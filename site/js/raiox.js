@@ -12,7 +12,11 @@
    carregado na tela (não substitui o relatório principal, complementa).
    ========================================================================= */
 const PESO_CONCEITO={Regular:0.25,Suficiente:0.50,Bom:0.75,'Ótimo':1};
-const TYPE_META_IND={eSF:'ESF',eAP:'eAP',eSB:'eSB',eMulti:'eMulti'};
+const TYPE_META_IND={eSF:'ESF',eAP:'eAP',eSFR:'eSFR',eSB:'eSB',eMulti:'eMulti',eAPP:'eAPP',eCR:'eCR'};
+// ordem das abas do Raio-X e nome completo (aparece ao passar o mouse na aba)
+const TIPOS_RAIOX=['eSF','eAP','eSFR','eSB','eMulti','eAPP','eCR'];
+const TIPO_NOME_IND={eSF:'Saúde da Família',eAP:'Atenção Primária',eSFR:'Saúde da Família Ribeirinha',eSB:'Saúde Bucal',
+  eMulti:'Multiprofissional',eAPP:'Atenção Primária Prisional',eCR:'Consultório na Rua'};
 // Ação sugerida por indicador — texto curto, de uso interno (consultor/vendas), para que
 // o Raio-X não só aponte o indicador mais crítico, mas já sugira por onde começar a
 // conversa técnica com a equipe. Indicador não mapeado aqui simplesmente não mostra a
@@ -32,7 +36,26 @@ const ACAO_INDICADOR={
   'Procedimentos Odontológicos preventivos na APS':'Verificar registro de procedimentos preventivos (ex.: aplicação de flúor).',
   'Tratamento Restaurador Atraumático na APS':'Verificar registro de procedimentos de Tratamento Restaurador Atraumático (TRA).',
   'Média de atendimentos da eMulti por pessoa':'Verificar frequência de atendimentos da equipe multiprofissional por usuário acompanhado.',
-  'Ações interprofissionais realizadas pela eMulti na APS':'Verificar registro de ações interprofissionais (matriciamento, atendimento compartilhado).'
+  'Ações interprofissionais realizadas pela eMulti na APS':'Verificar registro de ações interprofissionais (matriciamento, atendimento compartilhado).',
+  // equipes de Saúde da Família Ribeirinha (eSFR)
+  'Mais Acesso à equipe de Saúde da Família Ribeirinha (eSFR)':'Verificar agenda/oferta de consultas e o registro dos atendimentos nas comunidades ribeirinhas.',
+  'Cuidado da pessoa com hipertensão realizado pela equipe de Saúde da Família Ribeirinha (eSFR)':'Verificar cobertura de aferição de PA e adesão ao tratamento.',
+  'Cuidado da pessoa com diabetes realizado pela equipe de Saúde da Família Ribeirinha (eSFR)':'Verificar solicitação de HbA1c e acompanhamento em grupo/individual.',
+  'Cuidado na Gestação e Puerpério realizado pela equipe de Saúde da Família Ribeirinha (eSFR)':'Verificar nº de consultas de pré-natal e a consulta de puerpério registradas.',
+  'Cuidado no desenvolvimento infantil realizado pela equipe de Saúde da Família Ribeirinha (eSFR)':'Verificar consultas de puericultura e situação vacinal registradas.',
+  'Cuidado da mulher na prevenção do câncer realizado pela equipe de Saúde da Família Ribeirinha (eSFR)':'Verificar cobertura de citopatológico (Papanicolau) e mamografia.',
+  // equipes de Atenção Primária Prisional (eAPP)
+  'Mais Acesso à Atenção Primária Prisional (eAPP)':'Verificar agenda/oferta de atendimentos na unidade prisional e o registro deles.',
+  'Cuidado da pessoa com diabetes e/ou hipertensão pelas equipes de Atenção Primária Prisional (eAPP)':'Verificar aferição de PA, HbA1c e acompanhamento das pessoas privadas de liberdade com doença crônica.',
+  'Cuidado da pessoa com tuberculose pelas equipes de Atenção Primária Prisional (eAPP)':'Verificar busca ativa de sintomáticos respiratórios, exames e acompanhamento do tratamento.',
+  'Cuidado na Gestação realizado pela equipe de Primária Prisional (eAPP)':'Verificar nº de consultas de pré-natal registradas das gestantes privadas de liberdade.',
+  'Cuidado da mulher na prevenção do câncer pelas equipes de Primária Prisional (eAPP)':'Verificar cobertura de citopatológico (Papanicolau) e mamografia.',
+  'Rastreio das Infecções Sexualmente Transmissíveis pela equipe de Atenção Primária Prisional (eAPP)':'Verificar oferta e registro de testes rápidos de IST (HIV, sífilis, hepatites).',
+  // equipes de Consultório na Rua (eCR)
+  'Mais Acesso à equipe de Consultório na Rua (eCR)':'Verificar a oferta de atendimentos e o registro de cada atendimento à população em situação de rua.',
+  'Cuidado da pessoa com Tuberculose pelas equipes de Consultório na Rua (eCR)':'Verificar busca ativa de sintomáticos respiratórios, exames e acompanhamento do tratamento.',
+  'Cuidado das pessoas gestantes pelas equipes de Consultório na Rua (eCR)':'Verificar identificação das gestantes em situação de rua e consultas de pré-natal registradas.',
+  'Rastreio das Infecções Sexualmente Transmissíveis pela equipe de Consultório na Rua (eCR)':'Verificar oferta e registro de testes rápidos de IST (HIV, sífilis, hepatites).'
 };
 
 
@@ -104,7 +127,7 @@ function renderRaioX(){
   const targetKey=(lastRes&&lastRes.length)?quadKey(lastRes[lastRes.length-1].quad):null;
   const diag=computeIndicadorDiagnostico(indicador.rows,targetKey);
 
-  const tiposPresentes=['eSF','eAP','eSB','eMulti'].filter(t=>diag[t]&&diag[t].length);
+  const tiposPresentes=TIPOS_RAIOX.filter(t=>diag[t]&&diag[t].length);
   if(!raioxActiveTipo||!diag[raioxActiveTipo])raioxActiveTipo=tiposPresentes[0]||null;
 
   const usedQuad=raioxActiveTipo&&diag[raioxActiveTipo]&&diag[raioxActiveTipo][0]?diag[raioxActiveTipo][0].quad:null;
@@ -117,7 +140,7 @@ function renderRaioX(){
 
   const tabsEl=document.getElementById('ind-tabs');
   if(tabsEl)tabsEl.innerHTML=tiposPresentes.map(t=>
-    `<div class="tb${t===raioxActiveTipo?' active':''}" onclick="raioxSetTipo('${t}')">${TYPE_META_IND[t]||t}</div>`).join('');
+    `<div class="tb${t===raioxActiveTipo?' active':''}" onclick="raioxSetTipo('${t}')" title="${TIPO_NOME_IND[t]||t}">${TYPE_META_IND[t]||t}</div>`).join('');
 
   renderIndList(raioxActiveTipo?(diag[raioxActiveTipo]||[]):[]);
 

@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 3.1.0
+
+Raio-X por indicador na tela com abas para todos os tipos de equipe do relatório: além de ESF, eAP, eSB e eMulti, agora eSFR (Saúde da Família Ribeirinha), eAPP (Atenção Primária Prisional) e eCR (Consultório na Rua). O nome completo do tipo aparece ao passar o mouse na aba. Os indicadores dessas equipes ganharam sugestão de ação, como os demais. Os PDFs já traziam esses tipos.
+
 ## 3.0.0
 
 Painel nacional: seletor de estado no topo do painel, com os 27 estados (os que ainda não têm dados aparecem como "sem dados ainda"). Cada estado carrega só quando é escolhido, então quem abre o painel baixa só o estado que vai ver. O endereço guarda o estado (…/?uf=SC), para mandar o link de um estado direto a um colega, e o painel lembra o último estado escolhido. Mapas dos 27 estados (IBGE). O filtro de clientes mostra só os clientes do estado escolhido. A ferramenta de manutenção aceita relatórios do SIAPS de um ou de vários estados de uma vez (cada município vai para o seu estado pelo código IBGE), lê listas de clientes de vários estados (de preferência com coluna UF) e gera um arquivo por estado, mais o índice dados/indice.js.
