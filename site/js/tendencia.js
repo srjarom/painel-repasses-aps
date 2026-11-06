@@ -122,16 +122,24 @@ function selectMapMuni(id,opts={}){
 function renderMapDetail(){
   const el=document.getElementById('rsmap-detail');if(!el)return;
   const r=mapSelId?carteiraMapRows.find(x=>String(x.entry.ibge||x.entry.id)===String(mapSelId)):null;
+  const sec=el.closest('.side-sec');
   if(!r){
-    el.innerHTML=`<div class="rd-empty">Clique num município no mapa — ou busque pelo nome — para ver aqui a tendência e os números dele.</div>`;
+    // v4.4.3: sem município selecionado, só uma dica de uma linha (a busca fica no topo da página)
+    el.innerHTML=`<div class="rd-hint">Clique num município no mapa para ver os números dele e abrir o relatório.</div>`;
+    if(sec)sec.classList.remove('com-muni');
     return;
   }
+  if(sec)sec.classList.add('com-muni');
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const cli=clientesSet().has(String(r.entry.id))?'<span class="cli-tag">cliente</span>':'';
   const worst=worstIndicadorFor(r.entry,r.last.quad);
+  const id=esc(r.entry.id);
+  // o painel do lado volta ao topo, para o cartão (e o botão do relatório) aparecer na hora
+  {const side=el.closest('.estado-side');if(side)side.scrollTop=0;}
   el.innerHTML=`<div class="rd-card">
-    <div class="rd-top"><div class="rd-name">${esc(r.entry.nomeMuni)}</div><button type="button" class="rd-x" aria-label="Limpar seleção" onclick="selectMapMuni(null)">×</button></div>
+    <div class="rd-top"><div class="rd-name">${esc(r.entry.nomeMuni)}</div><button type="button" class="rd-x" aria-label="Fechar" title="Fechar" onclick="selectMapMuni(null)">×</button></div>
     <div class="rd-sub">${esc(r.entry.uf||'')} · IBGE ${esc(r.entry.ibge||r.entry.id)} ${cli}</div>
+    <button type="button" class="rd-open-top" onclick="openFromCarteira('${id}')">Abrir relatório do município <span aria-hidden="true">→</span></button>
     <div class="rd-trend">${trendChipHTML(r.trend,'big')}</div>
     <dl class="rd-kv">
       <div><dt>Repasse ${esc(qCode(r.last.quad))}</dt><dd>${fmtBRL(r.last.total)}<small>/mês</small></dd></div>
@@ -140,7 +148,6 @@ function renderMapDetail(){
     </dl>
     ${temAlertaEquipes(r.perda)?`<div class="rd-warn"><b>⚠ ${r.perda.ausente?'Fora do relatório mais recente':'Equipes a menos'}:</b> ${esc(perdaTexto(r.perda))}.${r.perda.impacto>0?` Impacto estimado: −${fmtBRL(r.perda.impacto)}/mês.`:''}</div>`:''}
     ${worst?`<div class="rd-worst"><b>Indicador mais crítico:</b> ${esc(TYPE_META_IND[worst.tipo]||worst.tipo)} · ${esc(worst.item.indicador)} (${Math.round(worst.item.score*100)}%)</div>`:''}
-    <div class="change primary rd-open" role="button" tabindex="0" onclick="openFromCarteira('${esc(r.entry.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFromCarteira('${esc(r.entry.id)}');}">Abrir relatório do município →</div>
   </div>`;
 }
 function renderMapSearch(rows){
