@@ -989,3 +989,96 @@ button.kpi:hover{border-color:var(--line-2);}
 .br-leg-list{display:flex;flex-wrap:wrap;gap:6px 16px;}
 .br-leg-list li{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px;color:var(--ink);}
 .br-leg-list .rsmap-swatch{flex:none;}
+
+/* =========================================================================
+   v4.4.0 — TELA DO ESTADO EM DUAS COLUNAS
+   À esquerda, o conteúdo grande (mapa / ranking / equipes a menos) ocupa a altura toda.
+   À direita, um painel fixo com os números, os filtros de tendência e o município
+   selecionado. O filtro de clientes foi para a barra do topo.
+   ========================================================================= */
+.tb-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end;}
+.tb-tools .cli-bar{margin:0;}
+.tb-tools .cli-toggle .map-metric-btn{white-space:nowrap;}
+
+.estado-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start;}
+.estado-main{min-width:0;}
+.estado-main .tabs-row{margin-bottom:12px;}
+.estado-side{display:flex;flex-direction:column;gap:12px;min-width:0;}
+.side-sec{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;}
+.side-sec[hidden]{display:none;}
+
+/* números em grade 2×2 no painel do lado */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.kpi-grid .kpi{padding:9px 12px 10px;}
+.kpi-grid .kpi-l{font-size:11px;}
+.kpi-grid .kpi-v{font-size:19px;}
+.kpi-grid .kpi-s{font-size:10.5px;line-height:1.35;}
+
+/* filtros de tendência empilhados no painel do lado */
+.estado-side .trend-strip{margin:0 !important;padding:0;}
+.estado-side .tf-bar{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;}
+.estado-side .tf-l{grid-column:1/-1;margin:0 0 2px;font-size:12px;}
+.estado-side .tf-chip{justify-content:flex-start;flex-wrap:wrap;white-space:normal;border-radius:10px;padding:6px 10px;font-size:12.5px;row-gap:0;}
+.estado-side .tf-chip.all{grid-column:1/-1;justify-content:center;}
+.estado-side .tf-chip.warn{grid-column:1/-1;}
+.estado-side .tf-chip small{flex-basis:100%;}
+.estado-side .tf-chip.all small{display:none;}
+
+/* busca e município selecionado */
+.estado-side .rsmap-search{margin-bottom:10px;}
+.estado-side .rsmap-detail .rd-card{background:var(--panel-2);}
+
+/* mapa: o desenho ocupa o quadro todo; legenda numa linha embaixo */
+.map-card .map-b{display:flex;flex-direction:column;padding:10px 16px 10px;}
+.map-card .rsmap-svg-outer{flex:1 1 auto;min-width:0;width:100%;}
+.map-legend-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px 14px;padding-top:8px;border-top:1px solid var(--line);margin-top:8px;font-size:12px;color:var(--muted);}
+.map-legend-row .rsmap-legend-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);margin:0;}
+.map-legend-row .rsmap-legend{flex:1 1 auto;min-width:0;}
+.map-legend-row .rsmap-legend-list{display:flex;flex-wrap:wrap;gap:4px 14px;}
+.map-legend-row .rsmap-legend-list li{display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.map-legend-row .rsmap-legend-list .lg-n{margin-left:2px;}
+.map-legend-row .lg-note{display:none;}
+.map-legend-row .rsmap-legend-grad{width:220px;}
+.map-legend-row .rsmap-nodata{display:flex;align-items:center;gap:5px;margin-left:auto;}
+
+.layout-fit .estado-side{height:var(--fit-h,auto);overflow-y:auto;padding-right:2px;}
+.layout-fit .map-card>.card-b.map-b{padding:10px 16px 10px;}
+.layout-fit .map-card .rsmap-svg-outer{height:auto;min-height:0;}
+.layout-fit #rsmap-svg-wrap{position:relative;height:100%;}
+.layout-fit .map-card .rsmap-svg-outer{position:relative;}
+.layout-fit .map-card .rsmap-svg-outer #rsmap-svg-wrap{position:absolute;inset:0;}
+
+@media(max-width:999px){
+  .estado-grid{grid-template-columns:1fr;}
+  .estado-side{order:-1;}
+  .tb-tools{width:100%;justify-content:space-between;}
+}
+@media(max-width:640px){
+  .tb-tools .cli-toggle{width:100%;}
+  .tb-tools .cli-toggle .map-metric-btn{flex:1;text-align:center;font-size:11.5px;padding:5px 6px;}
+}
+
+/* v4.4.0 (ajustes): seletor de cor do mapa na linha das abas; tendência como lista; topo numa linha */
+.estado-main .tabs-row{align-items:center;padding-bottom:6px;}
+.estado-main .tabs-row .tabs{margin-bottom:-8px;}
+.estado-main .tabs-row #rsmap-metrics[hidden]{display:none;}
+.map-card .map-b{padding-top:12px;}
+.tb-loc{flex:1 1 360px;}
+.tb-tools{flex-wrap:nowrap;}
+.tb-tools .busca-global{flex:0 1 280px;min-width:200px;}
+.navtabs .tab.active:hover{color:#09274C;}
+
+.estado-side .tf-bar{display:flex;flex-direction:column;gap:4px;}
+.estado-side .tf-l{margin:0 0 4px;}
+.estado-side .tf-chip{display:flex;align-items:baseline;flex-wrap:nowrap;gap:6px;width:100%;border-radius:8px;padding:6px 10px;white-space:nowrap;}
+.estado-side .tf-chip small{flex-basis:auto;margin-left:auto;}
+.estado-side .tf-chip.all{justify-content:flex-start;}
+.estado-side .tf-chip.all small{display:none;}
+
+.map-legend-row{font-size:11.5px;gap:4px 12px;}
+.map-legend-row .rsmap-legend-list{gap:3px 12px;}
+
+@media(max-width:1199px){.estado-grid{grid-template-columns:minmax(0,1fr) 320px;}}
+@media(max-width:999px){.estado-grid{grid-template-columns:1fr;}.tb-tools{flex-wrap:wrap;}}
+.tb-tools .cli-toggle{flex-wrap:nowrap;}
+.map-legend-row .rsmap-nodata{margin-left:0;}

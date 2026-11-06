@@ -20,7 +20,7 @@ function renderCarteiraBadge(){
 function renderCarteiraView(){
   const list=carteira.municipios;
   document.getElementById('carteira-empty').style.display=list.length?'none':'block';
-  document.getElementById('carteira-content').style.display=list.length?'block':'none';
+  document.getElementById('carteira-content').style.display=list.length?'':'none';   // '' = layout do CSS (grade de duas colunas)
   renderCarteiraBadge();
   if(!list.length)return;
 

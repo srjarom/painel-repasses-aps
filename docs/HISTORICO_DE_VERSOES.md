@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.4.0
+
+Painel do estado redesenhado em duas colunas, no padrão da tela do Brasil. À esquerda, o mapa (ou o ranking, ou as equipes a menos) ocupa toda a altura da tela; os botões de cor do mapa subiram para a linha das abas e o título repetido saiu, então o mapa ficou bem maior. À direita, um painel com os quatro números em grade, os filtros de tendência em lista (um por linha) e a busca/município selecionado. O filtro "Todos / Clientes" foi para a barra do topo, ao lado da busca. A legenda do mapa fica numa linha embaixo dele. No celular, o painel de números aparece antes do mapa.
+
 ## 4.3.1
 
 Os botões de "cor do mapa" (e o filtro de clientes) viraram um seletor compacto, tipo chave, em vez de botões grandes separados. A legenda da "Variação" no mapa do Brasil, que quebrava o texto palavra por palavra, agora mostra cada item numa linha só, lado a lado.

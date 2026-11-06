@@ -402,10 +402,13 @@
       </nav>
       <div class="tb-sub" id="dados-info" aria-live="polite"></div>
     </div>
-    <div class="busca-global">
-      <label for="busca-uf" class="sr-only">Buscar município</label>
-      <svg class="bg-ic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M20 20l-3.5-3.5"/></svg>
-      <input type="search" id="busca-uf" class="busca-input" list="busca-lista" placeholder="Buscar município" autocomplete="off">
+    <div class="tb-tools">
+      <div class="cli-bar" id="cli-bar"></div>
+      <div class="busca-global">
+        <label for="busca-uf" class="sr-only">Buscar município</label>
+        <svg class="bg-ic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="busca-uf" class="busca-input" list="busca-lista" placeholder="Buscar município" autocomplete="off">
+      </div>
     </div>
   </div>
 </section>
@@ -418,69 +421,72 @@
     </div>
   </div>
 
-  <div id="carteira-content" style="display:none;">
-    <div class="cli-bar" id="cli-bar"></div>
-    <div class="kpi-row" id="carteira-summary-grid"></div>
-
-    <div class="tabs-row">
-    <div class="tabs" role="tablist" aria-label="Seções do estado">
-      <button type="button" class="tab-btn on" role="tab" id="tab-mapa" aria-selected="true" aria-controls="painel-mapa" data-aba="mapa">Mapa</button>
-      <button type="button" class="tab-btn" role="tab" id="tab-ranking" aria-selected="false" aria-controls="painel-ranking" data-aba="ranking">Ranking</button>
-      <button type="button" class="tab-btn warn" role="tab" id="tab-perda" aria-selected="false" aria-controls="painel-perda" data-aba="perda">Equipes a menos <span class="tab-n" id="tab-perda-n"></span></button>
-    </div>
-    <div class="trend-strip" id="trend-strip"></div>
-    </div>
-
-    <div class="tab-panel" role="tabpanel" id="painel-mapa" aria-labelledby="tab-mapa">
-      <div class="card map-card fit-h">
-        <div class="card-h ch-row">
-          <h3 id="mapa-titulo">Mapa do estado</h3>
-          <div class="map-metrics" id="rsmap-metrics" role="group" aria-label="Cor do mapa">
-            <div class="map-metric-btn active" data-metric="trend" role="button" aria-pressed="true">Tendência</div>
-            <div class="map-metric-btn" data-metric="gap" role="button" aria-pressed="false">Margem em aberto</div>
-            <div class="map-metric-btn" data-metric="pct" role="button" aria-pressed="false">% do potencial atingido</div>
-            <div class="map-metric-btn" data-metric="total" role="button" aria-pressed="false">Repasse atual</div>
-          </div>
+  <!-- v4.4.0: duas colunas — à esquerda o conteúdo grande (mapa, ranking, equipes a menos);
+       à direita um painel com os números, os filtros de tendência e o município selecionado -->
+  <div id="carteira-content" class="estado-grid" style="display:none;">
+    <div class="estado-main">
+      <div class="tabs-row">
+        <div class="tabs" role="tablist" aria-label="Seções do estado">
+          <button type="button" class="tab-btn on" role="tab" id="tab-mapa" aria-selected="true" aria-controls="painel-mapa" data-aba="mapa">Mapa</button>
+          <button type="button" class="tab-btn" role="tab" id="tab-ranking" aria-selected="false" aria-controls="painel-ranking" data-aba="ranking">Ranking</button>
+          <button type="button" class="tab-btn warn" role="tab" id="tab-perda" aria-selected="false" aria-controls="painel-perda" data-aba="perda">Equipes a menos <span class="tab-n" id="tab-perda-n"></span></button>
         </div>
-        <div class="card-b">
-          <div class="rsmap-layout">
+        <div class="map-metrics" id="rsmap-metrics" role="group" aria-label="Cor do mapa">
+          <div class="map-metric-btn active" data-metric="trend" role="button" tabindex="0" aria-pressed="true">Tendência</div>
+          <div class="map-metric-btn" data-metric="gap" role="button" tabindex="0" aria-pressed="false">Margem em aberto</div>
+          <div class="map-metric-btn" data-metric="pct" role="button" tabindex="0" aria-pressed="false">% do potencial</div>
+          <div class="map-metric-btn" data-metric="total" role="button" tabindex="0" aria-pressed="false">Repasse atual</div>
+        </div>
+      </div>
+
+      <div class="tab-panel" role="tabpanel" id="painel-mapa" aria-labelledby="tab-mapa">
+        <div class="card map-card fit-h">
+          <h3 id="mapa-titulo" class="sr-only">Mapa do estado</h3>
+          <div class="card-b map-b">
             <div class="rsmap-svg-outer" id="rsmap-svg-outer">
               <div id="rsmap-svg-wrap"></div>
               <div class="rsmap-tooltip" id="rsmap-tooltip" role="status" aria-live="polite"></div>
             </div>
-            <div class="rsmap-side">
-              <div class="rsmap-search">
-                <label for="rsmap-busca">Achar no mapa</label>
-                <input type="search" id="rsmap-busca" list="rsmap-busca-list" placeholder="Digite o nome…" autocomplete="off">
-                <datalist id="rsmap-busca-list"></datalist>
-              </div>
-              <div class="rsmap-detail" id="rsmap-detail" aria-live="polite"></div>
-              <div>
-                <div class="rsmap-legend-title" id="rsmap-legend-title">Legenda</div>
-                <div class="rsmap-legend" id="rsmap-legend"></div>
-              </div>
-              <div class="rsmap-nodata"><span class="rsmap-swatch nodata"></span>Sem dado no relatório publicado</div>
+            <div class="map-legend-row">
+              <span class="rsmap-legend-title" id="rsmap-legend-title">Legenda</span>
+              <div class="rsmap-legend" id="rsmap-legend"></div>
+              <span class="rsmap-nodata"><span class="rsmap-swatch nodata"></span>Sem dado</span>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="tab-panel" role="tabpanel" id="painel-ranking" aria-labelledby="tab-ranking" hidden>
-      <div class="card rk-card fit-h">
-        <div class="card-h"><h3 id="ranking-title">Ranking por margem em aberto</h3><p id="ranking-sub"></p></div>
-        <div class="card-b">
-          <div class="rk-tools"><label for="ranking-busca" class="sr-only">Buscar no ranking</label><input type="search" id="ranking-busca" placeholder="Buscar município no ranking…" autocomplete="off"></div>
-          <div style="overflow-x:auto;"><table class="grid rk-table" id="carteira-table"></table></div>
-          <div class="rk-mais" id="ranking-mais"></div>
+      <div class="tab-panel" role="tabpanel" id="painel-ranking" aria-labelledby="tab-ranking" hidden>
+        <div class="card rk-card fit-h">
+          <div class="card-h"><h3 id="ranking-title">Ranking por margem em aberto</h3><p id="ranking-sub"></p></div>
+          <div class="card-b">
+            <div class="rk-tools"><label for="ranking-busca" class="sr-only">Buscar no ranking</label><input type="search" id="ranking-busca" placeholder="Buscar município no ranking…" autocomplete="off"></div>
+            <div style="overflow-x:auto;"><table class="grid rk-table" id="carteira-table"></table></div>
+            <div class="rk-mais" id="ranking-mais"></div>
+          </div>
         </div>
+      </div>
+
+      <div class="tab-panel" role="tabpanel" id="painel-perda" aria-labelledby="tab-perda" hidden>
+        <div class="card alerta-card fit-h" id="alerta-equipes-card" style="display:none;"></div>
+        <div class="card" id="alerta-vazio" style="display:none;"><div class="card-b" style="text-align:center;color:var(--muted);">Nenhum município com equipes a menos neste estado.</div></div>
       </div>
     </div>
 
-    <div class="tab-panel" role="tabpanel" id="painel-perda" aria-labelledby="tab-perda" hidden>
-      <div class="card alerta-card fit-h" id="alerta-equipes-card" style="display:none;"></div>
-      <div class="card" id="alerta-vazio" style="display:none;"><div class="card-b" style="text-align:center;color:var(--muted);">Nenhum município com equipes a menos neste estado.</div></div>
-    </div>
+    <aside class="estado-side fit-h" aria-label="Resumo do estado">
+      <div class="kpi-grid" id="carteira-summary-grid"></div>
+      <div class="side-sec">
+        <div class="trend-strip" id="trend-strip"></div>
+      </div>
+      <div class="side-sec" id="side-mapa">
+        <div class="rsmap-search">
+          <label for="rsmap-busca">Achar no mapa</label>
+          <input type="search" id="rsmap-busca" list="rsmap-busca-list" placeholder="Digite o nome do município…" autocomplete="off">
+          <datalist id="rsmap-busca-list"></datalist>
+        </div>
+        <div class="rsmap-detail" id="rsmap-detail" aria-live="polite"></div>
+      </div>
+    </aside>
   </div>
 </div>
 </div>

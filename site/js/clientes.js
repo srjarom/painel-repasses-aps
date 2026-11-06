@@ -35,13 +35,11 @@ function renderCliBar(list,cli,filtrar){
   const comDados=daUF.filter(x=>ids.has(String(x.ibge)));
   const semDados=daUF.filter(x=>!ids.has(String(x.ibge)));
   const dt=new Date(c.importadoEm).toLocaleDateString('pt-BR');
-  let h=`<div class="cli-row">
-    <div class="map-metrics cli-toggle">
-      <div class="map-metric-btn${filtrar?'':' active'}" onclick="setFiltroClientes(false)">Todos os municípios (${list.length})</div>
-      <div class="map-metric-btn${filtrar?' active':''}" onclick="setFiltroClientes(true)">Só clientes ${esc(c.rotulo||CLIENTES_ROTULO)} (${comDados.length})</div>
-    </div>
-    <div class="cli-meta">${daUF.length} cliente${daUF.length>1?'s':''} ${nomeComPrep(UF_ATUAL)} na lista · atualizada em ${dt}</div>
-  </div>`;
-  if(semDados.length)h+=`<div class="cli-warn">${semDados.length} cliente${semDados.length>1?'s':''} da lista sem dados no relatório publicado: ${semDados.map(x=>esc(x.cliente)).join(', ')}.</div>`;
-  el.innerHTML=h;
+  // v4.4.0: chave compacta na barra do topo; os detalhes da lista ficam na dica (title)
+  const dica=`${daUF.length} cliente${daUF.length>1?'s':''} ${nomeComPrep(UF_ATUAL)} na lista · atualizada em ${dt}`+
+    (semDados.length?` · ${semDados.length} sem dados no relatório publicado: ${semDados.map(x=>x.cliente).join(', ')}`:'');
+  el.innerHTML=`<div class="map-metrics cli-toggle" role="group" aria-label="Quais municípios mostrar" title="${esc(dica)}">
+      <div class="map-metric-btn${filtrar?'':' active'}" role="button" tabindex="0" aria-pressed="${!filtrar}" onclick="setFiltroClientes(false)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setFiltroClientes(false);}">Todos (${list.length})</div>
+      <div class="map-metric-btn${filtrar?' active':''}" role="button" tabindex="0" aria-pressed="${filtrar}" onclick="setFiltroClientes(true)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setFiltroClientes(true);}">Clientes ${esc(c.rotulo||CLIENTES_ROTULO)} (${comDados.length})</div>
+    </div>`;
 }
