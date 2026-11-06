@@ -65,6 +65,7 @@ function renderCarteiraView(){
 
   rankingAtual={rows:rankRows,filtrar,cli,totAtual,totPot,totGap,pctMed,filtroKey:trendFilter+'|'+filtrar};
   renderRanking();
+  if(typeof agendarAjusteAltura==='function')agendarAjusteAltura();
 }
 
 /* ranking: mostra 25 por vez (com busca), para a página não virar uma lista de 500 linhas */
@@ -145,6 +146,7 @@ function showView(view){
   if(tg)tg.classList.toggle('active',view==='guia');
   if(view==='brasil')renderBrasil();
   if(view==='carteira')renderCarteiraView();
+  if(typeof agendarAjusteAltura==='function')agendarAjusteAltura();
   if(view!=='municipio')window.scrollTo({top:0,behavior:'auto'});
 }
 // "Painel" no topo sempre leva à tela do Brasil

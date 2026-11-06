@@ -920,3 +920,59 @@ button.kpi:hover{border-color:var(--line-2);}
 #view-guia .comp-card{padding:18px 20px 16px;}
 #view-guia .scale-wrap{margin-bottom:26px;}
 @media(max-width:640px){#view-guia .guide-in{padding:16px 16px 32px;}#view-guia .tut-head h2{font-size:21px;}}
+
+/* =========================================================================
+   v4.3.0 — LAYOUT QUE CABE NA TELA
+   Largura: o painel usa a tela (até 1640 px) em vez de uma coluna de 1200 px.
+   Altura: em computador (.layout-fit, ver estados.js), o mapa, o ranking, a lista de
+   equipes a menos e a tela do Brasil ocupam a altura que sobra (--fit-h) e rolam por
+   dentro — a página em si não precisa rolar.
+   ========================================================================= */
+.nav .in,.topbar .in,.stage-compact{max-width:1640px;}
+.stage-compact{padding-left:28px;padding-right:28px;}
+
+/* abas à esquerda e filtros de tendência à direita, numa linha só */
+.tabs-row{display:flex;align-items:flex-end;justify-content:space-between;gap:8px 20px;flex-wrap:wrap;border-bottom:2px solid var(--line);margin:0 0 14px;}
+.tabs-row .tabs{border-bottom:0;margin:0;}
+.tabs-row .trend-strip{margin:0 0 7px !important;}
+.tabs-row .tf-bar{justify-content:flex-end;}
+
+.layout-fit .fit-h{height:var(--fit-h,auto);margin-bottom:0;}
+
+/* mapa do estado: o desenho ocupa toda a altura do quadro; o painel do lado rola por dentro */
+.layout-fit .map-card{display:flex;flex-direction:column;}
+.layout-fit .map-card>.card-h{padding:10px 18px;}
+.layout-fit .map-card>.card-b{flex:1;min-height:0;padding:0;}
+.layout-fit .rsmap-layout{height:100%;flex-wrap:nowrap;align-items:stretch;gap:20px;padding:12px 16px 12px 18px;}
+.layout-fit .rsmap-svg-outer{flex:1 1 auto;min-width:0;height:100%;}
+.layout-fit #rsmap-svg-wrap{height:100%;}
+.layout-fit #rsmap-svg-wrap svg{width:100%;height:100%;max-height:none;}
+.layout-fit .rsmap-side{flex:0 0 300px;overflow-y:auto;padding:2px 4px 6px 0;gap:14px;}
+.layout-fit .rsmap-legend-list{gap:3px;}
+
+/* ranking e equipes a menos: o quadro tem a altura da tela e a tabela rola por dentro */
+.layout-fit .rk-card,.layout-fit .alerta-card{display:flex;flex-direction:column;}
+.layout-fit .rk-card>.card-h,.layout-fit .alerta-card>.card-h{padding:12px 20px;}
+.layout-fit .rk-card>.card-b,.layout-fit .alerta-card>.card-b{flex:1;min-height:0;overflow:auto;padding:14px 20px;}
+.layout-fit .rk-card>.card-b>div[style]{overflow:visible !important;}
+.layout-fit .rk-table thead th,.layout-fit .ae-table thead th{position:sticky;top:-14px;z-index:2;}
+
+/* tela do Brasil: mapa e lista dos estados na altura da tela */
+.layout-fit .br-grid{margin-bottom:0;}
+.layout-fit .br-grid .card{height:100%;}
+.layout-fit .br-map-card>.card-h,.layout-fit .br-list-card>.card-h{padding:10px 18px;}
+.layout-fit .br-map-b{flex:1;min-height:0;display:flex;flex-direction:column;padding:10px 18px 10px;}
+.layout-fit .br-map-outer{flex:1;min-height:0;}
+.layout-fit #br-map{height:100%;}
+.layout-fit #br-map svg{height:100%;max-height:none;}
+.layout-fit .br-list{flex:1;min-height:0;max-height:none;}
+.layout-fit .br-legend{margin-top:6px;}
+.layout-fit .br-hint{margin-top:4px;}
+
+/* notas e rodapé ficam abaixo da dobra: não disputam espaço com o painel */
+.layout-fit .notas-gerais{padding-top:22px;}
+.layout-fit .br-grid{grid-template-rows:minmax(0,1fr);}
+.layout-fit .br-grid .card{min-height:0;overflow:hidden;}
+.layout-fit .br-map-outer{position:relative;}
+.layout-fit #br-map{position:absolute;inset:0;}
+.layout-fit #br-map svg{width:100%;height:100%;}

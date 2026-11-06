@@ -71,6 +71,7 @@ function renderBrasil(){
     kpiHTML({label:'Municípios com equipes a menos',valor:fmtNum(T.perda),cls:T.perda?'warn':'',sub:T.perda?`impacto estimado de −${fmtBRLcurto(T.perdaImpacto)}/mês`:'nenhum no momento'});
   renderBrasilLista(lista);
   renderBrasilMapa(lista);
+  agendarAjusteAltura();
 }
 
 /* ---------- lista dos estados ---------- */

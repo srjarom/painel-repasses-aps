@@ -347,7 +347,7 @@
 </section>
 <div class="stage stage-compact">
   <div class="kpi-row" id="br-kpis"></div>
-  <div class="br-grid">
+  <div class="br-grid fit-h">
     <div class="card br-map-card">
       <div class="card-h ch-row">
         <h3>Mapa do Brasil</h3>
@@ -422,15 +422,17 @@
     <div class="cli-bar" id="cli-bar"></div>
     <div class="kpi-row" id="carteira-summary-grid"></div>
 
+    <div class="tabs-row">
     <div class="tabs" role="tablist" aria-label="Seções do estado">
       <button type="button" class="tab-btn on" role="tab" id="tab-mapa" aria-selected="true" aria-controls="painel-mapa" data-aba="mapa">Mapa</button>
       <button type="button" class="tab-btn" role="tab" id="tab-ranking" aria-selected="false" aria-controls="painel-ranking" data-aba="ranking">Ranking</button>
       <button type="button" class="tab-btn warn" role="tab" id="tab-perda" aria-selected="false" aria-controls="painel-perda" data-aba="perda">Equipes a menos <span class="tab-n" id="tab-perda-n"></span></button>
     </div>
     <div class="trend-strip" id="trend-strip"></div>
+    </div>
 
     <div class="tab-panel" role="tabpanel" id="painel-mapa" aria-labelledby="tab-mapa">
-      <div class="card map-card">
+      <div class="card map-card fit-h">
         <div class="card-h ch-row">
           <h3 id="mapa-titulo">Mapa do estado</h3>
           <div class="map-metrics" id="rsmap-metrics" role="group" aria-label="Cor do mapa">
@@ -465,7 +467,7 @@
     </div>
 
     <div class="tab-panel" role="tabpanel" id="painel-ranking" aria-labelledby="tab-ranking" hidden>
-      <div class="card">
+      <div class="card rk-card fit-h">
         <div class="card-h"><h3 id="ranking-title">Ranking por margem em aberto</h3><p id="ranking-sub"></p></div>
         <div class="card-b">
           <div class="rk-tools"><label for="ranking-busca" class="sr-only">Buscar no ranking</label><input type="search" id="ranking-busca" placeholder="Buscar município no ranking…" autocomplete="off"></div>
@@ -476,7 +478,7 @@
     </div>
 
     <div class="tab-panel" role="tabpanel" id="painel-perda" aria-labelledby="tab-perda" hidden>
-      <div class="card alerta-card" id="alerta-equipes-card" style="display:none;"></div>
+      <div class="card alerta-card fit-h" id="alerta-equipes-card" style="display:none;"></div>
       <div class="card" id="alerta-vazio" style="display:none;"><div class="card-b" style="text-align:center;color:var(--muted);">Nenhum município com equipes a menos neste estado.</div></div>
     </div>
   </div>

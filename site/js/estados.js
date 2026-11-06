@@ -106,6 +106,7 @@ function renderDadosInfo(d){
 let abaEstado='mapa';
 function mostrarAba(nome,opts={}){
   abaEstado=nome;
+  agendarAjusteAltura();
   document.querySelectorAll('.tabs .tab-btn').forEach(b=>{const on=b.dataset.aba===nome;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;});
   ['mapa','ranking','perda'].forEach(a=>{const p=document.getElementById('painel-'+a);if(p)p.hidden=a!==nome;});
   // o filtro de tendência vale para o Mapa e o Ranking; na aba de equipes a menos ele some
@@ -132,3 +133,22 @@ function ajustarAlturaNav(){
   if(nav)document.documentElement.style.setProperty('--nav-h',nav.offsetHeight+'px');
 }
 window.addEventListener('resize',ajustarAlturaNav);
+
+/* ---------- layout "cabe na tela" (v4.3.0) ----------
+   Em telas de computador, o mapa, o ranking, a lista de equipes a menos e a tela do
+   Brasil ocupam exatamente a altura que sobra na janela: a página não precisa rolar e
+   cada quadro rola por dentro. Em telas pequenas (celular) tudo volta ao fluxo normal. */
+const MQ_FIT=window.matchMedia('(min-width:1000px) and (min-height:600px)');
+function ajustarAlturaUtil(){
+  const fit=MQ_FIT.matches;
+  document.documentElement.classList.toggle('layout-fit',fit);
+  if(!fit)return;
+  document.querySelectorAll('.fit-h').forEach(el=>{
+    if(el.offsetParent===null)return;          // escondido (outra aba/tela)
+    const top=el.getBoundingClientRect().top+window.scrollY;
+    el.style.setProperty('--fit-h',Math.max(440,Math.floor(window.innerHeight-top-16))+'px');
+  });
+}
+function agendarAjusteAltura(){requestAnimationFrame(()=>requestAnimationFrame(ajustarAlturaUtil));}
+window.addEventListener('resize',agendarAjusteAltura);
+if(MQ_FIT.addEventListener)MQ_FIT.addEventListener('change',agendarAjusteAltura);
