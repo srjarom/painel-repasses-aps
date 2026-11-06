@@ -45,7 +45,7 @@ O painel converte isso, em `PainelDados.municipios(uf)`, para o formato usado pe
 
 ```js
 PainelDados.registrarClientes(Object.assign(
-  { rotulo: "GOVBR Saúde / Celk", fonte: "<nome da planilha>", importadoEm: "<data ISO>", naoIdentificados: [ … ] },
+  { rotulo: "GOVBR Saúde / Celk", fonte: "Planilha comercial de clientes", importadoEm: "<data ISO>", naoIdentificados: [ … ] },
   { lista: [ {"ibge":"432240","cliente":"PM URUGUAIANA"}, … ] }));
 ```
 

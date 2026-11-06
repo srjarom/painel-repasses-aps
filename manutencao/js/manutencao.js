@@ -254,7 +254,7 @@ function gerarArquivoUF(){
 }
 function gerarArquivoClientes(){
   const c=trabalho.clientes;
-  return PainelDados.textoArquivoClientes({rotulo:c.rotulo||'GOVBR Saúde / Celk',fonte:c.fonte||'',importadoEm:c.importadoEm||'',
+  return PainelDados.textoArquivoClientes({rotulo:c.rotulo||'GOVBR Saúde / Celk',fonte:'Planilha comercial de clientes',importadoEm:c.importadoEm||'',
     naoIdentificados:c.naoIdentificados||[],lista:c.lista.map(x=>({ibge:String(x.ibge),cliente:x.cliente}))});
 }
 
