@@ -5,9 +5,13 @@
    ferramenta de manutenção (manutencao/atualizar-dados.html). Cada arquivo
    "se registra" aqui ao ser carregado:
 
-     dados/uf/RS.js       PainelDados.registrarUF({...})      municípios + indicadores
-     dados/clientes.js    PainelDados.registrarClientes({...}) lista de clientes
-     dados/geo/RS.js      PainelDados.registrarGeo('RS',[...]) contornos do mapa
+     dados/indice.js      PainelDados.registrarIndice({...})   estados com dados publicados
+     dados/uf/<UF>.js     PainelDados.registrarUF({...})      municípios + indicadores
+     dados/clientes.js    PainelDados.registrarClientes({...}) lista de clientes (todos os estados)
+     dados/geo/<UF>.js    PainelDados.registrarGeo('RS',[...]) contornos do mapa
+
+   O índice e os clientes carregam junto com a página; os arquivos de cada estado
+   (uf/ e geo/) só quando o estado é escolhido no seletor (carregarEstado).
 
    Por que .js e não .json? Porque assim o painel também abre com dois cliques,
    direto do computador (sem servidor), e funciona igual em qualquer hospedagem.
@@ -27,11 +31,33 @@ const PainelDados=(function(){
   const CLASSES=['Regular','Suficiente','Bom','Ótimo'];
   const COLS_R=['vEsf','vEap','qEsf','qEap','qEsb','qEmulti'];
   const ufs={},geos={};
-  let clientes=null;
+  let clientes=null,indice={};
 
   function registrarUF(d){if(d&&d.uf)ufs[d.uf]=d;}
   function registrarGeo(uf,lista){geos[uf]=lista||[];}
   function registrarClientes(c){clientes=c||null;}
+  // dados/indice.js: quais estados têm dados publicados (para o seletor saber sem baixar tudo)
+  function registrarIndice(i){indice=i||{};}
+
+  // Carrega um arquivo de dados só quando ele é preciso (cada estado ~1 MB).
+  // Usa <script> em vez de fetch: assim funciona também abrindo o painel com dois cliques (file://).
+  const carregados={};
+  function carregarScript(src){
+    if(!carregados[src])carregados[src]=new Promise(ok=>{
+      const s=document.createElement('script');
+      s.src=src;s.onload=()=>ok(true);s.onerror=()=>{delete carregados[src];ok(false);};
+      document.head.appendChild(s);
+    });
+    return carregados[src];
+  }
+  // base = caminho até a pasta site/ ('' no painel, '../site/' na manutenção)
+  async function carregarEstado(uf,base=''){
+    const tarefas=[];
+    if(!geos[uf])tarefas.push(carregarScript(`${base}dados/geo/${uf}.js`));
+    if(!ufs[uf]&&indice[uf])tarefas.push(carregarScript(`${base}dados/uf/${uf}.js`));
+    await Promise.all(tarefas);
+    return !!ufs[uf];
+  }
 
   // Converte o formato compacto no formato usado pelo resto do painel
   // (o mesmo que a antiga "carteira" usava: parsed.rows / indicadores.rows / params).
@@ -93,6 +119,20 @@ const PainelDados=(function(){
       (lista||[]).map(x=>JSON.stringify(x)).join(',\n')+`\n]}));\n`;
   }
 
-  return{registrarUF,registrarGeo,registrarClientes,municipios,codificarUF,textoArquivoUF,textoArquivoClientes,
-    uf:k=>ufs[k]||null,ufs:()=>Object.keys(ufs),geo:k=>geos[k]||[],clientes:()=>clientes};
+  // texto do arquivo dados/indice.js (gerado pela manutenção junto com o arquivo do estado)
+  function textoArquivoIndice(ind){
+    const ks=Object.keys(ind).sort();
+    return `/* Estados com dados publicados no Painel de Repasses APS. Gerado pela ferramenta de manutenção.\n`+
+      `   NÃO editar à mão: é atualizado junto com o arquivo do estado (ver docs/ATUALIZAR_OS_DADOS.md). */\n`+
+      `PainelDados.registrarIndice({\n`+ks.map(k=>JSON.stringify(k)+':'+JSON.stringify(ind[k])).join(',\n')+`\n});\n`;
+  }
+  // resumo de um estado para o índice
+  function resumoIndice(d){
+    const ult=d.quads[d.quads.length-1]||'';
+    return{atualizadoEm:d.atualizadoEm,municipios:d.municipios.length,ultimoQuad:ult&&typeof qCode==='function'?qCode(ult):ult};
+  }
+
+  return{registrarUF,registrarGeo,registrarClientes,registrarIndice,carregarEstado,
+    municipios,codificarUF,textoArquivoUF,textoArquivoClientes,textoArquivoIndice,resumoIndice,
+    uf:k=>ufs[k]||null,ufs:()=>Object.keys(ufs),geo:k=>geos[k]||[],clientes:()=>clientes,indice:()=>indice};
 })();

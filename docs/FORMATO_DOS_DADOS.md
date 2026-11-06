@@ -57,13 +57,24 @@ Só código IBGE e nome do cliente. Se o arquivo não existir, o filtro de clien
 
 ## `dados/geo/<UF>.js`
 
-`PainelDados.registrarGeo('RS', [ { id: "430003", name: "Aceguá", polys: [[[ [lon, lat], … ]]] }, … ])`: contornos simplificados dos municípios para o mapa. Fonte: IBGE, via o projeto `tbrugz/geodata-br`. Hoje falta Pinto Bandeira (431454), emancipado depois da malha usada. O município aparece no ranking e nos relatórios, só não no mapa.
+`PainelDados.registrarGeo('RS', [ { id: "430003", name: "Aceguá", polys: [[[ [lon, lat], … ]]] }, … ])`: contornos simplificados dos municípios para o mapa, um arquivo para cada um dos 27 estados. Fonte: IBGE, via o projeto `tbrugz/geodata-br`. Municípios criados depois da malha usada (por exemplo, Pinto Bandeira/RS, 431454) aparecem no ranking e nos relatórios, só não no mapa.
 
-## Expandir para outro estado (roteiro)
+Os mapas foram gerados por `manutencao/ferramentas/gerar-mapas.pl`. Só é preciso rodá-lo de novo se a malha do IBGE mudar (instruções no próprio arquivo).
 
-1. Gerar `dados/geo/<UF>.js` no mesmo formato.
-2. Na manutenção, permitir escolher a UF. Hoje ela usa `UF_ATUAL` de `site/js/base.js`.
-3. No painel, incluir os `<script>` do novo estado em `site/index.html` e criar um seletor de estado que troque `UF_ATUAL` e recarregue a tela.
-4. Ajustar textos fixos que dizem "Rio Grande do Sul" (`site/index.html`, título do mapa e PDFs).
+## `dados/indice.js`: estados publicados
+
+```js
+PainelDados.registrarIndice({
+"RS":{"atualizadoEm":"2026-11-06","municipios":497,"ultimoQuad":"2026Q2"}
+});
+```
+
+Lista os estados que têm `dados/uf/<UF>.js`. É o que o seletor de estado usa para separar "com dados publicados" de "sem dados ainda", sem precisar baixar todos os estados. A ferramenta de manutenção gera este arquivo junto com os estados.
+
+## Como o painel carrega os estados
+
+`index.html` carrega só `indice.js`, `clientes.js` e `estratos-ied.js`. Quando um estado é escolhido no seletor (`site/js/estados.js`), `PainelDados.carregarEstado(uf)` acrescenta na página os `<script>` de `dados/geo/<UF>.js` e, se o estado estiver no índice, de `dados/uf/<UF>.js`. Usar `<script>`, e não `fetch`, mantém o painel funcionando por duplo clique (`file://`).
+
+O estado escolhido vai para o endereço (`?uf=SC`) e fica guardado no navegador (`localStorage`, chave `painel-repasses-uf`).
 
 Se `formato` precisar mudar (por exemplo, nova coluna), aumente o número e trate as duas versões em `PainelDados.municipios()`.

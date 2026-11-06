@@ -308,7 +308,11 @@
     <span class="eyebrow">Painel de monitoramento · Governança Brasil</span>
     <div class="ch-top">
       <div>
-        <h2 id="painel-titulo">Repasses da Atenção Primária — Rio Grande do Sul</h2>
+        <div class="uf-sel">
+          <label for="sel-uf">Estado</label>
+          <select id="sel-uf" aria-label="Escolher o estado"></select>
+        </div>
+        <h2 id="painel-titulo">Repasses da Atenção Primária</h2>
         <p>Repasse federal de cada município, a tendência em relação ao quadrimestre anterior, equipes que saíram do relatório e onde estão as maiores oportunidades — com base nos relatórios públicos do SIAPS.</p>
       </div>
       <div class="dados-info" id="dados-info" aria-live="polite"></div>
@@ -323,8 +327,8 @@
   </div>
 
   <div class="card" id="carteira-empty">
-    <div class="card-b" style="text-align:center;color:var(--muted);padding:46px 22px;">
-      Nenhum dado publicado para este estado ainda.<br>Os dados são publicados pela ferramenta de manutenção (ver docs/ATUALIZAR_OS_DADOS.md).
+    <div class="card-b" id="carteira-empty-msg" style="text-align:center;color:var(--muted);padding:46px 22px;">
+      Nenhum dado publicado para este estado ainda.
     </div>
   </div>
 
@@ -336,7 +340,7 @@
 
     <div class="card map-card">
       <div class="card-h">
-        <h3>Mapa do Rio Grande do Sul</h3>
+        <h3 id="mapa-titulo">Mapa do estado</h3>
         <p>Cada município colorido pela opção escolhida. Passe o mouse (ou use Tab) para ver os números; clique para selecionar e ver os detalhes ao lado — o relatório abre pelo botão do painel ou com duplo clique.</p>
         <div class="map-metrics" id="rsmap-metrics" role="group" aria-label="Cor do mapa">
           <div class="map-metric-btn active" data-metric="trend" role="button" aria-pressed="true">Tendência</div>
@@ -402,9 +406,10 @@
 <!-- Dados publicados (gerados pela ferramenta de manutenção — ver docs/ATUALIZAR_OS_DADOS.md) -->
 <script src="js/dados.js"></script>
 <script src="dados/estratos-ied.js"></script>
-<script src="dados/geo/RS.js"></script>
-<script src="dados/uf/RS.js"></script>
+<script src="dados/indice.js"></script>
 <script src="dados/clientes.js"></script>
+<!-- os dados de cada estado (dados/uf/<UF>.js e dados/geo/<UF>.js) carregam quando o estado é escolhido -->
+
 
 <!-- Painel (a ordem importa: base primeiro, inicio.js por último) -->
 <script src="js/base.js"></script>
@@ -426,6 +431,7 @@
 <script src="js/pdf/relatorio-quadrimestre.js"></script>
 <script src="js/pdf/resumo-secretario.js"></script>
 <script src="js/pdf/raiox.js"></script>
+<script src="js/estados.js"></script>
 <script src="js/inicio.js"></script>
 </body>
 </html>

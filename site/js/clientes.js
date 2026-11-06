@@ -10,9 +10,13 @@
    contrato/valor da planilha é armazenado.
    ========================================================================= */
 const CLIENTES_ROTULO='GOVBR Saúde / Celk';
-function clientesSet(){
+// a lista pode ter clientes de vários estados: cada estado usa só os seus (pelo começo do código IBGE)
+function clientesDaUF(){
   const c=carteira.clientes;
-  return new Set(c&&Array.isArray(c.lista)?c.lista.map(x=>String(x.ibge)):[]);
+  return c&&Array.isArray(c.lista)?c.lista.filter(x=>ufDoIbge(x.ibge)===UF_ATUAL):[];
+}
+function clientesSet(){
+  return new Set(clientesDaUF().map(x=>String(x.ibge)));
 }
 function setFiltroClientes(on){
   carteira.filtroClientes=!!on;
@@ -22,21 +26,21 @@ function setFiltroClientes(on){
 function renderCliBar(list,cli,filtrar){
   const el=document.getElementById('cli-bar');if(!el)return;
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const c=carteira.clientes;
-  if(!c||!c.lista||!c.lista.length){
+  const c=carteira.clientes,daUF=clientesDaUF();
+  if(!daUF.length){
     el.innerHTML='';
     return;
   }
   const ids=new Set(list.map(m=>m.id));
-  const comDados=c.lista.filter(x=>ids.has(String(x.ibge)));
-  const semDados=c.lista.filter(x=>!ids.has(String(x.ibge)));
+  const comDados=daUF.filter(x=>ids.has(String(x.ibge)));
+  const semDados=daUF.filter(x=>!ids.has(String(x.ibge)));
   const dt=new Date(c.importadoEm).toLocaleDateString('pt-BR');
   let h=`<div class="cli-row">
     <div class="map-metrics cli-toggle">
       <div class="map-metric-btn${filtrar?'':' active'}" onclick="setFiltroClientes(false)">Todos os municípios (${list.length})</div>
       <div class="map-metric-btn${filtrar?' active':''}" onclick="setFiltroClientes(true)">Só clientes ${esc(c.rotulo||CLIENTES_ROTULO)} (${comDados.length})</div>
     </div>
-    <div class="cli-meta">Lista de clientes com ${c.lista.length} município${c.lista.length>1?'s':''} · atualizada em ${dt}</div>
+    <div class="cli-meta">${daUF.length} cliente${daUF.length>1?'s':''} ${nomeComPrep(UF_ATUAL)} na lista · atualizada em ${dt}</div>
   </div>`;
   if(semDados.length)h+=`<div class="cli-warn">${semDados.length} cliente${semDados.length>1?'s':''} da lista sem dados no relatório publicado: ${semDados.map(x=>esc(x.cliente)).join(', ')}.</div>`;
   el.innerHTML=h;

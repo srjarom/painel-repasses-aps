@@ -5,7 +5,7 @@ Painel de monitoramento do repasse federal da Atenção Primária à Saúde (Por
 - **Usuários:** equipes da Governança Brasil. O painel é **só de consulta**.
 - **Responsável pelo painel (código, dados e publicação):** Jarom Rosa.
 - **Infraestrutura / TI:** autoriza a publicação no hub. Veja a [ficha técnica](docs/FICHA_TECNICA.md).
-- **Versão atual:** 2.4.0. Veja o [histórico](docs/HISTORICO_DE_VERSOES.md).
+- **Versão atual:** 3.0.0. Veja o [histórico](docs/HISTORICO_DE_VERSOES.md).
 
 ---
 
@@ -18,10 +18,11 @@ painel-repasses-aps/
 │   ├── css/painel.css     aparência (cores, modo escuro, celular)
 │   ├── js/                código, um arquivo por assunto (ver lista abaixo)
 │   ├── dados/             OS DADOS — gerados pela ferramenta de manutenção
-│   │   ├── uf/RS.js         municípios do RS: equipes, classificações, indicadores
+│   │   ├── indice.js        quais estados têm dados publicados (para o seletor)
+│   │   ├── uf/<UF>.js       municípios de cada estado: equipes, classificações, indicadores
 │   │   ├── clientes.js      lista de clientes GOVBR Saúde / Celk (só IBGE + nome)
 │   │   ├── estratos-ied.js  estrato IED dos 5.570 municípios (Anexo VI da Portaria)
-│   │   └── geo/RS.js        contornos do mapa do RS (IBGE)
+│   │   └── geo/<UF>.js      contornos do mapa dos 27 estados (IBGE)
 │   ├── img/               logos e ícones
 │   ├── fontes/            fontes oficiais (Guanabara Sans e IBM Plex Sans) para a web
 │   └── vendor/            bibliotecas prontas (gráficos e PDF) — não mexer
@@ -45,6 +46,7 @@ painel-repasses-aps/
 | `calculo.js` | Cálculo do repasse (Fixo/IED, Vínculo, Qualidade), do potencial e da margem. |
 | `carteira.js` | Tela "Painel do estado": totais, ranking e navegação. |
 | `mapa.js` | Mapa do estado. |
+| `estados.js` | Seletor de estado: carrega o estado escolhido e guarda a escolha no endereço (`?uf=SC`). |
 | `tendencia.js` | Tendência (subiu / igual / caiu). |
 | `alerta-equipes.js` | Alerta "Possível perda de equipes". |
 | `clientes.js` | Filtro "Só clientes GOVBR Saúde / Celk". |
@@ -64,7 +66,7 @@ Dê dois cliques em `site/index.html`. Ele abre no navegador sem precisar de int
 
 Resumo:
 
-1. Baixe os dois relatórios do estado no SIAPS.
+1. Baixe os dois relatórios no SIAPS (pode marcar vários estados de uma vez).
 2. Abra `manutencao/atualizar-dados.html`.
 3. Importe os relatórios.
 4. Baixe os arquivos gerados e coloque-os em `site/dados/`.

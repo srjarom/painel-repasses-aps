@@ -81,20 +81,31 @@ function parseClientesWorkbook(wb,fileName){
     if(c>=0){h=i;iC=c;iUF=hd.findIndex(x=>x==='UF'||x==='ESTADO');break;}
   }
   if(h<0)throw new Error(`"${fileName}": não encontrei uma coluna "Cliente" ou "Município" nessa planilha.`);
-  // índice nome→IBGE: contornos do mapa da UF + municípios já presentes nos dados de trabalho
-  const idx=new Map();
-  PainelDados.geo(UF_ATUAL).forEach(g=>idx.set(UF_ATUAL+'|'+normNomeCliente(g.name),String(g.id)));
-  trabalho.municipios.forEach(m=>idx.set(String(m.uf||UF_ATUAL).toUpperCase()+'|'+normNomeCliente(m.nomeMuni),String(m.id)));
+  // índice nome→IBGE de todos os estados: contornos dos mapas + municípios já presentes nos dados de trabalho
+  const idx=new Map(),porNome=new Map();
+  const add=(uf,nome,ib)=>{const n=normNomeCliente(nome);idx.set(uf+'|'+n,ib);
+    if(!porNome.has(n))porNome.set(n,new Set());porNome.get(n).add(ib);};
+  ESTADOS.forEach(e=>PainelDados.geo(e.uf).forEach(g=>add(e.uf,g.name,String(g.id))));
+  Object.keys(trabalho.ufs).forEach(uf=>trabalho.ufs[uf].forEach(m=>add(uf,m.nomeMuni,String(m.id))));
+  // sem coluna de UF: um nome que existe em vários estados ("Bom Jesus") só é aceito se
+  // estiver em um único estado que já tem dados no painel
+  const comDados=new Set(Object.keys(trabalho.ufs).filter(uf=>trabalho.ufs[uf].length));
+  const acharPorNome=nome=>{
+    const s=[...(porNome.get(normNomeCliente(nome))||[])];
+    if(s.length===1)return s[0];
+    const d=s.filter(ib=>comDados.has(ufDoIbge(ib)));
+    return d.length===1?d[0]:'';
+  };
   const lista=new Map(),naoId=[];
   for(let i=h+1;i<rows.length;i++){
     const r=rows[i]||[];
     const nome=String(r[iC]||'').trim();
-    const uf=iUF>=0?String(r[iUF]||'').trim().toUpperCase():UF_ATUAL;
-    if(!nome||!/^[A-Z]{2}$/.test(uf))continue; // pula "Total" e o rodapé de filtros
-    const ib=idx.get(uf+'|'+normNomeCliente(nome));
+    const uf=iUF>=0?String(r[iUF]||'').trim().toUpperCase():'';
+    if(!nome||(iUF>=0&&!/^[A-Z]{2}$/.test(uf)))continue; // pula "Total" e o rodapé de filtros
+    const ib=iUF>=0?idx.get(uf+'|'+normNomeCliente(nome)):acharPorNome(nome);
     if(ib){if(!lista.has(ib))lista.set(ib,{ibge:ib,cliente:nome});}
     else if(!naoId.includes(nome))naoId.push(nome);
   }
   if(!lista.size)throw new Error(`"${fileName}": nenhum cliente foi identificado como município.`);
-  return{rotulo:'GOVBR Saúde / Celk',fonte:fileName,importadoEm:new Date().toISOString(),lista:[...lista.values()],naoIdentificados:naoId};
+  return{rotulo:'GOVBR Saúde / Celk',fonte:fileName,importadoEm:new Date().toISOString(),lista:[...lista.values()],naoIdentificados:naoId,semColunaUF:iUF<0};
 }

@@ -712,3 +712,14 @@ select,input,button,textarea{font-family:inherit;}
 @keyframes toast-tempo{from{transform:scaleX(1);}to{transform:scaleX(0);}}
 @media (max-width:640px){.toasts{left:16px;right:16px;bottom:16px;align-items:stretch;}.toast{width:auto;}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none;}.toast-bar{animation:none;display:none;}}
+
+/* Seletor de estado (v3.0.0) — no topo do painel do estado, sobre o fundo navy */
+.uf-sel{display:flex;align-items:center;gap:10px;margin:10px 0 10px;flex-wrap:wrap;}
+.uf-sel label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#B6F6FF;font-weight:700;}
+.uf-sel select{font:inherit;font-size:15px;font-weight:600;color:#fff;background:rgba(255,255,255,.1);border:1.5px solid rgba(182,246,255,.45);border-radius:9px;padding:7px 34px 7px 12px;max-width:100%;cursor:pointer;
+  appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23B6F6FF' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+.uf-sel select:hover{background-color:rgba(255,255,255,.16);}
+.uf-sel select:focus-visible{outline:2px solid #B6F6FF;outline-offset:2px;}
+.uf-sel select option,.uf-sel select optgroup{color:#09274C;background:#fff;}
+/* estados "altos" (ex.: Roraima, Amapá) não deixam o mapa ocupar a tela inteira */
+#rsmap-svg-wrap svg{max-height:min(72vh,680px);}

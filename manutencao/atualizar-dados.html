@@ -37,6 +37,10 @@
   .mt-steps-final code{background:var(--chip-neutral-bg);padding:1px 6px;border-radius:5px;font-size:12.5px;}
   .change.disabled{opacity:.45;pointer-events:none;}
   input[type=file]{display:none;}
+  .mt-tab{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px;}
+  .mt-tab th,.mt-tab td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);}
+  .mt-tab th{font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
+  .mt-tag-alt{background:var(--chip-amber-bg);color:var(--chip-amber-fg);border-radius:6px;padding:2px 8px;font-weight:600;}
 </style>
 </head>
 <body>
@@ -51,12 +55,12 @@
 
   <div class="card">
     <div class="card-h"><h3>Dados publicados hoje</h3><p>O que o painel está mostrando agora (arquivos atuais de site/dados/).</p></div>
-    <div class="card-b"><div class="mt-kv" id="mt-publicado"></div></div>
+    <div class="card-b"><div class="mt-kv" id="mt-publicado"></div><div id="mt-publicado-tab"></div></div>
   </div>
 
   <div class="card">
-    <div class="card-h"><h3><span class="mt-step">1</span>Relatórios do SIAPS (estado inteiro)</h3>
-      <p>No SIAPS público, gere os dois relatórios com a UF e o município em branco ("Todos"), em .xlsx: "Vínculo e Acompanhamento Territorial e Qualidade" e "Qualidade – Conceito obtido por indicador". Pode selecionar os dois de uma vez.</p></div>
+    <div class="card-h"><h3><span class="mt-step">1</span>Relatórios do SIAPS (um ou vários estados)</h3>
+      <p>No SIAPS público, gere os dois relatórios com os estados desejados (pode marcar vários, ou todos) e o município em branco ("Todos"), em .xlsx: "Vínculo e Acompanhamento Territorial e Qualidade" e "Qualidade – Conceito obtido por indicador". Pode selecionar vários arquivos de uma vez. Cada município vai para o seu estado automaticamente, pelo código IBGE.</p></div>
     <div class="card-b">
       <div class="mt-row">
         <div class="change primary" onclick="document.getElementById('in-siaps').click()">⤒ Selecionar relatórios do SIAPS (.xlsx)</div>
@@ -104,15 +108,17 @@
     <div class="card-h"><h3><span class="mt-step">4</span>Conferir e gerar os arquivos</h3><p>Confira o resumo antes de publicar.</p></div>
     <div class="card-b">
       <div class="mt-kv" id="mt-resumo"></div>
+      <div id="mt-resumo-tab"></div>
       <div class="mt-log" id="mt-avisos"></div>
       <div class="mt-row" style="margin-top:16px;">
-        <div class="change primary" id="btn-baixar-uf">⤓ Baixar dados do estado</div>
+        <div class="change primary" id="btn-baixar-uf">⤓ Baixar dados dos estados</div>
         <div class="change primary" id="btn-baixar-clientes">⤓ Baixar lista de clientes</div>
       </div>
+      <p class="mt-hint">O navegador pode perguntar se a página pode baixar vários arquivos de uma vez: responda que sim.</p>
       <ol class="mt-steps-final">
-        <li>Coloque o arquivo do estado (ex.: <code>RS.js</code>) em <code>site/dados/uf/</code> e o <code>clientes.js</code> em <code>site/dados/</code>, substituindo os atuais.</li>
-        <li>Abra <code>site/index.html</code> (dois cliques) e confira se está tudo certo.</li>
-        <li>No GitHub Desktop, escreva um resumo (ex.: "Dados RS 2026Q3") e clique em <b>Commit</b> e depois em <b>Push</b>. Depois, publique no hub seguindo docs/PUBLICAR_NO_HUB.md.</li>
+        <li>Coloque os arquivos dos estados (ex.: <code>RS.js</code>, <code>SP.js</code>) em <code>site/dados/uf/</code>, e o <code>indice.js</code> e o <code>clientes.js</code> em <code>site/dados/</code>, substituindo os atuais.</li>
+        <li>Abra <code>site/index.html</code> (dois cliques), escolha os estados atualizados no seletor e confira se está tudo certo.</li>
+        <li>No GitHub Desktop, escreva um resumo (ex.: "Dados 2026Q3 — todos os estados") e clique em <b>Commit</b> e depois em <b>Push</b>. O link do painel se atualiza sozinho em 1 a 2 minutos.</li>
       </ol>
     </div>
   </div>
@@ -121,9 +127,9 @@
 <script src="vendor/xlsx.full.min.js"></script>
 <script src="../site/js/dados.js"></script>
 <script src="../site/dados/estratos-ied.js"></script>
-<script src="../site/dados/geo/RS.js"></script>
-<!-- dados publicados atuais (se ainda não existirem, a página começa do zero) -->
-<script src="../site/dados/uf/RS.js" onerror="void 0"></script>
+<!-- dados publicados atuais (se ainda não existirem, a página começa do zero).
+     Os arquivos de cada estado e os mapas são carregados pelo manutencao.js. -->
+<script src="../site/dados/indice.js" onerror="void 0"></script>
 <script src="../site/dados/clientes.js" onerror="void 0"></script>
 <script src="../site/js/base.js"></script>
 <script src="../site/js/calculo.js"></script>

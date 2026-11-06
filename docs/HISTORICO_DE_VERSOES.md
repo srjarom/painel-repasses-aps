@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 3.0.0
+
+Painel nacional: seletor de estado no topo do painel, com os 27 estados (os que ainda não têm dados aparecem como "sem dados ainda"). Cada estado carrega só quando é escolhido, então quem abre o painel baixa só o estado que vai ver. O endereço guarda o estado (…/?uf=SC), para mandar o link de um estado direto a um colega, e o painel lembra o último estado escolhido. Mapas dos 27 estados (IBGE). O filtro de clientes mostra só os clientes do estado escolhido. A ferramenta de manutenção aceita relatórios do SIAPS de um ou de vários estados de uma vez (cada município vai para o seu estado pelo código IBGE), lê listas de clientes de vários estados (de preferência com coluna UF) e gera um arquivo por estado, mais o índice dados/indice.js.
+
 ## 2.4.0
 
 PDF "Raio-X por indicador" refeito no padrão visual do Relatório do quadrimestre. Saiu a "nota em %", difícil de entender; entraram: resumo em quatro quadros (indicadores avaliados, com equipe em Regular, com todas em Ótimo, quantos melhoraram/pioraram), "Onde focar na próxima agenda" (mesmas regras de prioridade do relatório, com a sugestão de ação de cada indicador) e, por tipo de equipe, cada indicador com um quadrado por equipe na cor do conceito (quadrimestre anterior e atual), a situação em palavras ("2 de 3 em Regular", "Todas em Ótimo") e a tendência. Municípios com mais de 6 equipes mostram uma barra proporcional com as quantidades. Rodapé deixa claro que é documento de uso interno.

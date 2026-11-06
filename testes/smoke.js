@@ -22,7 +22,7 @@ const ok=(cond,msg)=>{console.log((cond?'  ✓ ':'  ✗ ')+msg);if(!cond)falhas.
   page.on('console',m=>{if(m.type()==='error')erros.push(m.text());});
 
   console.log('Painel do estado');
-  await page.goto(URL);await page.waitForTimeout(1000);
+  await page.goto(URL);await page.waitForFunction(()=>typeof carteira!=='undefined'&&carteira.municipios.length>0,null,{timeout:15000});await page.waitForTimeout(500);
   const info=await page.evaluate(()=>({
     n:carteira.municipios.length,
     mapa:document.querySelectorAll('#rsmap-svg-wrap path').length,

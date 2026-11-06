@@ -7,11 +7,32 @@
    - leitura e formatação de quadrimestres ("2026Q2", "Q2/26"…) e de valores em R$.
    Se a Portaria mudar algum valor, é AQUI que se atualiza (ver docs/REGRAS_DE_NEGOCIO.md).
 
-   UF_ATUAL: estado exibido no painel. Hoje só o RS tem dados publicados; a estrutura
-   de dados já é por estado (dados/uf/<UF>.js) para a expansão a outros estados.
+   UF_ATUAL: estado exibido agora no painel (muda pelo seletor de estado — ver estados.js).
+   ESTADOS: as 27 UFs, com o nome, a preposição ("do Rio Grande do Sul", "da Bahia",
+   "de São Paulo") e o código IBGE de 2 dígitos (o começo do código de cada município).
    ========================================================================= */
 
-const UF_ATUAL='RS';
+let UF_ATUAL='RS';
+const UF_PADRAO='RS';
+const ESTADOS=[
+  {uf:'AC',nome:'Acre',de:'do',cod:'12'},{uf:'AL',nome:'Alagoas',de:'de',cod:'27'},
+  {uf:'AP',nome:'Amapá',de:'do',cod:'16'},{uf:'AM',nome:'Amazonas',de:'do',cod:'13'},
+  {uf:'BA',nome:'Bahia',de:'da',cod:'29'},{uf:'CE',nome:'Ceará',de:'do',cod:'23'},
+  {uf:'DF',nome:'Distrito Federal',de:'do',cod:'53'},{uf:'ES',nome:'Espírito Santo',de:'do',cod:'32'},
+  {uf:'GO',nome:'Goiás',de:'de',cod:'52'},{uf:'MA',nome:'Maranhão',de:'do',cod:'21'},
+  {uf:'MT',nome:'Mato Grosso',de:'de',cod:'51'},{uf:'MS',nome:'Mato Grosso do Sul',de:'de',cod:'50'},
+  {uf:'MG',nome:'Minas Gerais',de:'de',cod:'31'},{uf:'PA',nome:'Pará',de:'do',cod:'15'},
+  {uf:'PB',nome:'Paraíba',de:'da',cod:'25'},{uf:'PR',nome:'Paraná',de:'do',cod:'41'},
+  {uf:'PE',nome:'Pernambuco',de:'de',cod:'26'},{uf:'PI',nome:'Piauí',de:'do',cod:'22'},
+  {uf:'RJ',nome:'Rio de Janeiro',de:'do',cod:'33'},{uf:'RN',nome:'Rio Grande do Norte',de:'do',cod:'24'},
+  {uf:'RS',nome:'Rio Grande do Sul',de:'do',cod:'43'},{uf:'RO',nome:'Rondônia',de:'de',cod:'11'},
+  {uf:'RR',nome:'Roraima',de:'de',cod:'14'},{uf:'SC',nome:'Santa Catarina',de:'de',cod:'42'},
+  {uf:'SP',nome:'São Paulo',de:'de',cod:'35'},{uf:'SE',nome:'Sergipe',de:'de',cod:'28'},
+  {uf:'TO',nome:'Tocantins',de:'do',cod:'17'}
+];
+function estadoInfo(uf){return ESTADOS.find(e=>e.uf===uf)||{uf,nome:uf,de:'de',cod:''};}
+function nomeComPrep(uf){const e=estadoInfo(uf);return `${e.de} ${e.nome}`;}   // "do Rio Grande do Sul"
+function ufDoIbge(ib){const c=String(ib||'').slice(0,2);const e=ESTADOS.find(x=>x.cod===c);return e?e.uf:'';}
 
 const FIXO_ESTRATO={eSF:{1:18000,2:16000,3:14000,4:12000},eAP30:{1:10800,2:9600,3:8400,4:7200},eAP20:{1:7200,2:6400,3:5600,4:4800}};
 const FIXO_FLAT={I_comum:4014,II_comum:7064,I_quil:6021,II_quil:10596,ampliada:36000,complementar:24000,estrategica:12000};
@@ -70,11 +91,12 @@ function indScore(c){
   return CLASS_ORDEM.reduce((s,k)=>s+(c[k]||0)*PESO_CONCEITO[k],0)/t;
 }
 
-// Nome de município sem acento, sem "PM ", sem "-RS" — usado para casar nomes vindos de
-// planilhas (ex.: lista de clientes do comercial) com o código IBGE.
+// Nome de município sem acento, sem "PM ", sem "-RS"/"/SP" no fim — usado para casar nomes
+// vindos de planilhas (ex.: lista de clientes do comercial) com o código IBGE.
+const SIGLAS_UF=new Set(ESTADOS.map(e=>e.uf));
 function normNomeCliente(x){
   let s=String(x||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase();
   s=s.replace(/^\s*(P\.?\s?M\.?|PREFEITURA MUNICIPAL DE|PREFEITURA DE|MUNICIPIO DE)\s+/,'');
-  s=s.replace(/\s*[-\/]\s*RS\s*$/,'');
+  s=s.replace(/\s*[-\/]\s*([A-Z]{2})\s*$/,(m,uf)=>SIGLAS_UF.has(uf)?'':m);
   return s.replace(/[^A-Z]+/g,' ').trim();
 }

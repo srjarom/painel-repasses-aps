@@ -1,11 +1,11 @@
 /* Mapa interativo do estado (SVG desenhado a partir dos contornos em dados/geo/). */
 
 /* =========================================================================
-   MAPA INTERATIVO DA CARTEIRA (Rio Grande do Sul)
-   Projeção equirretangular simples (RS tem variação de latitude modesta,
-   então uma única correção de cosseno pela latitude média é suficiente —
-   sem precisar de Mercator/D3). As geometrias vêm de dados/geo/<UF>.js (PainelDados.geo) e
-   são projetadas uma única vez e cacheadas em RS_MAP_CACHE. Rampa de cor
+   MAPA INTERATIVO DO ESTADO ESCOLHIDO
+   Projeção equirretangular simples (uma única correção de cosseno pela latitude
+   média do estado basta para o tamanho de um estado — sem precisar de Mercator/D3).
+   As geometrias vêm de dados/geo/<UF>.js (PainelDados.geo) e são projetadas uma
+   única vez por estado e guardadas em MAPA_CACHE[UF]. Rampa de cor
    sequencial (uma matiz, mais escuro = mais valor), conforme o skill de
    dataviz: 6 degraus, família navy, validada contra o fundo branco do card.
    ========================================================================= */
@@ -22,9 +22,9 @@ function rsMapColorAt(t){
   const bl=Math.round(a[2]+(b[2]-a[2])*f);
   return `rgb(${r},${g},${bl})`;
 }
-let RS_MAP_CACHE=null;
+const MAPA_CACHE={};
 function buildRsMapGeometry(){
-  if(RS_MAP_CACHE)return RS_MAP_CACHE;
+  if(MAPA_CACHE[UF_ATUAL])return MAPA_CACHE[UF_ATUAL];
   let minLon=Infinity,maxLon=-Infinity,minLat=Infinity,maxLat=-Infinity;
   PainelDados.geo(UF_ATUAL).forEach(m=>m.polys.forEach(poly=>poly.forEach(ring=>ring.forEach(pt=>{
     const lon=pt[0],lat=pt[1];
@@ -46,8 +46,8 @@ function buildRsMapGeometry(){
     }).join(' ')).join(' ');
     return{id:m.id,name:m.name,d};
   });
-  RS_MAP_CACHE={paths,W,H};
-  return RS_MAP_CACHE;
+  MAPA_CACHE[UF_ATUAL]={paths,W,H};
+  return MAPA_CACHE[UF_ATUAL];
 }
 const MAP_METRICS=[
   {key:'trend',label:'Tendência vs. quadrimestre anterior'},
@@ -136,7 +136,7 @@ function renderCarteiraMap(rows){
   const span=(max-min)||1;
   const TC=trendColors(),PC=perdaColors();
   const perdaMode=isTrend&&trendFilter==='perda';
-  let svg=`<svg viewBox="0 0 ${geo.W.toFixed(1)} ${geo.H.toFixed(1)}" role="img" aria-label="Mapa do Rio Grande do Sul, municípios coloridos por ${metric.label.toLowerCase()}. A tabela de ranking abaixo traz os mesmos dados.">`;
+  let svg=`<svg viewBox="0 0 ${geo.W.toFixed(1)} ${geo.H.toFixed(1)}" role="img" aria-label="Mapa ${nomeComPrep(UF_ATUAL)}, municípios coloridos por ${metric.label.toLowerCase()}. A tabela de ranking abaixo traz os mesmos dados.">`;
   geo.paths.forEach(p=>{
     const r=byIbge[p.id];
     let fill=cssVar('--map-nodata-fill')||'#e7ecef',cls='rsmap-muni';

@@ -1,6 +1,6 @@
 # Painel de Repasses APS: ficha técnica
 
-**Versão do painel:** 2.4.0
+**Versão do painel:** 3.0.0
 **Responsável (desenvolvimento, dados e publicação):** Jarom Rosa
 
 Resumo técnico do painel para avaliação e autorização de publicação no hub corporativo: o que ele é, como funciona, que dados usa e o que precisa ser autorizado.
@@ -24,7 +24,7 @@ Resumo técnico do painel para avaliação e autorização de publicação no hu
   Lista de clientes do comercial (.xlsx) ─┤──► manutencao/atualizar-dados.html
                                           │        (roda no navegador, offline)
                                           ▼
-                              site/dados/uf/RS.js, site/dados/clientes.js
+                              site/dados/uf/<UF>.js, indice.js, clientes.js
                                           │
                                    git commit / push
                                           │
@@ -46,7 +46,7 @@ Resumo técnico do painel para avaliação e autorização de publicação no hu
   - `painel-repasses-tema`: claro ou escuro.
   - `painel-repasses-filtro-clientes`: estado do filtro.
 - **PDFs:** gerados no próprio navegador do usuário (jsPDF). Nada sai da máquina.
-- **Tamanho:** cerca de 2,6 MB no total, dos quais 1,2 MB são dados e 620 KB são bibliotecas. Comprime bem com gzip/brotli.
+- **Tamanho:** cerca de 7 MB na pasta (5 MB são os mapas dos 27 estados e 620 KB são bibliotecas), mas quem abre o painel baixa só a página e o estado escolhido (cerca de 2 MB). Comprime bem com gzip/brotli.
 
 ## 3. O que publicar e o que NÃO publicar
 
@@ -70,7 +70,7 @@ Se a publicação for automática a partir do repositório, ela deve copiar **s�
 1. **Responsável pelo painel**, a cada novo quadrimestre do SIAPS (cerca de 3 vezes por ano), e quando a lista de clientes muda:
    - baixa os relatórios;
    - roda `manutencao/atualizar-dados.html`;
-   - substitui `site/dados/uf/RS.js` e `site/dados/clientes.js`;
+   - substitui os arquivos dos estados atualizados (`site/dados/uf/<UF>.js`), o `site/dados/indice.js` e, se mudou, o `site/dados/clientes.js`;
    - confere localmente;
    - faz commit e push.
 
@@ -102,11 +102,7 @@ Os arquivos de dados têm **um município por linha**. Assim o diff do Git mostr
 
 ## 8. Próximos passos possíveis (não urgentes)
 
-- **Outros estados / Brasil:** a estrutura já está pronta para isso.
-  - Os dados são por estado (`dados/uf/<UF>.js`).
-  - O estrato IED já cobre os 5.570 municípios.
-  - Faltam: contornos do mapa de cada estado (`dados/geo/<UF>.js`), um seletor de estado na tela e a ferramenta de manutenção aceitar a UF escolhida.
-  - Com o Brasil inteiro, os dados e mapas somariam cerca de 11 MB (cerca de 1 MB a cada 500 municípios). Nesse caso, vale carregar só o estado escolhido sob demanda ou mover os dados para uma API.
+- **Visão Brasil:** desde a versão 3.0.0 o painel tem seletor com os 27 estados, mapas de todos eles e carrega só o estado escolhido (cerca de 1 MB por estado; o Brasil inteiro soma cerca de 12 MB). Um próximo passo possível é uma tela inicial com o ranking dos estados.
 - **Atualização automática:** os relatórios do SIAPS hoje são baixados manualmente no portal público. Se o Ministério oferecer API ou download direto, a manutenção pode virar uma rotina agendada.
 
 ---

@@ -21,3 +21,6 @@ pacote/
 # Testes
 testes/node_modules/
 testes/saida/
+
+# Configuração local do Claude Code (servidor de teste)
+.claude/
