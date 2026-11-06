@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.2.3
+
+Tela "Como funciona o repasse": sem o espaço vazio grande entre o topo e o título, e com menos espaço entre os blocos. O cartão de Qualidade passa a citar também as equipes ribeirinhas (eSFR), prisionais (eAPP) e de Consultório na Rua (eCR).
+
 ## 4.2.2
 
 Topo e quadros de números mais finos (barra de navegação, barra do Brasil/estado e os quatro quadros): o mapa começa cerca de 100 px mais acima, sem perder a leitura.

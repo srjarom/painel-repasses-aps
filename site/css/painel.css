@@ -908,3 +908,15 @@ button.kpi:hover{border-color:var(--line-2);}
 .kpi-s{font-size:11px;margin-top:3px;}
 .kpi-bar{height:5px;margin-top:5px;}
 .kpi-row{gap:12px;margin-bottom:12px;}
+
+/* v4.2.3 — tela "Como funciona o repasse": menos espaço vazio no alto e entre os blocos */
+#view-guia .guide{padding-top:0;border-bottom:0;}
+#view-guia .guide-in{padding:22px 30px 40px;}
+#view-guia .tut-head{margin-bottom:22px;}
+#view-guia .tut-kicker{padding:4px 12px;font-size:11px;}
+#view-guia .tut-head h2{font-size:24px;margin-top:10px;}
+#view-guia .tut-head p{margin-top:6px;font-size:14.5px;}
+#view-guia .comp-grid{gap:16px;margin-bottom:26px;}
+#view-guia .comp-card{padding:18px 20px 16px;}
+#view-guia .scale-wrap{margin-bottom:26px;}
+@media(max-width:640px){#view-guia .guide-in{padding:16px 16px 32px;}#view-guia .tut-head h2{font-size:21px;}}

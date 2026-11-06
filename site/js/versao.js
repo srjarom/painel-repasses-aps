@@ -6,8 +6,9 @@
    uma nova entrada no topo do array (mais recente primeiro) e atualize
    APP_VERSION (e docs/HISTORICO_DE_VERSOES.md). Fica visível só na tela (rodapé), não entra no PDF do cliente.
    ========================================================================= */
-const APP_VERSION='4.2.2';
+const APP_VERSION='4.2.3';
 const APP_CHANGELOG=[
+  {v:'4.2.3',desc:'Tela "Como funciona o repasse": sem o espaço vazio grande entre o topo e o título, e com menos espaço entre os blocos. O cartão de Qualidade passa a citar também as equipes ribeirinhas (eSFR), prisionais (eAPP) e de Consultório na Rua (eCR).'},
   {v:'4.2.2',desc:'Topo e quadros de números mais finos (barra de navegação, barra do Brasil/estado e os quatro quadros): o mapa começa cerca de 100 px mais acima, sem perder a leitura.'},
   {v:'4.2.1',desc:'Mapa de Pernambuco: Fernando de Noronha, que fica a uns 350 km da costa, espremia o estado num canto do mapa. Agora a ilha aparece ampliada num quadro tracejado com o nome, logo acima do litoral, e o continente ocupa a largura toda. A ilha continua clicável.'},
   {v:'4.2.0',desc:'Topo mais limpo: uma faixa escura só (a de navegação). A barra do Brasil/estado ficou clara, com "Brasil › estado" discreto, o nome do estado em destaque sem caixa pesada e uma busca curta ("Buscar município"), que não corta mais o texto. A linha de informação ficou mais curta (quadrimestre · municípios · histórico desde · atualizado em) e o plural foi corrigido ("1 município"). A referência à Portaria saiu do topo e foi para o rodapé.'},
