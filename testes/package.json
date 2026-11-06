@@ -7,6 +7,6 @@
     "test": "node smoke.js"
   },
   "devDependencies": {
-    "playwright": "1.48.2"
+    "playwright": "1.65.0"
   }
 }

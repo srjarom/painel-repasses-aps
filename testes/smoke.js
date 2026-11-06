@@ -3,7 +3,8 @@
    Abre site/index.html num Chrome sem janela, bloqueando qualquer acesso à internet
    (o painel não deve depender de nada externo), e confere:
    - nenhum erro no console;
-   - dados carregados (municípios, mapa, ranking);
+   - tela do Brasil (27 estados no mapa e na lista), busca do topo e voltar do navegador;
+   - painel de um estado (municípios, mapa, ranking);
    - abrir um município e gerar os 3 PDFs (relatório, resumo, Raio-X).
    Sai com código 1 se algo falhar (serve para CI). */
 const path=require('path');
@@ -20,6 +21,26 @@ const ok=(cond,msg)=>{console.log((cond?'  ✓ ':'  ✗ ')+msg);if(!cond)falhas.
   const erros=[];
   page.on('pageerror',e=>erros.push(e.message));
   page.on('console',m=>{if(m.type()==='error')erros.push(m.text());});
+
+  console.log('Tela do Brasil');
+  await page.goto(URL.replace('?uf=RS',''));
+  await page.waitForFunction(()=>document.querySelectorAll('#br-map path.has-data').length>0,null,{timeout:15000});
+  const br=await page.evaluate(()=>({
+    estados:document.querySelectorAll('#br-list .br-row').length,
+    mapa:document.querySelectorAll('#br-map path.has-data').length,
+    kpis:document.querySelectorAll('#br-kpis .kpi').length,
+  }));
+  ok(br.estados===27,`lista com ${br.estados} estados`);
+  ok(br.mapa===27,`mapa do Brasil com ${br.mapa} estados`);
+  ok(br.kpis===4,'quatro números do Brasil');
+  // busca do topo: "Alegrete" + Enter abre o município (e o estado dele)
+  await page.click('#busca-br');
+  await page.waitForFunction(()=>document.querySelectorAll('#busca-lista option').length>5000,null,{timeout:15000});
+  await page.fill('#busca-br','Alegrete');await page.press('#busca-br','Enter');
+  await page.waitForFunction(()=>document.getElementById('view-municipio').style.display!=='none',null,{timeout:15000});
+  ok((await page.textContent('#muni-name'))==='Alegrete','busca abriu Alegrete');
+  await page.goBack();await page.waitForTimeout(500);
+  ok(await page.evaluate(()=>document.getElementById('view-brasil').style.display!=='none'),'voltar do navegador retornou ao Brasil');
 
   console.log('Painel do estado');
   await page.goto(URL);await page.waitForFunction(()=>typeof carteira!=='undefined'&&carteira.municipios.length>0,null,{timeout:15000});await page.waitForTimeout(500);
