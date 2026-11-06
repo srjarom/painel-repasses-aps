@@ -26,6 +26,7 @@ function applyThemeSideEffects(){
   // carteira (se estiver com dados) usando as cores corretas do tema atual.
   if(parsed&&lastRes){chartRepasse(lastRes);chartClass(lastRes);}
   if(carteiraMapRows&&carteiraMapRows.length)renderCarteiraMap(carteiraMapRows);
+  {const vb=document.getElementById('view-brasil');if(vb&&vb.style.display!=='none'&&typeof renderBrasilMapa==='function')renderBrasilMapa(estadosComResumo());}
 }
 function setTheme(theme){
   if(theme==='dark')document.documentElement.setAttribute('data-theme','dark');

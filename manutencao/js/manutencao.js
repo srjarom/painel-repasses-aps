@@ -268,13 +268,13 @@ function renderResumo(){
     if(alterado.ufs.size&&tudoCerto)logMsg('mt-avisos','ok','✓ Nos estados alterados, todos os municípios têm o quadrimestre mais recente e estrato IED definido.');
   }
   const pend=[...alterado.ufs].sort().map(uf=>`<b>${uf}.js</b>`);
-  if(alterado.ufs.size)pend.push('<b>indice.js</b>');
+  if(alterado.ufs.size)pend.push('<b>indice.js</b>','<b>busca.js</b>');
   if(alterado.clientes)pend.push('<b>clientes.js</b>');
   if(pend.length)logMsg('mt-avisos','wa',`Alterações ainda não baixadas: ${pend.join(', ')}. Clique em "Baixar" abaixo.`);
 
   $('btn-baixar-uf').classList.toggle('disabled',!alterado.ufs.size);
   $('btn-baixar-uf').textContent=alterado.ufs.size
-    ?`⤓ Baixar dados dos estados alterados (${[...alterado.ufs].sort().map(uf=>uf+'.js').join(', ')} + indice.js)`
+    ?`⤓ Baixar dados dos estados alterados (${[...alterado.ufs].sort().map(uf=>uf+'.js').join(', ')} + indice.js e busca.js)`
     :'⤓ Baixar dados dos estados (nada alterado ainda)';
   $('btn-baixar-clientes').classList.toggle('disabled',!trabalho.clientes);
 }
@@ -286,13 +286,21 @@ function baixarTexto(nome,texto){
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
 }
+// índice: data, nº de municípios e quadrimestres de cada estado + o resumo dos números
+// (resumoEstado, em site/js/resumo.js) que alimenta a tela inicial do Brasil
 function gerarIndice(){
   const ind={};
   ufsTrabalho().forEach(uf=>{
     const d=alterado.ufs.has(uf)?PainelDados.codificarUF(uf,trabalho.ufs[uf]):PainelDados.uf(uf);
-    ind[uf]=publicado.indice[uf]&&!alterado.ufs.has(uf)?publicado.indice[uf]:PainelDados.resumoIndice(d);
+    const base=publicado.indice[uf]&&!alterado.ufs.has(uf)?publicado.indice[uf]:PainelDados.resumoIndice(d);
+    ind[uf]=Object.assign({atualizadoEm:base.atualizadoEm,municipios:base.municipios,ultimoQuad:base.ultimoQuad,
+      primeiroQuad:d.quads.length?qCode(d.quads[0]):''},resumoEstado(trabalho.ufs[uf]));
   });
   return ind;
+}
+// busca: [ibge, nome] de todos os municípios, para a busca do topo do painel
+function gerarBusca(){
+  return todosMunicipios().map(m=>[String(m.id),m.nomeMuni]).sort((a,b)=>a[1].localeCompare(b[1],'pt-BR'));
 }
 async function baixarEstados(){
   const ufs=[...alterado.ufs].sort();
@@ -301,6 +309,8 @@ async function baixarEstados(){
     await new Promise(r=>setTimeout(r,350)); // o navegador baixa um arquivo por vez
   }
   baixarTexto('indice.js',PainelDados.textoArquivoIndice(gerarIndice()));
+  await new Promise(r=>setTimeout(r,350));
+  baixarTexto('busca.js',PainelDados.textoArquivoBusca(gerarBusca()));
   alterado.ufs.clear();
   renderResumo();
 }

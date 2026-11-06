@@ -1,60 +1,93 @@
 /* =========================================================================
-   SELETOR DE ESTADO (v3.0.0)
+   NAVEGAÇÃO: BRASIL → ESTADO → MUNICÍPIO (v4.0.0)
    -------------------------------------------------------------------------
-   O painel mostra um estado por vez. Os dados de cada estado (dados/uf/<UF>.js)
-   e o mapa (dados/geo/<UF>.js) só são baixados quando o estado é escolhido.
-   O estado escolhido vai para o endereço (…/?uf=SC), para dar para mandar o link
-   de um estado direto a um colega, e fica lembrado neste navegador.
+   O endereço diz onde a pessoa está, e dá para mandar o link de qualquer tela:
+     (sem parâmetros)        tela inicial do Brasil
+     ?uf=SC                  painel do estado
+     ?uf=SC&m=420540         relatório do município
+   Cada mudança de tela entra no histórico do navegador, então o botão "voltar"
+   do navegador funciona. Os dados de cada estado (dados/uf/<UF>.js) e o mapa
+   (dados/geo/<UF>.js) só são baixados quando o estado é aberto.
    ========================================================================= */
-const PREF_UF='painel-repasses-uf';
+function lerRota(){
+  let q;try{q=new URLSearchParams(location.search);}catch(e){q=new URLSearchParams('');}
+  const uf=(q.get('uf')||'').toUpperCase(),m=(q.get('m')||'').replace(/\D/g,'');
+  return{uf:SIGLAS_UF.has(uf)?uf:'',m:SIGLAS_UF.has(uf)?m:''};
+}
+function urlDaRota(r){
+  const q=new URLSearchParams();if(r.uf)q.set('uf',r.uf);if(r.m)q.set('m',r.m);
+  const s=q.toString();return location.pathname+(s?'?'+s:'');
+}
+function irPara(r){
+  r={uf:r.uf||'',m:r.m||''};
+  const atual=lerRota();
+  if(atual.uf!==r.uf||atual.m!==r.m){
+    try{history.pushState(r,'',urlDaRota(r));entrouNoMunicipioPeloPainel=!!r.m;}catch(e){/* file:// em alguns navegadores */}
+  }
+  return aplicarRota(r);
+}
+function irBrasil(){return irPara({});}
+function irEstado(uf){return irPara({uf});}
+function irMunicipio(ibge){return irPara({uf:ufDoIbge(ibge),m:String(ibge)});}
+let entrouNoMunicipioPeloPainel=false;   // o "Voltar" da tela do município só usa o histórico se veio do painel
+window.addEventListener('popstate',()=>{entrouNoMunicipioPeloPainel=false;aplicarRota(lerRota());});
 
-// estado inicial: ?uf= no endereço → último escolhido neste navegador → padrão
-function ufInicial(){
-  let uf='';
-  try{uf=(new URLSearchParams(location.search).get('uf')||'').toUpperCase();}catch(e){/* endereço sem parâmetros */}
-  if(!SIGLAS_UF.has(uf)){try{uf=(localStorage.getItem(PREF_UF)||'').toUpperCase();}catch(e){uf='';}}
-  if(!SIGLAS_UF.has(uf))uf=UF_PADRAO;
-  return uf;
+let ufCarregada='',voltandoDoMunicipio=false;
+async function aplicarRota(r){
+  const loading=document.getElementById('view-loading');
+  if(!r.uf){
+    if(loading)loading.style.display='none';
+    document.title='Painel de Repasses APS — Brasil — Governança Brasil';
+    showView('brasil');
+    return;
+  }
+  const vinhaDoMunicipio=document.getElementById('view-municipio').style.display!=='none';
+  if(r.uf!==ufCarregada){
+    if(loading)loading.style.display='';
+    const ok=await trocarEstado(r.uf);
+    if(loading)loading.style.display='none';
+    if(!ok)return;   // o usuário já foi para outro lugar enquanto carregava
+  }
+  if(r.m&&carteira.municipios.some(x=>String(x.id)===r.m)){abrirMunicipio(r.m);return;}
+  showView('carteira');
+  if(vinhaDoMunicipio)window.scrollTo({top:scrollAntesDoMunicipio,behavior:'auto'});
 }
 
 function montarSeletorUF(){
   const sel=document.getElementById('sel-uf');if(!sel)return;
   const ind=PainelDados.indice();
   const com=ESTADOS.filter(e=>ind[e.uf]),sem=ESTADOS.filter(e=>!ind[e.uf]);
-  const opt=e=>`<option value="${e.uf}">${e.nome} (${e.uf})${ind[e.uf]?'':' — sem dados ainda'}</option>`;
+  const opt=e=>`<option value="${e.uf}">${e.nome}${ind[e.uf]?'':' — sem dados ainda'}</option>`;
   sel.innerHTML=(com.length?`<optgroup label="Com dados publicados">${com.map(opt).join('')}</optgroup>`:'')+
     (sem.length?`<optgroup label="Ainda sem dados">${sem.map(opt).join('')}</optgroup>`:'');
-  sel.addEventListener('change',()=>trocarEstado(sel.value));
+  sel.addEventListener('change',()=>irEstado(sel.value));
+  const crumb=document.getElementById('crumb-brasil');
+  if(crumb)crumb.addEventListener('click',e=>{e.preventDefault();irBrasil();});
 }
 
 let trocaEmAndamento=0;
 async function trocarEstado(uf){
   const minhaTroca=++trocaEmAndamento;
-  const loading=document.getElementById('view-loading');
-  if(loading)loading.style.display='';
   await PainelDados.carregarEstado(uf);
-  if(minhaTroca!==trocaEmAndamento)return;   // o usuário já escolheu outro estado
-  UF_ATUAL=uf;
+  if(minhaTroca!==trocaEmAndamento)return false;
+  UF_ATUAL=uf;ufCarregada=uf;
   const d=PainelDados.uf(uf);
   carteira.municipios=PainelDados.municipios(uf);
-  // volta os filtros e a seleção do mapa ao início (eram do estado anterior)
-  trendFilter='all';mapSelId=null;rankBusca='';
+  // volta os filtros, a seleção do mapa e a aba ao início (eram do estado anterior)
+  trendFilter='all';mapSelId=null;rankBusca='';perdaVerTodos=false;abaEstado='mapa';
   {const b=document.getElementById('ranking-busca');if(b)b.value='';}
 
   const e=estadoInfo(uf);
   const sel=document.getElementById('sel-uf');if(sel)sel.value=uf;
   const tit=document.getElementById('painel-titulo');if(tit)tit.textContent=`Repasses da Atenção Primária — ${e.nome}`;
   const mt=document.getElementById('mapa-titulo');if(mt)mt.textContent=`Mapa ${nomeComPrep(uf)}`;
+  const bu=document.getElementById('busca-uf');if(bu)bu.placeholder=`Buscar município ${nomeComPrep(uf)} ou do Brasil`;
   const vazio=document.getElementById('carteira-empty-msg');
-  if(vazio)vazio.innerHTML=`Ainda não há dados publicados ${nomeComPrep(uf)}.<br>Escolha outro estado no seletor acima.`;
+  if(vazio)vazio.innerHTML=`Ainda não há dados publicados ${nomeComPrep(uf)}.<br><a href="?" onclick="event.preventDefault();irBrasil();">Voltar ao Brasil</a> ou escolha outro estado acima.`;
   document.title=`Painel de Repasses APS — ${e.nome} — Governança Brasil`;
   renderDadosInfo(d);
-
-  try{localStorage.setItem(PREF_UF,uf);}catch(x){/* só preferência */}
-  try{const u=new URL(location.href);u.searchParams.set('uf',uf);history.replaceState(null,'',u);}catch(x){/* file:// em alguns navegadores */}
-
-  if(loading)loading.style.display='none';
-  showView('carteira');
+  mostrarAba('mapa',{semRender:true});
+  return true;
 }
 
 function renderDadosInfo(d){
@@ -62,9 +95,37 @@ function renderDadosInfo(d){
   if(d&&d.quads&&d.quads.length){
     const ult=quadParts(d.quads[d.quads.length-1]);
     const dt=d.atualizadoEm?new Date(d.atualizadoEm+'T12:00:00').toLocaleDateString('pt-BR'):'—';
-    info.innerHTML=`<div class="di-l">Avaliação mais recente</div><div class="di-v">${ult.q}º quadrimestre de ${ult.y}</div>`+
-      `<div class="di-s">${d.municipios.length} municípios · dados de ${qCode(d.quads[0])} a ${qCode(d.quads[d.quads.length-1])}<br>atualizado em ${dt}</div>`;
+    info.textContent=`Avaliação mais recente: ${ult.q}º quadrimestre de ${ult.y} · ${d.municipios.length} municípios · dados de ${qCode(d.quads[0])} a ${qCode(d.quads[d.quads.length-1])} · atualizado em ${dt}`;
   }else{
-    info.innerHTML='<div class="di-s">Sem dados publicados</div>';
+    info.textContent='Sem dados publicados';
   }
 }
+
+/* ---------- abas do painel do estado: Mapa · Ranking · Equipes a menos ---------- */
+let abaEstado='mapa';
+function mostrarAba(nome,opts={}){
+  abaEstado=nome;
+  document.querySelectorAll('.tabs .tab-btn').forEach(b=>{const on=b.dataset.aba===nome;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;});
+  ['mapa','ranking','perda'].forEach(a=>{const p=document.getElementById('painel-'+a);if(p)p.hidden=a!==nome;});
+  if(opts.rolar){const t=document.querySelector('.tabs');if(t&&t.getBoundingClientRect().top<0)t.scrollIntoView({block:'start'});}
+}
+(function initAbas(){
+  const tabs=[...document.querySelectorAll('.tabs .tab-btn')];
+  tabs.forEach((b,i)=>{
+    b.addEventListener('click',()=>mostrarAba(b.dataset.aba,{rolar:true}));
+    // setas do teclado trocam de aba (padrão de acessibilidade para abas)
+    b.addEventListener('keydown',e=>{
+      if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;
+      const vis=tabs.filter(t=>t.style.display!=='none');
+      const j=(vis.indexOf(b)+(e.key==='ArrowRight'?1:-1)+vis.length)%vis.length;
+      vis[j].focus();mostrarAba(vis[j].dataset.aba);
+    });
+  });
+})();
+
+// altura da barra de navegação, para a barra do estado ficar presa logo abaixo dela
+function ajustarAlturaNav(){
+  const nav=document.querySelector('.nav');
+  if(nav)document.documentElement.style.setProperty('--nav-h',nav.offsetHeight+'px');
+}
+window.addEventListener('resize',ajustarAlturaNav);

@@ -5,7 +5,7 @@ Painel de monitoramento do repasse federal da Atenção Primária à Saúde (Por
 - **Usuários:** equipes da Governança Brasil. O painel é **só de consulta**.
 - **Responsável pelo painel (código, dados e publicação):** Jarom Rosa.
 - **Infraestrutura / TI:** autoriza a publicação no hub. Veja a [ficha técnica](docs/FICHA_TECNICA.md).
-- **Versão atual:** 3.2.0. Veja o [histórico](docs/HISTORICO_DE_VERSOES.md).
+- **Versão atual:** 4.0.0. Veja o [histórico](docs/HISTORICO_DE_VERSOES.md).
 
 ---
 
@@ -18,11 +18,12 @@ painel-repasses-aps/
 │   ├── css/painel.css     aparência (cores, modo escuro, celular)
 │   ├── js/                código, um arquivo por assunto (ver lista abaixo)
 │   ├── dados/             OS DADOS — gerados pela ferramenta de manutenção
-│   │   ├── indice.js        quais estados têm dados publicados (para o seletor)
+│   │   ├── indice.js        estados publicados + resumo de cada um (tela do Brasil)
+│   │   ├── busca.js         nomes dos municípios do Brasil (busca do topo)
 │   │   ├── uf/<UF>.js       municípios de cada estado: equipes, classificações, indicadores
 │   │   ├── clientes.js      lista de clientes GOVBR Saúde / Celk (só IBGE + nome)
 │   │   ├── estratos-ied.js  estrato IED dos 5.570 municípios (Anexo VI da Portaria)
-│   │   └── geo/<UF>.js      contornos do mapa dos 27 estados (IBGE)
+│   │   └── geo/<UF>.js      contornos do mapa dos 27 estados e do Brasil (BR.js), do IBGE
 │   ├── img/               logos e ícones
 │   ├── fontes/            fontes oficiais (Guanabara Sans e IBM Plex Sans) para a web
 │   └── vendor/            bibliotecas prontas (gráficos e PDF) — não mexer
@@ -46,7 +47,9 @@ painel-repasses-aps/
 | `calculo.js` | Cálculo do repasse (Fixo/IED, Vínculo, Qualidade), do potencial e da margem. |
 | `carteira.js` | Tela "Painel do estado": totais, ranking e navegação. |
 | `mapa.js` | Mapa do estado. |
-| `estados.js` | Seletor de estado: carrega o estado escolhido e guarda a escolha no endereço (`?uf=SC`). |
+| `estados.js` | Navegação Brasil → estado → município: endereço (`?uf=SC`, `?uf=SC&m=420540`), voltar do navegador e abas do estado. |
+| `brasil.js` | Tela inicial do Brasil (números, mapa por estado, lista dos estados) e a busca do topo. |
+| `resumo.js` | Números de cada município e o resumo de cada estado (usado na tela do Brasil e pela manutenção). |
 | `tendencia.js` | Tendência (subiu / igual / caiu). |
 | `alerta-equipes.js` | Alerta "Possível perda de equipes". |
 | `clientes.js` | Filtro "Só clientes GOVBR Saúde / Celk". |

@@ -69,12 +69,20 @@ PainelDados.registrarIndice({
 });
 ```
 
-Lista os estados que têm `dados/uf/<UF>.js`. É o que o seletor de estado usa para separar "com dados publicados" de "sem dados ainda", sem precisar baixar todos os estados. A ferramenta de manutenção gera este arquivo junto com os estados.
+Lista os estados que têm `dados/uf/<UF>.js` e, desde a versão 4.0.0, traz também o resumo de cada estado no quadrimestre mais recente: `total`, `potencial`, `gap` (margem), `pct` (% do potencial), `delta`/`deltaPct` (variação vs. o anterior), `sobe`/`igual`/`desce` (municípios), `perda`/`perdaImpacto` (municípios com equipes a menos e o impacto estimado) e `primeiroQuad`. É a mesma conta do painel do estado (`site/js/resumo.js`). A tela do Brasil usa só esse resumo, sem baixar os 27 estados. Lista os estados que têm `dados/uf/<UF>.js`. É o que o seletor de estado usa para separar "com dados publicados" de "sem dados ainda", sem precisar baixar todos os estados. A ferramenta de manutenção gera este arquivo junto com os estados.
+
+## `dados/busca.js`: busca do topo
+
+`PainelDados.registrarBusca([["520005","Abadia de Goiás"], …])`: código IBGE e nome de todos os municípios publicados. Só é baixado quando a pessoa clica na busca. Gerado pela manutenção junto com o índice.
+
+## `dados/geo/BR.js`: mapa do Brasil
+
+Contornos dos 27 estados (`id` = sigla), da API de malhas do IBGE. Gerado por `manutencao/ferramentas/gerar-mapa-brasil.pl`.
 
 ## Como o painel carrega os estados
 
-`index.html` carrega só `indice.js`, `clientes.js` e `estratos-ied.js`. Quando um estado é escolhido no seletor (`site/js/estados.js`), `PainelDados.carregarEstado(uf)` acrescenta na página os `<script>` de `dados/geo/<UF>.js` e, se o estado estiver no índice, de `dados/uf/<UF>.js`. Usar `<script>`, e não `fetch`, mantém o painel funcionando por duplo clique (`file://`).
+`index.html` carrega só `indice.js`, `clientes.js` e `estratos-ied.js`. O mapa do Brasil (`geo/BR.js`) é baixado ao abrir a tela inicial, e a lista da busca (`busca.js`) ao clicar na busca. Quando um estado é escolhido no seletor (`site/js/estados.js`), `PainelDados.carregarEstado(uf)` acrescenta na página os `<script>` de `dados/geo/<UF>.js` e, se o estado estiver no índice, de `dados/uf/<UF>.js`. Usar `<script>`, e não `fetch`, mantém o painel funcionando por duplo clique (`file://`).
 
-O estado escolhido vai para o endereço (`?uf=SC`) e fica guardado no navegador (`localStorage`, chave `painel-repasses-uf`).
+O endereço acompanha a navegação: sem parâmetros é a tela do Brasil, `?uf=SC` é o painel do estado e `?uf=SC&m=420540` é o relatório do município. Cada mudança entra no histórico do navegador (`site/js/estados.js`).
 
 Se `formato` precisar mudar (por exemplo, nova coluna), aumente o número e trate as duas versões em `PainelDados.municipios()`.

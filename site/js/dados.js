@@ -32,13 +32,15 @@ const PainelDados=(function(){
   const CLASSES=['Regular','Suficiente','Bom','Ótimo'];
   const COLS_R=['vEsf','vEap','qEsf','qEap','qEsb','qEmulti','qEsfr','qEapp','qEcr'];
   const ufs={},geos={};
-  let clientes=null,indice={};
+  let clientes=null,indice={},busca=[];
 
   function registrarUF(d){if(d&&d.uf)ufs[d.uf]=d;}
   function registrarGeo(uf,lista){geos[uf]=lista||[];}
   function registrarClientes(c){clientes=c||null;}
   // dados/indice.js: quais estados têm dados publicados (para o seletor saber sem baixar tudo)
   function registrarIndice(i){indice=i||{};}
+  // dados/busca.js: [[ibge,nome],…] de todos os municípios do Brasil, para a busca do topo
+  function registrarBusca(l){busca=l||[];}
 
   // Carrega um arquivo de dados só quando ele é preciso (cada estado ~1 MB).
   // Usa <script> em vez de fetch: assim funciona também abrindo o painel com dois cliques (file://).
@@ -136,13 +138,19 @@ const PainelDados=(function(){
       `   NÃO editar à mão: é atualizado junto com o arquivo do estado (ver docs/ATUALIZAR_OS_DADOS.md). */\n`+
       `PainelDados.registrarIndice({\n`+ks.map(k=>JSON.stringify(k)+':'+JSON.stringify(ind[k])).join(',\n')+`\n});\n`;
   }
+  // texto do arquivo dados/busca.js — um município por linha
+  function textoArquivoBusca(lista){
+    return `/* Nomes de todos os municípios com dados publicados — usados só pela busca do topo do painel.\n`+
+      `   Gerado pela ferramenta de manutenção junto com o índice. NÃO editar à mão. */\n`+
+      `PainelDados.registrarBusca([\n`+lista.map(x=>JSON.stringify(x)).join(',\n')+`\n]);\n`;
+  }
   // resumo de um estado para o índice
   function resumoIndice(d){
     const ult=d.quads[d.quads.length-1]||'';
     return{atualizadoEm:d.atualizadoEm,municipios:d.municipios.length,ultimoQuad:ult&&typeof qCode==='function'?qCode(ult):ult};
   }
 
-  return{registrarUF,registrarGeo,registrarClientes,registrarIndice,carregarEstado,
+  return{registrarUF,registrarGeo,registrarClientes,registrarIndice,registrarBusca,carregarEstado,textoArquivoBusca,busca:()=>busca,
     municipios,codificarUF,textoArquivoUF,textoArquivoClientes,textoArquivoIndice,resumoIndice,
-    uf:k=>ufs[k]||null,ufs:()=>Object.keys(ufs),geo:k=>geos[k]||[],clientes:()=>clientes,indice:()=>indice};
+    carregarScript,uf:k=>ufs[k]||null,ufs:()=>Object.keys(ufs),geo:k=>geos[k]||[],clientes:()=>clientes,indice:()=>indice};
 })();

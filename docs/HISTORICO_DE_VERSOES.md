@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.0.0
+
+Nova navegação, com muito menos rolagem. O painel abre numa tela do Brasil: quatro números do país, mapa do Brasil colorido por estado (margem em aberto, % do potencial, repasse ou variação) e a lista dos 27 estados, que pode ser ordenada; clicar num estado abre o painel dele. Busca no topo para ir direto a qualquer município do Brasil ou a um estado. No painel do estado, o bloco azul grande virou uma barra fina presa no topo (Brasil › estado, troca de estado e busca), os números ficam numa linha só e o conteúdo foi dividido em três abas: Mapa, Ranking e Equipes a menos. O endereço acompanha a navegação (…?uf=SC e …?uf=SC&m=420540), então dá para mandar o link de um estado ou de um município, e o botão voltar do navegador funciona. A ferramenta de manutenção passa a gerar também o resumo de cada estado (dados/indice.js) e a lista da busca (dados/busca.js).
+
 ## 3.2.0
 
 O cálculo do repasse passa a incluir as equipes de Saúde da Família Ribeirinha (eSFR), Atenção Primária Prisional (eAPP) e Consultório na Rua (eCR), que antes ficavam de fora. Qualidade pelos valores do Anexo XCIX-B (redação da Portaria GM/MS nº 7.799/2025); custeio mensal da eSFR (R$ 24.000, Portaria nº 5.850/2024) e da eCR (I R$ 20.000, II R$ 28.000, III R$ 36.000, art. 84). O custeio mensal da eAPP e o Vínculo da eSFR não entram, por falta de valor confirmado ou de dado no relatório público. Novos campos de modalidade eCR e eAPP (padrão: os menores valores, eCR I e eAPP Essencial 20h), ajustáveis na tela e na manutenção. Cada município mostra só os tipos de equipe que tem: cartões, campos de modalidade, abas do Raio-X, tabelas, gráficos, alertas de equipes a menos, diagnóstico e PDFs. No Brasil, as três equipes somam cerca de R$ 20,6 milhões/mês a mais no quadrimestre mais recente.

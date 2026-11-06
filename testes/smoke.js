@@ -8,7 +8,7 @@
    Sai com código 1 se algo falhar (serve para CI). */
 const path=require('path');
 const {chromium}=require('playwright');
-const URL='file://'+path.resolve(__dirname,'..','site','index.html');
+const URL='file://'+path.resolve(__dirname,'..','site','index.html')+'?uf=RS';
 const falhas=[];
 const ok=(cond,msg)=>{console.log((cond?'  ✓ ':'  ✗ ')+msg);if(!cond)falhas.push(msg);};
 

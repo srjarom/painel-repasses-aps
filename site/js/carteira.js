@@ -9,17 +9,7 @@
 
 let carteira={municipios:[],clientes:null,filtroClientes:false};
 
-function carteiraRow(entry){
-  const res=compute(entry.parsed.rows,entry.params);
-  const last=res[res.length-1];
-  const gap=last.potencial-last.total;
-  const pct=last.potencial>0?Math.round(last.total/last.potencial*100):100;
-  const perda=analisarPerdaEquipes(res,entry.parsed.rows,carteiraRefKey);
-  let trend=tendenciaDe(res);
-  // município que nem aparece no relatório mais recente: a "tendência" antiga enganaria
-  if(perda&&perda.ausente)trend={dir:null,ausente:true,delta:0,pct:null,prevQuad:null,quad:last.quad,ref:perda.ausente.ref};
-  return{entry,last,gap,pct,trend,perda};
-}
+function carteiraRow(entry){return linhaMunicipio(entry,carteiraRefKey);}   // ver resumo.js
 
 function renderCarteiraBadge(){
   const n=carteira.municipios.length;
@@ -55,17 +45,23 @@ function renderCarteiraView(){
   const totGap=rows.reduce((s,r)=>s+r.gap,0);
   const pctMed=totPot>0?Math.round(totAtual/totPot*100):0;
 
-  document.getElementById('carteira-summary-grid').innerHTML=`
-    <div class="tcard"><div class="tcard-top"><div><div class="tt">${filtrar?'Clientes '+CLIENTES_ROTULO:'Municípios no painel'}</div></div></div>
-      <div class="tcard-body"><div class="now mono">${rows.length}</div></div></div>
-    <div class="tcard"><div class="tcard-top"><div><div class="tt">Repasse atual — agregado</div></div></div>
-      <div class="tcard-body"><div class="nowlbl">Soma do quadrimestre mais recente de cada município</div><div class="now mono">${fmtBRL(totAtual)}</div></div></div>
-    <div class="tcard"><div class="tcard-top"><div><div class="tt">Potencial — agregado</div></div></div>
-      <div class="tcard-body"><div class="nowlbl">Se todas as equipes estivessem em "Ótimo"</div><div class="now mono">${fmtBRL(totPot)}</div></div></div>
-    <div class="tcard"><div class="tcard-top"><div><div class="tt">Margem em aberto — agregada</div></div></div>
-      <div class="tcard-body"><div class="now mono">${fmtBRL(totGap)}</div>
-        <div class="tcard-prog"><i style="width:${Math.min(pctMed,100)}%"></i></div>
-        <div class="nowlbl" style="margin-top:6px;">${pctMed}% do potencial já alcançado, em média</div></div></div>`;
+  // quatro quadros numa linha só (v4.0.0) — o detalhe fica nas abas logo abaixo
+  const totDelta=rows.reduce((s,r)=>s+(r.trend&&r.trend.dir!=null?r.trend.delta:0),0);
+  const totDeltaPct=totAtual-totDelta>0?totDelta/(totAtual-totDelta)*100:null;
+  document.getElementById('carteira-summary-grid').innerHTML=
+    kpiHTML({label:'Repasse atual por mês',valor:fmtBRLcurto(totAtual),titulo:fmtBRL(totAtual),sub:fmtVar(Math.round(totDelta),totDeltaPct)+' vs. quadrimestre anterior'})+
+    kpiHTML({label:'Potencial por mês',valor:fmtBRLcurto(totPot),titulo:fmtBRL(totPot),sub:'se todas as equipes estivessem em "Ótimo"'})+
+    kpiHTML({label:'Margem em aberto por mês',valor:fmtBRLcurto(totGap),titulo:fmtBRL(totGap),barra:pctMed,sub:`${pctMed}% do potencial já alcançado`})+
+    kpiHTML({label:filtrar?'Clientes '+CLIENTES_ROTULO:'Municípios',valor:fmtNum(rows.length),
+      sub:filtrar?`de ${fmtNum(list.length)} municípios do estado`:(cli.size?`${fmtNum(cli.size)} clientes ${CLIENTES_ROTULO}`:'no relatório publicado')});
+
+  // aba "Equipes a menos": número na aba; some quando não há nenhum
+  const nPerda=rows.filter(r=>temAlertaEquipes(r.perda)).length;
+  const tp=document.getElementById('tab-perda'),tpn=document.getElementById('tab-perda-n'),av=document.getElementById('alerta-vazio');
+  if(tpn)tpn.textContent=nPerda?`(${nPerda})`:'';
+  if(tp)tp.style.display=nPerda?'':'none';
+  if(av)av.style.display=nPerda?'none':'block';
+  if(!nPerda&&abaEstado==='perda')mostrarAba('mapa');
 
   rankingAtual={rows:rankRows,filtrar,cli,totAtual,totPot,totGap,pctMed,filtroKey:trendFilter+'|'+filtrar};
   renderRanking();
@@ -109,10 +105,16 @@ function renderRanking(){
 
 
 let scrollAntesDoMunicipio=0;
+// abrir um município (do mapa, do ranking, dos alertas…) entra no endereço e no histórico
+// do navegador (…?uf=RS&m=430040) — ver estados.js
 function openFromCarteira(id){
+  if(!carteira.municipios.some(m=>m.id===id))return;
+  if(document.getElementById('view-carteira').style.display!=='none')scrollAntesDoMunicipio=window.scrollY;
+  irPara({uf:UF_ATUAL,m:String(id)});
+}
+function abrirMunicipio(id){
   const entry=carteira.municipios.find(m=>m.id===id);
   if(!entry)return;
-  if(document.getElementById('view-carteira').style.display!=='none')scrollAntesDoMunicipio=window.scrollY;
   parsed={nomeMuni:entry.parsed.nomeMuni,uf:entry.parsed.uf,ibge:entry.parsed.ibge,rows:entry.parsed.rows};
   showView('municipio');
   showSecTab('geral');
@@ -134,16 +136,21 @@ function openFromCarteira(id){
 
 
 function showView(view){
-  ['carteira','municipio','guia'].forEach(v=>{
+  ['brasil','carteira','municipio','guia'].forEach(v=>{
     const el=document.getElementById('view-'+v);if(el)el.style.display=view===v?'block':'none';
   });
+  const notas=document.getElementById('notas-gerais');if(notas)notas.style.display=(view==='brasil'||view==='carteira')?'block':'none';
   const tc=document.getElementById('nav-tab-carteira'),tg=document.getElementById('nav-tab-guia');
-  if(tc)tc.classList.toggle('active',view==='carteira'||view==='municipio');
+  if(tc)tc.classList.toggle('active',view!=='guia');
   if(tg)tg.classList.toggle('active',view==='guia');
+  if(view==='brasil')renderBrasil();
   if(view==='carteira')renderCarteiraView();
   if(view!=='municipio')window.scrollTo({top:0,behavior:'auto'});
 }
-document.getElementById('nav-tab-carteira').addEventListener('click',()=>showView('carteira'));
+// "Painel" no topo sempre leva à tela do Brasil
+document.getElementById('nav-tab-carteira').addEventListener('click',()=>irBrasil());
 document.getElementById('nav-tab-guia').addEventListener('click',()=>showView('guia'));
-// "Voltar" devolve o usuário ao ponto do painel onde ele estava (mapa, ranking…)
-{const back=document.getElementById('btn-voltar-painel');if(back)back.addEventListener('click',()=>{showView('carteira');window.scrollTo({top:scrollAntesDoMunicipio,behavior:'auto'});});}
+// "Voltar" devolve o usuário ao ponto do painel do estado onde ele estava (mapa, ranking…)
+{const back=document.getElementById('btn-voltar-painel');if(back)back.addEventListener('click',()=>{
+  if(entrouNoMunicipioPeloPainel)history.back();else irEstado(UF_ATUAL);
+});}

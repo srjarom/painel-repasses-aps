@@ -72,7 +72,10 @@ function trendMatch(r){
   const d=r.trend?r.trend.dir:null;
   return trendFilter==='up'?d===1:trendFilter==='dn'?d===-1:d===0;
 }
-function setTrendFilter(f){trendFilter=(trendFilter===f||f==='all')?'all':f;renderCarteiraView();}
+function setTrendFilter(f){trendFilter=(trendFilter===f||f==='all')?'all':f;
+  // o filtro vale para o mapa e o ranking: se a pessoa está na aba "Equipes a menos", leva ao mapa
+  if(typeof abaEstado!=='undefined'&&abaEstado==='perda')mostrarAba('mapa',{rolar:true});
+  renderCarteiraView();}
 function renderTrendStrip(rows){
   const el=document.getElementById('trend-strip');if(!el)return;
   const up=rows.filter(r=>r.trend.dir===1),eq=rows.filter(r=>r.trend.dir===0),dn=rows.filter(r=>r.trend.dir===-1);
@@ -110,7 +113,7 @@ function selectMapMuni(id,opts={}){
       if(opts.focus)el.focus({preventScroll:true});
     }
   }
-  if(opts.scroll){const card=document.querySelector('.map-card');if(card)card.scrollIntoView({behavior:'smooth',block:'start'});}
+  if(opts.scroll){mostrarAba('mapa');const card=document.querySelector('.map-card');if(card)card.scrollIntoView({behavior:'smooth',block:'start'});}
 }
 function renderMapDetail(){
   const el=document.getElementById('rsmap-detail');if(!el)return;

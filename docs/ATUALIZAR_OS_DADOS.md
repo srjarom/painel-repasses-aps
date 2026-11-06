@@ -60,7 +60,7 @@ Os municípios novos entram com o estrato oficial do Anexo VI e com as modalidad
 No bloco **4 · Conferir e gerar os arquivos**:
 
 1. Leia o resumo, com a tabela dos estados (os alterados aparecem como "alterado — baixar"), e os avisos em amarelo. Por exemplo, "município sem dados no quadrimestre mais recente" é informação, não erro.
-2. Clique em **Baixar dados dos estados alterados** e, se a lista de clientes mudou, em **Baixar lista de clientes**. Os arquivos vão para a sua pasta **Downloads**: um por estado (`RS.js`, `SP.js`…) e o `indice.js`. Se o navegador perguntar se a página pode baixar vários arquivos, responda que sim.
+2. Clique em **Baixar dados dos estados alterados** e, se a lista de clientes mudou, em **Baixar lista de clientes**. Os arquivos vão para a sua pasta **Downloads**: um por estado (`RS.js`, `SP.js`…), o `indice.js` e o `busca.js`. Se o navegador perguntar se a página pode baixar vários arquivos, responda que sim.
 
 ## Passo 7: coloque os arquivos no lugar
 
@@ -70,9 +70,10 @@ Copie os arquivos baixados para dentro do projeto, **substituindo** os antigos:
 |---|---|
 | `RS.js`, `SP.js`… (um por estado) | `site/dados/uf/` |
 | `indice.js` | `site/dados/indice.js` |
+| `busca.js` | `site/dados/busca.js` |
 | `clientes.js` | `site/dados/clientes.js` |
 
-> O `indice.js` é o que faz o estado aparecer no seletor como "com dados". **Sempre copie o `indice.js` junto com os estados.**
+> O `indice.js` faz o estado aparecer como "com dados" e alimenta os números da tela do Brasil; o `busca.js` alimenta a busca do topo. **Sempre copie os dois junto com os estados.**
 
 > Se o Windows salvar como `RS (1).js`, renomeie para `RS.js` antes de copiar.
 

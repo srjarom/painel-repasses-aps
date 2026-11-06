@@ -20,7 +20,7 @@
       <div class="brand-div"><div class="nm">Painel de Repasses APS</div></div>
     </div>
     <div class="navtabs" id="navtabs">
-      <div class="tab" id="nav-tab-carteira">Painel do estado<span class="cnt" id="nav-tab-carteira-count"></span></div>
+      <div class="tab" id="nav-tab-carteira">Painel</div>
       <div class="tab" id="nav-tab-guia">Como funciona o repasse</div>
     </div>
     <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Alternar modo claro/escuro" title="Alternar modo claro/escuro">
@@ -330,30 +330,88 @@
 </section>
 </div>
 
-<div id="view-carteira" style="display:none;">
-<section class="carteira-hero">
-  <div class="in">
-    <span class="eyebrow">Painel de monitoramento · Governança Brasil</span>
-    <div class="ch-top">
-      <div>
-        <div class="uf-sel">
-          <label for="sel-uf">Estado</label>
-          <select id="sel-uf" aria-label="Escolher o estado"></select>
-        </div>
-        <h2 id="painel-titulo">Repasses da Atenção Primária</h2>
-        <p>Repasse federal de cada município, a tendência em relação ao quadrimestre anterior, equipes que saíram do relatório e onde estão as maiores oportunidades — com base nos relatórios públicos do SIAPS.</p>
-      </div>
-      <div class="dados-info" id="dados-info" aria-live="polite"></div>
+<!-- ======================= TELA INICIAL: BRASIL (v4.0.0) ======================= -->
+<div id="view-brasil" style="display:none;">
+<section class="topbar" aria-label="Brasil">
+  <div class="in tb-row">
+    <div class="tb-loc">
+      <h2 class="tb-title">Repasses da Atenção Primária — Brasil</h2>
+      <div class="tb-sub" id="br-info"></div>
+    </div>
+    <div class="busca-global">
+      <label for="busca-br" class="sr-only">Buscar município ou estado</label>
+      <svg class="bg-ic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="busca-br" class="busca-input" list="busca-lista" placeholder="Buscar município ou estado" autocomplete="off">
     </div>
   </div>
 </section>
-
-<div class="stage">
-  <div class="privln on-light" style="margin-bottom:24px;">
-    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.25-7 9.75C8 19.25 5 15.5 5 11V6l7-3z"/></svg>
-    Painel só de consulta: os dados são publicados pela equipe responsável a cada nova avaliação do SIAPS. Nenhum dado digitado aqui é enviado ou salvo.
+<div class="stage stage-compact">
+  <div class="kpi-row" id="br-kpis"></div>
+  <div class="br-grid">
+    <div class="card br-map-card">
+      <div class="card-h ch-row">
+        <h3>Mapa do Brasil</h3>
+        <div class="map-metrics" id="br-metrics" role="group" aria-label="Cor do mapa">
+          <div class="map-metric-btn active" data-metric="gap" role="button" tabindex="0" aria-pressed="true">Margem em aberto</div>
+          <div class="map-metric-btn" data-metric="pct" role="button" tabindex="0" aria-pressed="false">% do potencial</div>
+          <div class="map-metric-btn" data-metric="total" role="button" tabindex="0" aria-pressed="false">Repasse atual</div>
+          <div class="map-metric-btn" data-metric="trend" role="button" tabindex="0" aria-pressed="false">Variação</div>
+        </div>
+      </div>
+      <div class="card-b br-map-b">
+        <div class="br-map-outer" id="br-map-outer">
+          <div id="br-map"></div>
+          <div class="rsmap-tooltip" id="br-tooltip" role="status" aria-live="polite"></div>
+        </div>
+        <div class="br-legend" id="br-legend"></div>
+        <p class="br-hint">Clique num estado para ver os municípios dele.</p>
+      </div>
+    </div>
+    <div class="card br-list-card">
+      <div class="card-h ch-row">
+        <h3>Estados</h3>
+        <label class="br-ordem"><span>Ordenar por</span>
+          <select id="br-ordem">
+            <option value="gap">Margem em aberto</option>
+            <option value="total">Repasse atual</option>
+            <option value="pct">% do potencial (menor primeiro)</option>
+            <option value="delta">Variação vs. anterior</option>
+            <option value="perda">Municípios com equipes a menos</option>
+            <option value="nome">Nome</option>
+          </select>
+        </label>
+      </div>
+      <div class="br-list" id="br-list" role="list"></div>
+    </div>
   </div>
+</div>
+</div>
 
+<!-- ======================= TELA DO ESTADO ======================= -->
+<div id="view-carteira" style="display:none;">
+<section class="topbar" aria-label="Estado">
+  <div class="in tb-row">
+    <div class="tb-loc">
+      <nav class="crumbs" aria-label="Você está em">
+        <a href="?" class="crumb-link" id="crumb-brasil">Brasil</a>
+        <span class="crumb-sep" aria-hidden="true">›</span>
+        <span class="uf-sel">
+          <label for="sel-uf" class="sr-only">Escolher o estado</label>
+          <select id="sel-uf"></select>
+        </span>
+      </nav>
+      <div class="tb-sub" id="dados-info" aria-live="polite"></div>
+    </div>
+    <div class="busca-global">
+      <label for="busca-uf" class="sr-only">Buscar município</label>
+      <svg class="bg-ic" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="busca-uf" class="busca-input" list="busca-lista" placeholder="Buscar município" autocomplete="off">
+    </div>
+  </div>
+</section>
+<h2 id="painel-titulo" class="sr-only">Repasses da Atenção Primária</h2>
+
+<div class="stage stage-compact">
   <div class="card" id="carteira-empty">
     <div class="card-b" id="carteira-empty-msg" style="text-align:center;color:var(--muted);padding:46px 22px;">
       Nenhum dado publicado para este estado ainda.
@@ -362,60 +420,82 @@
 
   <div id="carteira-content" style="display:none;">
     <div class="cli-bar" id="cli-bar"></div>
-    <div class="bytype-grid" id="carteira-summary-grid"></div>
+    <div class="kpi-row" id="carteira-summary-grid"></div>
+    <div class="trend-strip" id="trend-strip"></div>
 
-    <div class="card alerta-card" id="alerta-equipes-card" style="display:none;"></div>
+    <div class="tabs" role="tablist" aria-label="Seções do estado">
+      <button type="button" class="tab-btn on" role="tab" id="tab-mapa" aria-selected="true" aria-controls="painel-mapa" data-aba="mapa">Mapa</button>
+      <button type="button" class="tab-btn" role="tab" id="tab-ranking" aria-selected="false" aria-controls="painel-ranking" data-aba="ranking">Ranking</button>
+      <button type="button" class="tab-btn warn" role="tab" id="tab-perda" aria-selected="false" aria-controls="painel-perda" data-aba="perda">Equipes a menos <span class="tab-n" id="tab-perda-n"></span></button>
+    </div>
 
-    <div class="card map-card">
-      <div class="card-h">
-        <h3 id="mapa-titulo">Mapa do estado</h3>
-        <p>Cada município colorido pela opção escolhida. Passe o mouse (ou use Tab) para ver os números; clique para selecionar e ver os detalhes ao lado — o relatório abre pelo botão do painel ou com duplo clique.</p>
-        <div class="map-metrics" id="rsmap-metrics" role="group" aria-label="Cor do mapa">
-          <div class="map-metric-btn active" data-metric="trend" role="button" aria-pressed="true">Tendência</div>
-          <div class="map-metric-btn" data-metric="gap" role="button" aria-pressed="false">Margem em aberto</div>
-          <div class="map-metric-btn" data-metric="pct" role="button" aria-pressed="false">% do potencial atingido</div>
-          <div class="map-metric-btn" data-metric="total" role="button" aria-pressed="false">Repasse atual</div>
-        </div>
-      </div>
-      <div class="trend-strip" id="trend-strip"></div>
-      <div class="card-b">
-        <div class="rsmap-layout">
-          <div class="rsmap-svg-outer" id="rsmap-svg-outer">
-            <div id="rsmap-svg-wrap"></div>
-            <div class="rsmap-tooltip" id="rsmap-tooltip" role="status" aria-live="polite"></div>
+    <div class="tab-panel" role="tabpanel" id="painel-mapa" aria-labelledby="tab-mapa">
+      <div class="card map-card">
+        <div class="card-h ch-row">
+          <h3 id="mapa-titulo">Mapa do estado</h3>
+          <div class="map-metrics" id="rsmap-metrics" role="group" aria-label="Cor do mapa">
+            <div class="map-metric-btn active" data-metric="trend" role="button" aria-pressed="true">Tendência</div>
+            <div class="map-metric-btn" data-metric="gap" role="button" aria-pressed="false">Margem em aberto</div>
+            <div class="map-metric-btn" data-metric="pct" role="button" aria-pressed="false">% do potencial atingido</div>
+            <div class="map-metric-btn" data-metric="total" role="button" aria-pressed="false">Repasse atual</div>
           </div>
-          <div class="rsmap-side">
-            <div class="rsmap-search">
-              <label for="rsmap-busca">Buscar município</label>
-              <input type="search" id="rsmap-busca" list="rsmap-busca-list" placeholder="Digite o nome…" autocomplete="off">
-              <datalist id="rsmap-busca-list"></datalist>
+        </div>
+        <div class="card-b">
+          <div class="rsmap-layout">
+            <div class="rsmap-svg-outer" id="rsmap-svg-outer">
+              <div id="rsmap-svg-wrap"></div>
+              <div class="rsmap-tooltip" id="rsmap-tooltip" role="status" aria-live="polite"></div>
             </div>
-            <div class="rsmap-detail" id="rsmap-detail" aria-live="polite"></div>
-            <div>
-              <div class="rsmap-legend-title" id="rsmap-legend-title">Legenda</div>
-              <div class="rsmap-legend" id="rsmap-legend"></div>
+            <div class="rsmap-side">
+              <div class="rsmap-search">
+                <label for="rsmap-busca">Achar no mapa</label>
+                <input type="search" id="rsmap-busca" list="rsmap-busca-list" placeholder="Digite o nome…" autocomplete="off">
+                <datalist id="rsmap-busca-list"></datalist>
+              </div>
+              <div class="rsmap-detail" id="rsmap-detail" aria-live="polite"></div>
+              <div>
+                <div class="rsmap-legend-title" id="rsmap-legend-title">Legenda</div>
+                <div class="rsmap-legend" id="rsmap-legend"></div>
+              </div>
+              <div class="rsmap-nodata"><span class="rsmap-swatch nodata"></span>Sem dado no relatório publicado</div>
             </div>
-            <div class="rsmap-nodata"><span class="rsmap-swatch nodata"></span>Sem dado no relatório publicado</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-h"><h3 id="ranking-title">Ranking por margem em aberto</h3><p id="ranking-sub">Municípios ordenados do maior para o menor gap mensal entre repasse atual e potencial — no quadrimestre mais recente de cada um.</p></div>
-      <div class="card-b">
-        <div class="rk-tools"><label for="ranking-busca" class="sr-only">Buscar no ranking</label><input type="search" id="ranking-busca" placeholder="Buscar município no ranking…" autocomplete="off"></div>
-        <div style="overflow-x:auto;"><table class="grid rk-table" id="carteira-table"></table></div>
-        <div class="rk-mais" id="ranking-mais"></div>
+    <div class="tab-panel" role="tabpanel" id="painel-ranking" aria-labelledby="tab-ranking" hidden>
+      <div class="card">
+        <div class="card-h"><h3 id="ranking-title">Ranking por margem em aberto</h3><p id="ranking-sub"></p></div>
+        <div class="card-b">
+          <div class="rk-tools"><label for="ranking-busca" class="sr-only">Buscar no ranking</label><input type="search" id="ranking-busca" placeholder="Buscar município no ranking…" autocomplete="off"></div>
+          <div style="overflow-x:auto;"><table class="grid rk-table" id="carteira-table"></table></div>
+          <div class="rk-mais" id="ranking-mais"></div>
+        </div>
       </div>
     </div>
 
-    <div class="foot">
-      <b>Sobre estes dados.</b> Relatórios públicos do SIAPS "Vínculo e Acompanhamento Territorial e Qualidade" e "Qualidade – Conceito obtido por indicador", gerados para o estado inteiro e publicados pela equipe responsável pelo painel. O estrato IED de cada município vem do Anexo VI da Portaria GM/MS nº 3.493/2024; as modalidades de eAP, eSB e eMulti seguem o cadastro mantido pela equipe do painel. <b>Os valores podem divergir dos registrados no Fundo Municipal de Saúde do município</b> — a metodologia de cálculo da Governança Brasil é aplicada de forma consistente em todo o painel, mas não substitui a conciliação com o Fundo Municipal, o e-Gestor nem os demonstrativos oficiais do FNS.
+    <div class="tab-panel" role="tabpanel" id="painel-perda" aria-labelledby="tab-perda" hidden>
+      <div class="card alerta-card" id="alerta-equipes-card" style="display:none;"></div>
+      <div class="card" id="alerta-vazio" style="display:none;"><div class="card-b" style="text-align:center;color:var(--muted);">Nenhum município com equipes a menos neste estado.</div></div>
     </div>
   </div>
 </div>
 </div>
+
+<datalist id="busca-lista"></datalist>
+
+<!-- notas gerais (aparecem embaixo das telas do Brasil e do estado) -->
+<div class="stage stage-compact notas-gerais" id="notas-gerais">
+  <div class="privln on-light">
+    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.25-7 9.75C8 19.25 5 15.5 5 11V6l7-3z"/></svg>
+    Painel só de consulta: os dados são publicados pela equipe responsável a cada nova avaliação do SIAPS. Nenhum dado digitado aqui é enviado ou salvo.
+  </div>
+  <div class="foot">
+    <b>Sobre estes dados.</b> Relatórios públicos do SIAPS "Vínculo e Acompanhamento Territorial e Qualidade" e "Qualidade – Conceito obtido por indicador", publicados pela equipe responsável pelo painel. O estrato IED de cada município vem do Anexo VI da Portaria GM/MS nº 3.493/2024; as modalidades de eAP, eSB, eMulti, eCR e eAPP seguem o cadastro mantido pela equipe do painel. <b>Os valores podem divergir dos registrados no Fundo Municipal de Saúde do município</b> — a metodologia de cálculo da Governança Brasil é aplicada de forma consistente em todo o painel, mas não substitui a conciliação com o Fundo Municipal, o e-Gestor nem os demonstrativos oficiais do FNS.
+  </div>
+</div>
+
 
 <footer class="site-foot">
   <div class="in">
@@ -459,6 +539,8 @@
 <script src="js/pdf/relatorio-quadrimestre.js"></script>
 <script src="js/pdf/resumo-secretario.js"></script>
 <script src="js/pdf/raiox.js"></script>
+<script src="js/resumo.js"></script>
+<script src="js/brasil.js"></script>
 <script src="js/estados.js"></script>
 <script src="js/inicio.js"></script>
 </body>
