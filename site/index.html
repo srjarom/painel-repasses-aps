@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Repasses APS — Governança Brasil</title>
+<link rel="icon" type="image/x-icon" href="img/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="stylesheet" href="css/painel.css">
+<!-- aplica o tema claro/escuro antes de desenhar a página (evita "piscar") -->
+<script src="js/tema-inicial.js"></script>
+</head>
+<body>
+
+<div class="nav">
+  <div class="in">
+    <div class="brand">
+      <img class="gb-logo" src="img/logo-governanca-brasil-fundo-escuro.png" alt="Governança Brasil">
+      <div class="brand-div"><div class="nm">Painel de Repasses APS</div></div>
+    </div>
+    <div class="navtabs" id="navtabs">
+      <div class="tab" id="nav-tab-carteira">Painel do estado<span class="cnt" id="nav-tab-carteira-count"></span></div>
+      <div class="tab" id="nav-tab-guia">Como funciona o repasse</div>
+    </div>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Alternar modo claro/escuro" title="Alternar modo claro/escuro">
+      <svg class="ic-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="ic-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+    <div class="rt">Saúde Brasil 360 · <b>Portaria GM/MS nº 3.493/2024</b></div>
+  </div>
+</div>
+
+<div id="view-loading" class="view-loading"><div class="vl-spin"></div></div>
+
+<div id="view-municipio" style="display:none;">
+
+
+
+
+
+
+<div class="stage">
+  <div id="results">
+    <div class="back-row"><button type="button" class="back-link" id="btn-voltar-painel">← Voltar ao painel do estado</button></div>
+    <div class="idbar">
+      <div class="muni">
+        <h2 id="muni-name">—</h2>
+        <span class="uf" id="uf-code">—</span>
+        <span class="ibge">IBGE <span id="ibge-code">—</span></span>
+      </div>
+      <div class="idbar-actions">
+        <div class="change primary" id="btn-pdf" onclick="generatePDF()">⤓ Relatório do quadrimestre (PDF)</div>
+        <div class="change disabled" id="btn-resumo" onclick="generatePDFResumo()">▤ Resumo p/ secretário</div>
+      </div>
+    </div>
+
+    <div class="parambar">
+      <div class="pfield">
+        <label>Estrato IED <span class="auto-badge" id="estrato-badge">definido automaticamente</span></label>
+        <select id="sel-estrato">
+          <option value="">— selecione —</option>
+          <option value="1">Estrato I</option><option value="2">Estrato II</option>
+          <option value="3">Estrato III</option><option value="4">Estrato IV</option>
+        </select>
+        <div class="hint" id="estrato-hint">Anexo VI da <a href="https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-3.493-de-10-de-abril-de-2024-553573811" target="_blank">Portaria 3.493/2024</a></div>
+      </div>
+      <div class="pfield" id="field-eap" style="display:none;">
+        <label>Modalidade eAP</label>
+        <select id="sel-eap"><option value="30">30 horas</option><option value="20">20 horas</option></select>
+      </div>
+      <div class="pfield" id="field-esb" style="display:none;">
+        <label>Modalidade eSB</label>
+        <select id="sel-esb"><option value="II_comum">eSB II comum</option><option value="I_comum">eSB I comum</option><option value="II_quil">eSB II quil/assent</option><option value="I_quil">eSB I quil/assent</option></select>
+      </div>
+      <div class="pfield" id="field-emulti" style="display:none;">
+        <label>Modalidade eMulti</label>
+        <select id="sel-emulti"><option value="complementar">Complementar</option><option value="ampliada">Ampliada</option><option value="estrategica">Estratégica</option></select>
+      </div>
+      <div class="pfield grow" id="field-destinatario">
+        <label for="inp-destinatario">Destinatário do relatório <span class="opt">(opcional)</span></label>
+        <input type="text" id="inp-destinatario" maxlength="90" autocomplete="off" placeholder="Ex.: Ester Cassol, Coordenação da APS">
+        <div class="hint">Aparece no cabeçalho do PDF como "Para: …"</div>
+      </div>
+    </div>
+
+    <div class="sim-note">Estrato e modalidades vêm dos dados publicados. Se mudar algo acima, vale só como simulação nesta tela — os dados oficiais não mudam.</div>
+
+    <div class="sec-tabs" id="sec-tabs">
+      <div class="sec-tab active" data-sec="geral">Visão geral</div>
+      <div class="sec-tab" data-sec="raiox">Raio-X por indicador<span class="sec-flag" id="sec-flag-raiox"></span></div>
+      <div class="sec-tab" data-sec="diag">Diagnóstico<span class="sec-flag" id="sec-flag-diag"></span></div>
+      <div class="sec-tab" data-sec="detalhe">Detalhamento</div>
+    </div>
+
+    <div id="sec-tabpanels">
+    <div class="sec-panel" id="sec-geral">
+      <div class="alerta-muni" id="alerta-equipes-muni" role="status" style="display:none;"></div>
+      <div class="headline" id="headline"></div>
+
+      <div class="card">
+        <div class="card-h"><h3>Evolução do repasse por quadrimestre</h3><p>Componente Fixo/IED + Vínculo e Acompanhamento Territorial + Qualidade. Cada resultado subsidia o custeio do quadrimestre subsequente.</p></div>
+        <div class="card-b"><canvas id="chart-repasse" height="98"></canvas></div>
+      </div>
+
+      <div class="bytype-head">
+        <h3>Onde estão os ganhos e as lacunas — por tipo de equipe</h3>
+        <p id="bytype-sub">Repasse mensal de cada tipo de equipe no quadrimestre mais recente e a margem que ainda pode ser conquistada.</p>
+      </div>
+      <div class="bytype-grid" id="bytype-grid"></div>
+    </div>
+
+    <div class="sec-panel sec-inactive" id="sec-raiox">
+      <div class="card" id="raiox-card">
+        <div class="card-h" style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;">
+          <div>
+            <h3>Raio-X por indicador</h3>
+            <p>Mostra, indicador por indicador, por que uma equipe não chega a "Ótimo" — a nota de cada indicador de Qualidade, por tipo de equipe, no quadrimestre mais recente.</p>
+          </div>
+          <div class="idbar-actions" id="raiox-actions" style="display:none;">
+            <div class="change primary" onclick="generatePDFRaioX()">⤓ Baixar Raio-X (PDF)</div>
+          </div>
+        </div>
+        <div class="card-b">
+          <div id="raiox-empty">
+            <div class="ind-empty-hint">Este município não tem dados por indicador no relatório publicado (relatório "Qualidade – Conceito obtido por indicador" do SIAPS).</div>
+          </div>
+          <div id="raiox-content" style="display:none;">
+            <div class="raiox-quad-badge" id="raiox-quad-badge">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M3 10h18"/></svg>
+              <span>Indicadores de <b id="raiox-quad-badge-val">—</b></span>
+            </div>
+            <div class="ind-tabs" id="ind-tabs"></div>
+            <div id="ind-list-wrap"></div>
+          </div>
+        </div>
+        <div class="foot" id="raiox-foot" style="display:none;padding:14px 22px;border-top:1px solid var(--line);">
+          <b>Como ler.</b> A nota de cada indicador é a média ponderada das equipes classificadas nele, usando os pesos oficiais do SIAPS (Regular 0,25 · Suficiente 0,50 · Bom 0,75 · Ótimo 1). Quanto mais perto de 0%, mais esse indicador específico está pesando para a equipe não atingir "Ótimo" — é o ponto de partida mais preciso para uma agenda técnica. Quadrimestre de referência: <span id="raiox-quad-ref"></span>.
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-panel sec-inactive" id="sec-diag">
+      <div class="diag-wrap" id="diag-wrap" style="display:none;">
+        <div class="diag-head">
+          <h3>Diagnóstico e oportunidades</h3>
+          <p>Pontos identificados automaticamente na série histórica deste município — sinais de que uma agenda técnica presencial pode agregar valor.</p>
+        </div>
+        <div class="diag-grid" id="diag-grid"></div>
+        <div class="diag-more" id="diag-more"></div>
+      </div>
+      <div class="ind-empty-hint" id="diag-empty-hint" style="display:none;">Nenhum ponto de atenção identificado automaticamente para este município neste momento — os indicadores estão dentro do esperado na série histórica.</div>
+    </div>
+
+    <div class="sec-panel sec-inactive" id="sec-detalhe">
+      <div class="grid2">
+        <div class="card">
+          <div class="card-h"><h3>Composição do repasse</h3><p>Valores mensais por componente.</p></div>
+          <div class="card-b" style="overflow-x:auto;"><table class="grid" id="tbl-repasse"></table></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3>Classificação das equipes</h3><p>Distribuição por faixa, padrão SIAPS.</p></div>
+          <div class="card-b">
+            <div class="legend">
+              <span class="chip"><i style="background:var(--otimo)"></i>Ótimo</span>
+              <span class="chip"><i style="background:var(--bom)"></i>Bom</span>
+              <span class="chip"><i style="background:var(--suficiente)"></i>Suficiente</span>
+              <span class="chip"><i style="background:var(--regular)"></i>Regular</span>
+            </div>
+            <canvas id="chart-class" height="150"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h3>Equipes no relatório e Componente Fixo/IED</h3><p>O Fixo/IED é pago por equipe que aparece no relatório do SIAPS (valor conforme o estrato e a modalidade). Aqui dá para ver qual tipo de equipe entrou ou saiu em cada quadrimestre e quanto isso mudou o Fixo.</p></div>
+        <div class="card-b" style="overflow-x:auto;"><table class="grid eqf-table" id="tbl-equipes-fixo"></table></div>
+      </div>
+    </div>
+    </div>
+
+    <div class="foot">
+      <b>Metodologia.</b> <b>CVAT</b> é o <b>Componente de Vínculo e Acompanhamento Territorial</b> (aparece como "Vínculo (CVAT)" no gráfico de evolução). Valores conforme o novo modelo de financiamento da APS, o <b>Saúde Brasil 360</b>, instituído pela Portaria GM/MS nº 3.493/2024 (art. 9º-B — Componente Fixo por estrato IED; Anexo XCIX-A — Componente de Vínculo e Acompanhamento Territorial; Anexo XCIX-B — Componente de Qualidade). O relatório público do SIAPS não contém INE nem modalidade das equipes; os cálculos usam a quantidade de equipes por classificação e a modalidade informada, aplicada a todas as equipes do mesmo tipo. O estrato IED, quando não identificado automaticamente pelo código IBGE, deve ser informado conforme o Anexo VI da mesma Portaria. O potencial máximo assume classificação "Ótimo" para todas as equipes, mantido o quantitativo atual. Ferramenta de apoio — não substitui o e-Gestor nem os demonstrativos oficiais do FNS. Ferramenta desenvolvida com apoio de IA; valores calculados por regras fixas a partir de dados públicos do SIAPS.
+      <br><b>Os valores podem divergir dos registrados no Fundo Municipal de Saúde do município.</b> A metodologia de cálculo da Governança Brasil é aplicada de forma consistente em todos os documentos gerados por este painel, mas não substitui a conciliação com o Fundo Municipal.
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="view-guia" style="display:none;">
+<section class="guide" id="guide">
+  <div class="guide-in">
+    <div class="tut-head">
+      <span class="tut-kicker">Para quem conversa com o município</span>
+      <h2>Como funciona o repasse, em resumo</h2>
+      <p>Pensado pra quem apresenta esses números ao cliente sem precisar dominar a Saúde Pública por dentro.</p>
+    </div>
+
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-ic fixed"><svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.66 0-3 .9-3 2s1.34 2 3 2 3 .9 3 2-1.34 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 12v-2M12 4v.01M12 20a8 8 0 100-16 8 8 0 000 16z"/></svg></div>
+        <div class="comp-tag fixed">Componente fixo</div>
+        <h3>Fixo por Estrato IED</h3>
+        <p>Pago <b>todo mês, independente de avaliação</b>. Só varia pelo <b>Estrato IED</b> do município (I a IV, definido pelo IBGE conforme o perfil socioeconômico) e pelo <b>tipo de equipe</b>. É a base garantida do repasse — a parte que não depende do desempenho.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-ic variable"><svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.97-3-8-6.5-8-10.5A5.5 5.5 0 0112 6a5.5 5.5 0 018 4.5c0 4-3.03 7.5-8 10.5z"/></svg></div>
+        <div class="comp-tag variable">Componente variável</div>
+        <h3>Vínculo e Acompanhamento Territorial (CVAT)</h3>
+        <p>Paga pelo <b>vínculo da equipe com o território</b> — cadastro atualizado, visitas domiciliares, acompanhamento das famílias. Existe só para equipes <b>ESF</b> e <b>eAP</b>. Varia conforme a classificação do quadrimestre.</p>
+      </div>
+      <div class="comp-card">
+        <div class="comp-ic variable"><svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a4 4 0 100-8 4 4 0 000 8zm-3.5 1.5L7 22l5-3 5 3-1.5-5.5"/></svg></div>
+        <div class="comp-tag variable">Componente variável</div>
+        <h3>Qualidade</h3>
+        <p>Paga pelo desempenho nos <b>indicadores de qualidade</b> (pré-natal, hipertensão/diabetes, câncer da mulher, saúde da criança, entre outros). Existe para <b>todos os tipos de equipe</b> — ESF, eAP, eSB e eMulti. Também varia por classificação.</p>
+      </div>
+    </div>
+
+    <div class="scale-wrap">
+      <div class="scale-label">A classificação de cada equipe, a cada quadrimestre</div>
+      <div class="scale">
+        <div class="scale-seg" style="background:var(--regular)">Regular</div>
+        <div class="scale-seg" style="background:var(--suficiente)">Suficiente</div>
+        <div class="scale-seg" style="background:var(--bom)">Bom</div>
+        <div class="scale-seg" style="background:var(--otimo)">Ótimo</div>
+      </div>
+      <div class="scale-caption">Quanto maior a classificação, maior o valor de <b>Vínculo</b> e de <b>Qualidade</b> — o <b>Fixo não muda</b>, independente da classificação.</div>
+    </div>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="fq">Quadrimestre atual</div>
+        <div class="fl">A equipe atua e é avaliada nos indicadores</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step hl">
+        <div class="fq">Quadrimestre seguinte</div>
+        <div class="fl">O repasse é pago com base na nota do quadrimestre anterior</div>
+      </div>
+    </div>
+    <p class="flow-note">Por isso, o valor que a equipe recebe <b>agora</b> reflete o desempenho do quadrimestre <b>anterior</b> — não do atual. Uma equipe que melhorou a atuação neste quadrimestre só vai ver o reflexo em R$ no quadrimestre seguinte. É esse intervalo que o gráfico de evolução do repasse, mais abaixo, mostra.</p>
+
+    <details class="guide-details">
+      <summary>Ver valores oficiais completos, por tipo de equipe <span class="sm">(Portaria GM/MS nº 3.493/2024)</span></summary>
+      <div class="guide-tables">
+        <div class="guide-tbl-h">Fixo por Estrato IED — ESF e eAP (R$/mês por equipe)</div>
+        <table class="guide-tbl">
+          <thead><tr><th>Tipo de equipe</th><th>Estrato I</th><th>Estrato II</th><th>Estrato III</th><th>Estrato IV</th></tr></thead>
+          <tbody>
+            <tr><td>ESF</td><td>R$ 18.000</td><td>R$ 16.000</td><td>R$ 14.000</td><td>R$ 12.000</td></tr>
+            <tr><td>eAP 30h</td><td>R$ 10.800</td><td>R$ 9.600</td><td>R$ 8.400</td><td>R$ 7.200</td></tr>
+            <tr><td>eAP 20h</td><td>R$ 7.200</td><td>R$ 6.400</td><td>R$ 5.600</td><td>R$ 4.800</td></tr>
+          </tbody>
+        </table>
+        <p class="guide-tbl-note">Estrato IED: classificação de I (maior vulnerabilidade) a IV, definida pelo IBGE conforme o perfil socioeconômico do município (Anexo VI da Portaria).</p>
+
+        <div class="guide-tbl-h">Fixo — eSB e eMulti (valor único, não varia por Estrato)</div>
+        <table class="guide-tbl">
+          <thead><tr><th>Tipo de equipe</th><th>R$/mês</th></tr></thead>
+          <tbody>
+            <tr><td>eSB I comum</td><td>R$ 4.014</td></tr>
+            <tr><td>eSB II comum</td><td>R$ 7.064</td></tr>
+            <tr><td>eSB I quilombola/assentamento</td><td>R$ 6.021</td></tr>
+            <tr><td>eSB II quilombola/assentamento</td><td>R$ 10.596</td></tr>
+            <tr><td>eMulti Estratégica</td><td>R$ 12.000</td></tr>
+            <tr><td>eMulti Complementar</td><td>R$ 24.000</td></tr>
+            <tr><td>eMulti Ampliada</td><td>R$ 36.000</td></tr>
+          </tbody>
+        </table>
+
+        <div class="guide-tbl-h">Vínculo e Acompanhamento Territorial (CVAT) por classificação — só ESF e eAP</div>
+        <table class="guide-tbl">
+          <thead><tr><th>Tipo de equipe</th><th>Regular</th><th>Suficiente</th><th>Bom</th><th>Ótimo</th></tr></thead>
+          <tbody>
+            <tr><td>ESF</td><td>R$ 2.000</td><td>R$ 4.000</td><td>R$ 6.000</td><td>R$ 8.000</td></tr>
+            <tr><td>eAP 30h</td><td>R$ 1.000</td><td>R$ 2.000</td><td>R$ 3.000</td><td>R$ 4.000</td></tr>
+            <tr><td>eAP 20h</td><td>R$ 750</td><td>R$ 1.500</td><td>R$ 2.250</td><td>R$ 3.000</td></tr>
+          </tbody>
+        </table>
+        <p class="guide-tbl-note">eSB e eMulti não têm componente de Vínculo — só Fixo e Qualidade.</p>
+
+        <div class="guide-tbl-h">Qualidade por classificação — todos os tipos de equipe</div>
+        <table class="guide-tbl">
+          <thead><tr><th>Tipo de equipe</th><th>Regular</th><th>Suficiente</th><th>Bom</th><th>Ótimo</th></tr></thead>
+          <tbody>
+            <tr><td>ESF</td><td>R$ 2.000</td><td>R$ 4.000</td><td>R$ 6.000</td><td>R$ 8.000</td></tr>
+            <tr><td>eAP 30h</td><td>R$ 1.000</td><td>R$ 2.000</td><td>R$ 3.000</td><td>R$ 4.000</td></tr>
+            <tr><td>eAP 20h</td><td>R$ 750</td><td>R$ 1.500</td><td>R$ 2.250</td><td>R$ 3.000</td></tr>
+            <tr><td>eMulti Estratégica</td><td>R$ 750</td><td>R$ 1.500</td><td>R$ 2.250</td><td>R$ 3.000</td></tr>
+            <tr><td>eMulti Complementar</td><td>R$ 1.500</td><td>R$ 3.000</td><td>R$ 4.500</td><td>R$ 6.000</td></tr>
+            <tr><td>eMulti Ampliada</td><td>R$ 2.250</td><td>R$ 4.500</td><td>R$ 6.750</td><td>R$ 9.000</td></tr>
+            <tr><td>eSB I comum</td><td>R$ 612,25</td><td>R$ 1.224,50</td><td>R$ 1.836,75</td><td>R$ 2.449,00</td></tr>
+            <tr><td>eSB II comum</td><td>R$ 816,75</td><td>R$ 1.633,50</td><td>R$ 2.450,25</td><td>R$ 3.267,00</td></tr>
+            <tr><td>eSB I quilombola/assentamento</td><td>R$ 918,38</td><td>R$ 1.836,75</td><td>R$ 2.755,13</td><td>R$ 3.673,50</td></tr>
+            <tr><td>eSB II quilombola/assentamento</td><td>R$ 1.225,13</td><td>R$ 2.450,25</td><td>R$ 3.675,38</td><td>R$ 4.900,50</td></tr>
+          </tbody>
+        </table>
+        <p class="guide-tbl-note">São exatamente os valores que este portal usa para calcular o repasse — a mesma fonte, a Portaria GM/MS nº 3.493/2024 (art. 9º-B, Anexo XCIX-A e Anexo XCIX-B).</p>
+      </div>
+    </details>
+  </div>
+</section>
+</div>
+
+<div id="view-carteira" style="display:none;">
+<section class="carteira-hero">
+  <div class="in">
+    <span class="eyebrow">Painel de monitoramento · Governança Brasil</span>
+    <div class="ch-top">
+      <div>
+        <h2 id="painel-titulo">Repasses da Atenção Primária — Rio Grande do Sul</h2>
+        <p>Repasse federal de cada município, a tendência em relação ao quadrimestre anterior, equipes que saíram do relatório e onde estão as maiores oportunidades — com base nos relatórios públicos do SIAPS.</p>
+      </div>
+      <div class="dados-info" id="dados-info" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<div class="stage">
+  <div class="privln on-light" style="margin-bottom:24px;">
+    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3l7 3v5c0 4.5-3 8.25-7 9.75C8 19.25 5 15.5 5 11V6l7-3z"/></svg>
+    Painel só de consulta: os dados são publicados pela equipe responsável a cada nova avaliação do SIAPS. Nenhum dado digitado aqui é enviado ou salvo.
+  </div>
+
+  <div class="card" id="carteira-empty">
+    <div class="card-b" style="text-align:center;color:var(--muted);padding:46px 22px;">
+      Nenhum dado publicado para este estado ainda.<br>Os dados são publicados pela ferramenta de manutenção (ver docs/ATUALIZAR_OS_DADOS.md).
+    </div>
+  </div>
+
+  <div id="carteira-content" style="display:none;">
+    <div class="cli-bar" id="cli-bar"></div>
+    <div class="bytype-grid" id="carteira-summary-grid"></div>
+
+    <div class="card alerta-card" id="alerta-equipes-card" style="display:none;"></div>
+
+    <div class="card map-card">
+      <div class="card-h">
+        <h3>Mapa do Rio Grande do Sul</h3>
+        <p>Cada município colorido pela opção escolhida. Passe o mouse (ou use Tab) para ver os números; clique para selecionar e ver os detalhes ao lado — o relatório abre pelo botão do painel ou com duplo clique.</p>
+        <div class="map-metrics" id="rsmap-metrics" role="group" aria-label="Cor do mapa">
+          <div class="map-metric-btn active" data-metric="trend" role="button" aria-pressed="true">Tendência</div>
+          <div class="map-metric-btn" data-metric="gap" role="button" aria-pressed="false">Margem em aberto</div>
+          <div class="map-metric-btn" data-metric="pct" role="button" aria-pressed="false">% do potencial atingido</div>
+          <div class="map-metric-btn" data-metric="total" role="button" aria-pressed="false">Repasse atual</div>
+        </div>
+      </div>
+      <div class="trend-strip" id="trend-strip"></div>
+      <div class="card-b">
+        <div class="rsmap-layout">
+          <div class="rsmap-svg-outer" id="rsmap-svg-outer">
+            <div id="rsmap-svg-wrap"></div>
+            <div class="rsmap-tooltip" id="rsmap-tooltip" role="status" aria-live="polite"></div>
+          </div>
+          <div class="rsmap-side">
+            <div class="rsmap-search">
+              <label for="rsmap-busca">Buscar município</label>
+              <input type="search" id="rsmap-busca" list="rsmap-busca-list" placeholder="Digite o nome…" autocomplete="off">
+              <datalist id="rsmap-busca-list"></datalist>
+            </div>
+            <div class="rsmap-detail" id="rsmap-detail" aria-live="polite"></div>
+            <div>
+              <div class="rsmap-legend-title" id="rsmap-legend-title">Legenda</div>
+              <div class="rsmap-legend" id="rsmap-legend"></div>
+            </div>
+            <div class="rsmap-nodata"><span class="rsmap-swatch nodata"></span>Sem dado no relatório publicado</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><h3 id="ranking-title">Ranking por margem em aberto</h3><p id="ranking-sub">Municípios ordenados do maior para o menor gap mensal entre repasse atual e potencial — no quadrimestre mais recente de cada um.</p></div>
+      <div class="card-b">
+        <div class="rk-tools"><label for="ranking-busca" class="sr-only">Buscar no ranking</label><input type="search" id="ranking-busca" placeholder="Buscar município no ranking…" autocomplete="off"></div>
+        <div style="overflow-x:auto;"><table class="grid rk-table" id="carteira-table"></table></div>
+        <div class="rk-mais" id="ranking-mais"></div>
+      </div>
+    </div>
+
+    <div class="foot">
+      <b>Sobre estes dados.</b> Relatórios públicos do SIAPS "Vínculo e Acompanhamento Territorial e Qualidade" e "Qualidade – Conceito obtido por indicador", gerados para o estado inteiro e publicados pela equipe responsável pelo painel. O estrato IED de cada município vem do Anexo VI da Portaria GM/MS nº 3.493/2024; as modalidades de eAP, eSB e eMulti seguem o cadastro mantido pela equipe do painel. <b>Os valores podem divergir dos registrados no Fundo Municipal de Saúde do município</b> — a metodologia de cálculo da Governança Brasil é aplicada de forma consistente em todo o painel, mas não substitui a conciliação com o Fundo Municipal, o e-Gestor nem os demonstrativos oficiais do FNS.
+    </div>
+  </div>
+</div>
+</div>
+
+<footer class="site-foot">
+  <div class="in">
+    <div class="foot-sign"><span class="dot"></span><span>Desenvolvido por <b>Jarom Sambrana da Rosa</b> — <span class="fs-brand">Governança Brasil</span></span></div>
+    <details class="ver-details" id="ver-details">
+      <summary class="ver-tag" id="ver-tag">v…</summary>
+      <div class="ver-panel" id="ver-panel"></div>
+    </details>
+  </div>
+</footer>
+
+<!-- Bibliotecas de terceiros (cópias locais — o painel não depende de internet externa) -->
+<script src="vendor/chart.umd.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+
+<!-- Dados publicados (gerados pela ferramenta de manutenção — ver docs/ATUALIZAR_OS_DADOS.md) -->
+<script src="js/dados.js"></script>
+<script src="dados/estratos-ied.js"></script>
+<script src="dados/geo/RS.js"></script>
+<script src="dados/uf/RS.js"></script>
+<script src="dados/clientes.js"></script>
+
+<!-- Painel (a ordem importa: base primeiro, inicio.js por último) -->
+<script src="js/base.js"></script>
+<script src="js/calculo.js"></script>
+<script src="js/mapa.js"></script>
+<script src="js/versao.js"></script>
+<script src="js/raiox.js"></script>
+<script src="js/municipio.js"></script>
+<script src="js/carteira.js"></script>
+<script src="js/clientes.js"></script>
+<script src="js/tendencia.js"></script>
+<script src="js/alerta-equipes.js"></script>
+<script src="js/diagnostico.js"></script>
+<script src="js/tema.js"></script>
+<script src="js/graficos.js"></script>
+<script src="js/pdf/fontes-pdf.js"></script>
+<script src="js/pdf/comum.js"></script>
+<script src="js/pdf/logos.js"></script>
+<script src="js/pdf/relatorio-quadrimestre.js"></script>
+<script src="js/pdf/resumo-secretario.js"></script>
+<script src="js/pdf/raiox.js"></script>
+<script src="js/inicio.js"></script>
+</body>
+</html>

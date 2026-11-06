@@ -1,0 +1,12 @@
+{
+  "name": "painel-repasses-aps-testes",
+  "private": true,
+  "description": "Teste rápido (smoke test) do Painel de Repasses APS: abre o painel, confere erros e gera os PDFs.",
+  "scripts": {
+    "postinstall": "playwright install chromium",
+    "test": "node smoke.js"
+  },
+  "devDependencies": {
+    "playwright": "1.48.2"
+  }
+}

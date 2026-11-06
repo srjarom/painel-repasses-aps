@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manutenção dos dados — Painel de Repasses APS</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../site/img/favicon-32.png">
+<link rel="stylesheet" href="../site/css/painel.css">
+<script src="../site/js/tema-inicial.js"></script>
+<style>
+  .mt-hero{background:#09274C;color:#fff;}
+  .mt-hero .in{max-width:1100px;margin:0 auto;padding:28px 30px;}
+  .mt-hero h1{font-size:26px;margin:6px 0 6px;color:#fff;}
+  .mt-hero p{color:#c3d6e2;margin:0;max-width:760px;line-height:1.5;}
+  .mt-kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--lightblue);}
+  .mt-warn{display:inline-block;margin-top:12px;font-size:12.5px;background:rgba(224,168,46,.18);border:1px solid rgba(224,168,46,.55);color:#ffe2a8;border-radius:8px;padding:6px 12px;}
+  .mt-stage{max-width:1100px;margin:0 auto;padding:26px 30px 60px;}
+  .mt-step{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#09274C;color:#fff;font-size:13px;font-weight:800;margin-right:10px;flex:none;}
+  .card-h h3{display:flex;align-items:center;}
+  .mt-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .mt-kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;}
+  .mt-kv div{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;}
+  .mt-kv b{display:block;font-size:20px;font-family:var(--font-titulo);color:var(--ink);}
+  .mt-kv span{font-size:12px;color:var(--muted);}
+  .mt-log{margin-top:12px;display:grid;gap:8px;}
+  .mt-log .ok,.mt-log .er,.mt-log .wa{border-radius:9px;padding:10px 14px;font-size:13px;line-height:1.5;}
+  .mt-log .ok{background:var(--chip-green-bg);color:var(--chip-green-fg);}
+  .mt-log .er{background:var(--chip-red-bg);color:var(--chip-red-fg);}
+  .mt-log .wa{background:var(--chip-amber-bg);color:var(--chip-amber-fg);border:1px solid var(--chip-amber-border);}
+  .mt-hint{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0 0;}
+  .mt-hint a{color:var(--navy);}
+  .mt-params{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-top:10px;}
+  .mt-params label{display:block;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:5px;}
+  .mt-params select,.mt-params input{padding:8px 10px;border:1px solid var(--line-2);border-radius:7px;font:inherit;font-size:13.5px;background:var(--card-bg-solid);color:var(--ink);}
+  .mt-params input{min-width:260px;}
+  .mt-steps-final{margin:14px 0 0;padding-left:20px;line-height:1.7;font-size:13.5px;color:var(--ink);}
+  .mt-steps-final code{background:var(--chip-neutral-bg);padding:1px 6px;border-radius:5px;font-size:12.5px;}
+  .change.disabled{opacity:.45;pointer-events:none;}
+  input[type=file]{display:none;}
+</style>
+</head>
+<body>
+<div class="mt-hero"><div class="in">
+  <div class="mt-kicker">Painel de Repasses APS · Manutenção</div>
+  <h1>Atualizar os dados do painel</h1>
+  <p>Importa os relatórios do SIAPS e a lista de clientes, permite ajustar modalidades e gera os arquivos que vão para <code style="color:#fff">site/dados/</code>. Tudo é processado aqui no seu computador — nada é enviado.</p>
+  <div class="mt-warn">⚠ Uso exclusivo do responsável pelos dados. Esta página (pasta <b>manutencao/</b>) não deve ser publicada no hub.</div>
+</div></div>
+
+<div class="mt-stage">
+
+  <div class="card">
+    <div class="card-h"><h3>Dados publicados hoje</h3><p>O que o painel está mostrando agora (arquivos atuais de site/dados/).</p></div>
+    <div class="card-b"><div class="mt-kv" id="mt-publicado"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3><span class="mt-step">1</span>Relatórios do SIAPS (estado inteiro)</h3>
+      <p>No SIAPS público, gere os dois relatórios com a UF e o município em branco ("Todos"), em .xlsx: "Vínculo e Acompanhamento Territorial e Qualidade" e "Qualidade – Conceito obtido por indicador". Pode selecionar os dois de uma vez.</p></div>
+    <div class="card-b">
+      <div class="mt-row">
+        <div class="change primary" onclick="document.getElementById('in-siaps').click()">⤒ Selecionar relatórios do SIAPS (.xlsx)</div>
+        <input type="file" id="in-siaps" accept=".xlsx,.xls" multiple>
+      </div>
+      <p class="mt-hint">Quadrimestres que vierem no arquivo substituem os publicados; os anteriores continuam guardados (o histórico vai crescendo a cada atualização). Passo a passo em <b>docs/ATUALIZAR_OS_DADOS.md</b>.</p>
+      <div class="mt-log" id="log-siaps"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3><span class="mt-step">2</span>Lista de clientes GOVBR Saúde / Celk</h3>
+      <p>Planilha do comercial com a coluna "Cliente" (ex.: exportação "Visão Geral" com os contratos ativos do parceiro Celk). Só o nome e o código IBGE são guardados — nenhum dado de contrato.</p></div>
+    <div class="card-b">
+      <div class="mt-row">
+        <div class="change primary" onclick="document.getElementById('in-clientes').click()">⤒ Selecionar lista de clientes (.xlsx)</div>
+        <input type="file" id="in-clientes" accept=".xlsx,.xls">
+      </div>
+      <div class="mt-log" id="log-clientes"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3><span class="mt-step">3</span>Modalidades por município <span style="font-weight:500;font-size:13px;color:var(--muted);margin-left:8px;">(opcional)</span></h3>
+      <p>Municípios novos entram com o estrato do Anexo VI (pelo código IBGE) e as modalidades padrão: eAP 30h, eSB II comum, eMulti complementar. Ajuste aqui quando souber a modalidade correta.</p></div>
+    <div class="card-b">
+      <div class="mt-params">
+        <div><label for="pm-busca">Município</label><input type="search" id="pm-busca" list="pm-lista" placeholder="Digite o nome…" autocomplete="off"><datalist id="pm-lista"></datalist></div>
+        <div><label for="pm-estrato">Estrato IED</label><select id="pm-estrato"><option value="">—</option><option value="1">I</option><option value="2">II</option><option value="3">III</option><option value="4">IV</option></select></div>
+        <div><label for="pm-eap">eAP</label><select id="pm-eap"><option value="30">30 horas</option><option value="20">20 horas</option></select></div>
+        <div><label for="pm-esb">eSB</label><select id="pm-esb"><option value="II_comum">II comum</option><option value="I_comum">I comum</option><option value="II_quil">II quil/assent</option><option value="I_quil">I quil/assent</option></select></div>
+        <div><label for="pm-emulti">eMulti</label><select id="pm-emulti"><option value="complementar">Complementar</option><option value="ampliada">Ampliada</option><option value="estrategica">Estratégica</option></select></div>
+        <div class="change" id="pm-aplicar">Aplicar a este município</div>
+      </div>
+      <div class="mt-row" style="margin-top:14px;">
+        <div class="change" onclick="document.getElementById('in-backup').click()">⤒ Trazer modalidades e histórico de um backup antigo da carteira (.json)</div>
+        <input type="file" id="in-backup" accept=".json,application/json">
+      </div>
+      <p class="mt-hint">O backup antigo é o arquivo "carteira-repasses-aps-AAAA-MM-DD.json" exportado pela versão anterior do painel (1.x). Ele traz as modalidades que você já tinha ajustado e quadrimestres antigos que não estão nos relatórios novos.</p>
+      <div class="mt-log" id="log-params"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-h"><h3><span class="mt-step">4</span>Conferir e gerar os arquivos</h3><p>Confira o resumo antes de publicar.</p></div>
+    <div class="card-b">
+      <div class="mt-kv" id="mt-resumo"></div>
+      <div class="mt-log" id="mt-avisos"></div>
+      <div class="mt-row" style="margin-top:16px;">
+        <div class="change primary" id="btn-baixar-uf">⤓ Baixar dados do estado</div>
+        <div class="change primary" id="btn-baixar-clientes">⤓ Baixar lista de clientes</div>
+      </div>
+      <ol class="mt-steps-final">
+        <li>Coloque o arquivo do estado (ex.: <code>RS.js</code>) em <code>site/dados/uf/</code> e o <code>clientes.js</code> em <code>site/dados/</code>, substituindo os atuais.</li>
+        <li>Abra <code>site/index.html</code> (dois cliques) e confira se está tudo certo.</li>
+        <li>No GitHub Desktop, escreva um resumo (ex.: "Dados RS 2026Q3") e clique em <b>Commit</b> e depois em <b>Push</b>. Depois, publique no hub seguindo docs/PUBLICAR_NO_HUB.md.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="../site/js/dados.js"></script>
+<script src="../site/dados/estratos-ied.js"></script>
+<script src="../site/dados/geo/RS.js"></script>
+<!-- dados publicados atuais (se ainda não existirem, a página começa do zero) -->
+<script src="../site/dados/uf/RS.js" onerror="void 0"></script>
+<script src="../site/dados/clientes.js" onerror="void 0"></script>
+<script src="../site/js/base.js"></script>
+<script src="../site/js/calculo.js"></script>
+<script src="js/leitura-siaps.js"></script>
+<script src="js/manutencao.js"></script>
+</body>
+</html>
