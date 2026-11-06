@@ -860,3 +860,27 @@ button.kpi:hover{border-color:var(--line-2);}
 .tf-chip.warn{border-color:var(--chip-amber-border);background:var(--chip-amber-bg);}
 .tf-chip.warn b{color:var(--chip-amber-fg);}
 @media(max-width:640px){.tf-l{flex-basis:100%;}.tf-chip{font-size:12.5px;padding:5px 10px;}}
+
+/* v4.2.0 — topo mais limpo: uma faixa escura só (a de navegação); a barra do estado/Brasil fica clara */
+.nav .rt{display:none;}
+.topbar{background:var(--panel);color:var(--ink);border-top:0;border-bottom:1px solid var(--line);box-shadow:0 1px 6px rgba(var(--ink-rgb),.06);}
+.topbar .in{padding:12px 30px;}
+.tb-title{color:var(--navy);}
+.tb-sub{color:var(--muted);font-size:12.5px;margin-top:3px;}
+.crumb-link{color:var(--muted);font-weight:600;font-size:14px;border-bottom:0;padding:4px 2px;}
+.crumb-link:hover{color:var(--navy);text-decoration:underline;text-underline-offset:3px;}
+.crumb-link:focus-visible{outline:2px solid var(--teal);}
+.crumb-sep{color:var(--line-2);font-size:16px;}
+.topbar .uf-sel select{color:var(--navy);background-color:transparent;border:1.5px solid transparent;border-radius:8px;padding:3px 30px 3px 8px;margin-left:-8px;font-size:20px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2309274C' stroke-width='2'/%3E%3C/svg%3E");background-position:right 10px center;}
+.topbar .uf-sel select:hover{background-color:var(--panel-2);border-color:var(--line-2);}
+.topbar .uf-sel select:focus-visible{outline:2px solid var(--teal);outline-offset:1px;}
+:root[data-theme="dark"] .topbar .uf-sel select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23bcd6f0' stroke-width='2'/%3E%3C/svg%3E");}
+.busca-global{flex:0 1 320px;}
+.busca-global .bg-ic{color:var(--muted);}
+.busca-input{color:var(--ink);background:var(--panel-2);border:1.5px solid var(--line-2);}
+.busca-input::placeholder{color:var(--muted);}
+.busca-input:focus{border-color:var(--navy);background:var(--panel);}
+.busca-input.notfound{border-color:#D0483C;}
+.foot-ref{font-size:12px;color:var(--muted);}
+.foot-ref b{color:var(--navy);font-weight:600;}

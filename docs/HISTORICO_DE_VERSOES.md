@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.2.0
+
+Topo mais limpo: uma faixa escura só (a de navegação). A barra do Brasil/estado ficou clara, com "Brasil › estado" discreto, o nome do estado em destaque sem caixa pesada e uma busca curta ("Buscar município"), que não corta mais o texto. A linha de informação ficou mais curta (quadrimestre · municípios · histórico desde · atualizado em) e o plural foi corrigido ("1 município"). A referência à Portaria saiu do topo e foi para o rodapé.
+
 ## 4.1.0
 
 Painel do estado mais enxuto: a tendência do repasse deixou de ser uma segunda fileira de cartões grandes e virou uma barra fina de filtros (todos · subiram · iguais · caíram · com equipes a menos), logo abaixo das abas, valendo para o Mapa e o Ranking (na aba Equipes a menos ela some). Os quatro quadros de números ficaram mais baixos.

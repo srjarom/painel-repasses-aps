@@ -81,7 +81,7 @@ async function trocarEstado(uf){
   const sel=document.getElementById('sel-uf');if(sel)sel.value=uf;
   const tit=document.getElementById('painel-titulo');if(tit)tit.textContent=`Repasses da Atenção Primária — ${e.nome}`;
   const mt=document.getElementById('mapa-titulo');if(mt)mt.textContent=`Mapa ${nomeComPrep(uf)}`;
-  const bu=document.getElementById('busca-uf');if(bu)bu.placeholder=`Buscar município ${nomeComPrep(uf)} ou do Brasil`;
+  const bu=document.getElementById('busca-uf');if(bu){bu.placeholder='Buscar município';bu.title='Busca qualquer município do Brasil ou um estado';}
   const vazio=document.getElementById('carteira-empty-msg');
   if(vazio)vazio.innerHTML=`Ainda não há dados publicados ${nomeComPrep(uf)}.<br><a href="?" onclick="event.preventDefault();irBrasil();">Voltar ao Brasil</a> ou escolha outro estado acima.`;
   document.title=`Painel de Repasses APS — ${e.nome} — Governança Brasil`;
@@ -95,7 +95,8 @@ function renderDadosInfo(d){
   if(d&&d.quads&&d.quads.length){
     const ult=quadParts(d.quads[d.quads.length-1]);
     const dt=d.atualizadoEm?new Date(d.atualizadoEm+'T12:00:00').toLocaleDateString('pt-BR'):'—';
-    info.textContent=`Avaliação mais recente: ${ult.q}º quadrimestre de ${ult.y} · ${d.municipios.length} municípios · dados de ${qCode(d.quads[0])} a ${qCode(d.quads[d.quads.length-1])} · atualizado em ${dt}`;
+    const n=d.municipios.length;
+    info.textContent=`${ult.q}º quadrimestre de ${ult.y} · ${n.toLocaleString('pt-BR')} ${n===1?'município':'municípios'} · histórico desde ${qCode(d.quads[0])} · atualizado em ${dt}`;
   }else{
     info.textContent='Sem dados publicados';
   }

@@ -62,7 +62,7 @@ function renderBrasil(){
   const ult=lista.map(x=>x.ultimoQuad).sort().pop(),pri=lista.map(x=>x.primeiroQuad).filter(Boolean).sort()[0];
   const dt=lista.map(x=>x.atualizadoEm).sort().pop();
   const up=quadParts(ult);
-  if(info)info.textContent=`Avaliação mais recente: ${up?up.q+'º quadrimestre de '+up.y:ult} · ${fmtNum(T.municipios)} municípios em ${lista.length} estados · dados de ${pri||'—'} a ${ult} · atualizado em ${new Date(dt+'T12:00:00').toLocaleDateString('pt-BR')}`;
+  if(info)info.textContent=`${up?up.q+'º quadrimestre de '+up.y:ult} · ${fmtNum(T.municipios)} municípios em ${lista.length} estados · histórico desde ${pri||'—'} · atualizado em ${new Date(dt+'T12:00:00').toLocaleDateString('pt-BR')}`;
   const pctTxt=Math.round(T.pct).toLocaleString('pt-BR');
   if(kpis)kpis.innerHTML=
     kpiHTML({label:'Repasse atual por mês',valor:fmtBRLcurto(T.total),titulo:fmtBRL(T.total),sub:fmtVar(T.delta,T.deltaPct)+' vs. quadrimestre anterior'})+
