@@ -888,3 +888,23 @@ button.kpi:hover{border-color:var(--line-2);}
 /* quadro das ilhas reposicionadas no mapa (ex.: Fernando de Noronha) */
 .rsmap-inset{fill:none;stroke:var(--muted);stroke-width:1;stroke-dasharray:4 3;pointer-events:none;}
 .rsmap-inset-l{font-size:10px;fill:var(--muted);text-anchor:end;pointer-events:none;}
+
+/* v4.2.2 — topo e quadros mais finos */
+.nav .in{padding-top:10px;padding-bottom:10px;}
+.gb-logo{height:32px;}
+.brand .nm{font-size:16px;}
+.navtabs .tab{padding:6px 13px;}
+.theme-toggle{width:32px;height:32px;}
+.topbar .in{padding-top:8px;padding-bottom:8px;}
+.tb-title{font-size:clamp(17px,1.7vw,20px);}
+.tb-sub{font-size:12px;margin-top:2px;}
+.topbar .uf-sel select{font-size:18px;padding-top:1px;padding-bottom:1px;}
+.busca-input{padding-top:6px;padding-bottom:6px;font-size:13.5px;}
+.stage-compact{padding-top:16px;}
+.kpi{padding:8px 14px 9px;}
+.kpi-l{font-size:11.5px;}
+.kpi-v{font-size:20px;margin-top:1px;}
+.kpi-v .var{font-size:16px;}
+.kpi-s{font-size:11px;margin-top:3px;}
+.kpi-bar{height:5px;margin-top:5px;}
+.kpi-row{gap:12px;margin-bottom:12px;}

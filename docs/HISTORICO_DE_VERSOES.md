@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.2.2
+
+Topo e quadros de números mais finos (barra de navegação, barra do Brasil/estado e os quatro quadros): o mapa começa cerca de 100 px mais acima, sem perder a leitura.
+
 ## 4.2.1
 
 Mapa de Pernambuco: Fernando de Noronha, que fica a uns 350 km da costa, espremia o estado num canto do mapa. Agora a ilha aparece ampliada num quadro tracejado com o nome, logo acima do litoral, e o continente ocupa a largura toda. A ilha continua clicável.

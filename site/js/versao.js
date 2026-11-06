@@ -6,8 +6,9 @@
    uma nova entrada no topo do array (mais recente primeiro) e atualize
    APP_VERSION (e docs/HISTORICO_DE_VERSOES.md). Fica visível só na tela (rodapé), não entra no PDF do cliente.
    ========================================================================= */
-const APP_VERSION='4.2.1';
+const APP_VERSION='4.2.2';
 const APP_CHANGELOG=[
+  {v:'4.2.2',desc:'Topo e quadros de números mais finos (barra de navegação, barra do Brasil/estado e os quatro quadros): o mapa começa cerca de 100 px mais acima, sem perder a leitura.'},
   {v:'4.2.1',desc:'Mapa de Pernambuco: Fernando de Noronha, que fica a uns 350 km da costa, espremia o estado num canto do mapa. Agora a ilha aparece ampliada num quadro tracejado com o nome, logo acima do litoral, e o continente ocupa a largura toda. A ilha continua clicável.'},
   {v:'4.2.0',desc:'Topo mais limpo: uma faixa escura só (a de navegação). A barra do Brasil/estado ficou clara, com "Brasil › estado" discreto, o nome do estado em destaque sem caixa pesada e uma busca curta ("Buscar município"), que não corta mais o texto. A linha de informação ficou mais curta (quadrimestre · municípios · histórico desde · atualizado em) e o plural foi corrigido ("1 município"). A referência à Portaria saiu do topo e foi para o rodapé.'},
   {v:'4.1.0',desc:'Painel do estado mais enxuto: a tendência do repasse deixou de ser uma segunda fileira de cartões grandes e virou uma barra fina de filtros (todos · subiram · iguais · caíram · com equipes a menos), logo abaixo das abas, valendo para o Mapa e o Ranking (na aba Equipes a menos ela some). Os quatro quadros de números ficaram mais baixos.'},

@@ -1,6 +1,6 @@
 # Painel de Repasses APS: ficha técnica
 
-**Versão do painel:** 4.2.1
+**Versão do painel:** 4.2.2
 **Responsável (desenvolvimento, dados e publicação):** Jarom Rosa
 
 Resumo técnico do painel para avaliação e autorização de publicação no hub corporativo: o que ele é, como funciona, que dados usa e o que precisa ser autorizado.
