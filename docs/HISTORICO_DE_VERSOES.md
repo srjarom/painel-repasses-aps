@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.4.4
+
+Aba Equipes a menos: o quadro vazava para fora da tela e se sobrepunha ao rodapé (o código forçava um modo de exibição que impedia a rolagem por dentro). Agora fica contido na altura da tela e rola por dentro, como o Ranking. Colunas com largura fixa, selos de "o que mudou" lado a lado e linhas mais baixas.
+
 ## 4.4.3
 
 Ao clicar num município no mapa, o cartão dele aparece no alto do painel do lado (que volta ao topo sozinho), com o botão verde "Abrir relatório do município" logo abaixo do nome — a primeira coisa que se vê. Saiu o campo "Achar no mapa", que repetia a busca do topo; sem município selecionado fica só uma dica de uma linha.

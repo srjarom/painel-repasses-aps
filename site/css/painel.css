@@ -1168,3 +1168,17 @@ table.rk-table th:last-child,table.rk-table td:last-child,table.ae-table th:last
 .rd-open-top:hover{filter:brightness(1.05);transform:translateY(-1px);}
 .rd-open-top:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
 .side-muni .rd-name{font-size:18px;}
+
+/* v4.4.4 — equipes a menos: o quadro não vaza mais da tela e os selos ficam lado a lado */
+.layout-fit .rk-card,.layout-fit .alerta-card{overflow:hidden;}
+table.ae-table{table-layout:fixed;}
+table.ae-table th:nth-child(1),table.ae-table td:nth-child(1){width:20%;}
+table.ae-table th:nth-child(2),table.ae-table td:nth-child(2){width:31%;}
+table.ae-table th:nth-child(3),table.ae-table td:nth-child(3){width:27%;}
+table.ae-table th:nth-child(4),table.ae-table td:nth-child(4){width:11%;}
+table.ae-table th:nth-child(5),table.ae-table td:nth-child(5){width:11%;}
+.ae-nome{white-space:normal;}
+.ae-table .eq-chip{margin:2px 4px 2px 0;font-size:11px;padding:1px 7px;}
+.ae-hcell .ae-hist{display:block;margin:0;line-height:1.55;}
+.ae-acts{white-space:nowrap;}
+.ae-rel{margin-left:6px;}

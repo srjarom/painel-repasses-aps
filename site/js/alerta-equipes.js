@@ -136,7 +136,7 @@ function renderAlertaCarteira(rows){
   const el=document.getElementById('alerta-equipes-card');if(!el)return;
   const com=rows.filter(r=>temAlertaEquipes(r.perda));
   if(!com.length){el.style.display='none';return;}
-  el.style.display='block';
+  el.style.display='';   // '' = deixa o CSS decidir (no computador o quadro é flex e rola por dentro)
   const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const aus=com.filter(r=>r.perda.ausente);
   const rec=com.filter(r=>!r.perda.ausente&&r.perda.recente.length);
