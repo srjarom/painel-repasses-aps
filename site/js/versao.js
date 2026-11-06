@@ -6,8 +6,9 @@
    uma nova entrada no topo do array (mais recente primeiro) e atualize
    APP_VERSION (e docs/HISTORICO_DE_VERSOES.md). Fica visível só na tela (rodapé), não entra no PDF do cliente.
    ========================================================================= */
-const APP_VERSION='4.3.0';
+const APP_VERSION='4.3.1';
 const APP_CHANGELOG=[
+  {v:'4.3.1',desc:'Os botões de "cor do mapa" (e o filtro de clientes) viraram um seletor compacto, tipo chave, em vez de botões grandes separados. A legenda da "Variação" no mapa do Brasil, que quebrava o texto palavra por palavra, agora mostra cada item numa linha só, lado a lado.'},
   {v:'4.3.0',desc:'Layout que cabe na tela. O painel passa a usar a largura da tela (até 1640 px, antes 1200 px) e, no computador, o mapa, o ranking, a lista de equipes a menos e a tela do Brasil ocupam exatamente a altura que sobra na janela: a página não precisa rolar, e cada quadro rola por dentro (o cabeçalho das tabelas fica preso no alto). No mapa do estado, o desenho ocupa a altura toda e o painel do lado (busca, município selecionado e legenda) rola sozinho. As abas e os filtros de tendência ficam na mesma linha. No celular, tudo continua no fluxo normal.'},
   {v:'4.2.3',desc:'Tela "Como funciona o repasse": sem o espaço vazio grande entre o topo e o título, e com menos espaço entre os blocos. O cartão de Qualidade passa a citar também as equipes ribeirinhas (eSFR), prisionais (eAPP) e de Consultório na Rua (eCR).'},
   {v:'4.2.2',desc:'Topo e quadros de números mais finos (barra de navegação, barra do Brasil/estado e os quatro quadros): o mapa começa cerca de 100 px mais acima, sem perder a leitura.'},

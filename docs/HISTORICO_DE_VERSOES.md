@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.3.1
+
+Os botões de "cor do mapa" (e o filtro de clientes) viraram um seletor compacto, tipo chave, em vez de botões grandes separados. A legenda da "Variação" no mapa do Brasil, que quebrava o texto palavra por palavra, agora mostra cada item numa linha só, lado a lado.
+
 ## 4.3.0
 
 Layout que cabe na tela. O painel passa a usar a largura da tela (até 1640 px, antes 1200 px) e, no computador, o mapa, o ranking, a lista de equipes a menos e a tela do Brasil ocupam exatamente a altura que sobra na janela: a página não precisa rolar, e cada quadro rola por dentro (o cabeçalho das tabelas fica preso no alto). No mapa do estado, o desenho ocupa a altura toda e o painel do lado (busca, município selecionado e legenda) rola sozinho. As abas e os filtros de tendência ficam na mesma linha. No celular, tudo continua no fluxo normal.
