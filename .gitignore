@@ -15,6 +15,9 @@ desktop.ini
 .vscode/*
 !.vscode/extensions.json
 
+# Pacotes .zip gerados para publicar no hub (dá para gerar de novo a qualquer momento)
+pacote/
+
 # Testes
 testes/node_modules/
 testes/saida/

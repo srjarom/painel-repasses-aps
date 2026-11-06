@@ -31,7 +31,19 @@ Siga o formato combinado na autorização. Os mais comuns:
 
 ---
 
-## Instruções do ambiente (preencher após a autorização)
+## Publicação atual: GitHub Pages (link aberto)
+
+Desde novembro de 2026 o painel é publicado pelo **GitHub Pages**, a partir do repositório `srjarom/painel-repasses-aps`.
+
+- **Endereço do painel:** https://srjarom.github.io/painel-repasses-aps/
+- **Como publicar:** basta o **Push** na branch `main` (GitHub Desktop → Commit to main → Push origin). A automação em `.github/workflows/publicar-painel.yml` publica sozinha o conteúdo de `site/`, em cerca de 1 a 2 minutos.
+- **Acompanhar ou repetir:** no GitHub, aba **Actions** → "Publicar painel". Um ✔ verde quer dizer que publicou. Para publicar de novo sem mudar nada: **Run workflow**.
+- **Acesso:** o link é **aberto**, sem login. Qualquer pessoa com o endereço vê o painel, inclusive a lista de clientes. Decisão do responsável: os clientes também constam no Portal da Transparência.
+- **Cache:** o GitHub Pages guarda os arquivos por até 10 minutos. Se os dados novos não aparecerem, espere um pouco e recarregue com **Ctrl+F5**.
+
+Se no futuro o painel for para o hub da empresa, as instruções abaixo continuam valendo.
+
+## Instruções do ambiente do hub (preencher após a autorização)
 
 - Endereço do painel:
 - Onde/como enviar os arquivos:
