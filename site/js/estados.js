@@ -107,6 +107,8 @@ function mostrarAba(nome,opts={}){
   abaEstado=nome;
   document.querySelectorAll('.tabs .tab-btn').forEach(b=>{const on=b.dataset.aba===nome;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;});
   ['mapa','ranking','perda'].forEach(a=>{const p=document.getElementById('painel-'+a);if(p)p.hidden=a!==nome;});
+  // o filtro de tendência vale para o Mapa e o Ranking; na aba de equipes a menos ele some
+  {const ts=document.getElementById('trend-strip');if(ts)ts.hidden=nome==='perda';}
   if(opts.rolar){const t=document.querySelector('.tabs');if(t&&t.getBoundingClientRect().top<0)t.scrollIntoView({block:'start'});}
 }
 (function initAbas(){

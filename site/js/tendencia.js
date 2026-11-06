@@ -87,14 +87,18 @@ function renderTrendStrip(rows){
   const pares=[...cont.entries()].sort((a,b)=>b[1]-a[1]);
   const outros=pares.slice(1).reduce((s2,x)=>s2+x[1],0);
   const ref=pares.length?pares[0][0]+(outros?` · ${outros} município${outros>1?'s':''} com outro período (ver tooltip)`:''):'sem quadrimestre anterior para comparar';
-  const btn=(k,cls,ic,lbl,arr,extra)=>`<button type="button" class="ts-btn ${cls}${trendFilter===k?' on':''}" aria-pressed="${trendFilter===k}" onclick="setTrendFilter('${k}')">
-      <span class="ts-ic" aria-hidden="true">${ic}</span><span class="ts-n">${arr.length}</span><span class="ts-l">${lbl}</span>${extra?`<span class="ts-v">${extra}</span>`:''}</button>`;
-  el.innerHTML=`<div class="ts-head"><b>Tendência do repasse</b> · ${ref}<span class="ts-hint">${trendFilter==='all'?'Clique para filtrar o mapa e o ranking':`<span class="rowlink" onclick="setTrendFilter('all')">Mostrar todos</span>`}</span></div>
-    <div class="ts-row${perd.length?' n4':''}">
-      ${btn('up','up','▲',up.length===1?'melhorou':'melhoraram',up,up.length?'+ '+fmtBRL(soma(up))+'/mês':'')}
-      ${btn('eq','eq','=',eq.length===1?'ficou igual':'ficaram iguais',eq,'')}
-      ${btn('dn','dn','▼',dn.length===1?'piorou':'pioraram',dn,dn.length?'− '+fmtBRL(-soma(dn))+'/mês':'')}
-      ${perd.length?btn('perda','warn','⚠',perd.length===1?'com equipes a menos':'com equipes a menos',perd,'impacto est. − '+fmtBRL(perd.reduce((s2,r)=>s2+r.perda.impacto,0))+'/mês'):''}
+  // v4.1.0: uma barra fina de filtros (antes eram quatro cartões grandes) — fica logo
+  // abaixo das abas e vale para o Mapa e o Ranking
+  const chip=(k,cls,ic,lbl,n,extra,titulo)=>`<button type="button" class="tf-chip ${cls}${trendFilter===k?' on':''}" aria-pressed="${trendFilter===k}" onclick="setTrendFilter('${k}')"${titulo?` title="${titulo}"`:''}>
+      ${ic?`<span class="tf-ic" aria-hidden="true">${ic}</span>`:''}<b>${n}</b> ${lbl}${extra?` <small>${extra}</small>`:''}</button>`;
+  const fmtC=typeof fmtBRLcurto==='function'?fmtBRLcurto:fmtBRL;
+  el.innerHTML=`<div class="tf-bar" role="group" aria-label="Filtrar o mapa e o ranking pela tendência do repasse">
+      <span class="tf-l">Tendência <span class="tf-ref">${ref}</span></span>
+      ${chip('all','all','','todos',rows.length,'')}
+      ${chip('up','up','▲',up.length===1?'subiu':'subiram',up.length,up.length?'+'+fmtC(soma(up)):'',up.length?'+ '+fmtBRL(soma(up))+'/mês':'')}
+      ${chip('eq','eq','=',eq.length===1?'igual':'iguais',eq.length,'')}
+      ${chip('dn','dn','▼',dn.length===1?'caiu':'caíram',dn.length,dn.length?'−'+fmtC(-soma(dn)):'',dn.length?'− '+fmtBRL(-soma(dn))+'/mês':'')}
+      ${perd.length?chip('perda','warn','⚠','com equipes a menos',perd.length,'−'+fmtC(perd.reduce((s2,r)=>s2+r.perda.impacto,0)),'impacto estimado − '+fmtBRL(perd.reduce((s2,r)=>s2+r.perda.impacto,0))+'/mês'):''}
     </div>`;
 }
 function selectMapMuni(id,opts={}){

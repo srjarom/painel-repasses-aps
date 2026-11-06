@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.1.0
+
+Painel do estado mais enxuto: a tendência do repasse deixou de ser uma segunda fileira de cartões grandes e virou uma barra fina de filtros (todos · subiram · iguais · caíram · com equipes a menos), logo abaixo das abas, valendo para o Mapa e o Ranking (na aba Equipes a menos ela some). Os quatro quadros de números ficaram mais baixos.
+
 ## 4.0.0
 
 Nova navegação, com muito menos rolagem. O painel abre numa tela do Brasil: quatro números do país, mapa do Brasil colorido por estado (margem em aberto, % do potencial, repasse ou variação) e a lista dos 27 estados, que pode ser ordenada; clicar num estado abre o painel dele. Busca no topo para ir direto a qualquer município do Brasil ou a um estado. No painel do estado, o bloco azul grande virou uma barra fina presa no topo (Brasil › estado, troca de estado e busca), os números ficam numa linha só e o conteúdo foi dividido em três abas: Mapa, Ranking e Equipes a menos. O endereço acompanha a navegação (…?uf=SC e …?uf=SC&m=420540), então dá para mandar o link de um estado ou de um município, e o botão voltar do navegador funciona. A ferramenta de manutenção passa a gerar também o resumo de cada estado (dados/indice.js) e a lista da busca (dados/busca.js).

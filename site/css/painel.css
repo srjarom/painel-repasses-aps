@@ -834,3 +834,29 @@ button.kpi:hover{border-color:var(--line-2);}
   .tb-sub{font-size:12px;}
   .stage-compact{padding-left:16px;padding-right:16px;}
 }
+
+/* v4.1.0 — quadros mais baixos e tendência numa barra fina de filtros, abaixo das abas */
+.kpi{padding:10px 16px 11px;}
+.kpi-v{font-size:22px;margin-top:2px;}
+.kpi-s{margin-top:4px;font-size:11.5px;}
+.kpi-bar{margin-top:6px;}
+.kpi-row{margin-bottom:14px;}
+.stage-compact .trend-strip{margin:0 0 14px;}
+.trend-strip[hidden]{display:none;}
+.tf-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+.tf-l{font-size:12.5px;font-weight:600;color:var(--ink);margin-right:4px;}
+.tf-ref{font-weight:400;color:var(--muted);margin-left:4px;}
+.tf-chip{display:inline-flex;align-items:baseline;gap:5px;font:inherit;font-size:13px;color:var(--ink);background:var(--panel);border:1.5px solid var(--line-2);border-radius:999px;padding:5px 12px;cursor:pointer;white-space:nowrap;}
+.tf-chip b{font-family:var(--font-titulo);font-size:14px;color:var(--navy);}
+.tf-chip small{font-size:11.5px;color:var(--muted);}
+.tf-chip:hover{border-color:var(--navy);}
+.tf-chip:focus-visible{outline:2px solid var(--teal);outline-offset:2px;}
+.tf-ic{font-size:11px;}
+.tf-chip.up .tf-ic{color:#2E6FE0;} .tf-chip.dn .tf-ic{color:#D0483C;} .tf-chip.eq .tf-ic{color:var(--muted);} .tf-chip.warn .tf-ic{color:#c58f1f;}
+.tf-chip.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+.tf-chip.on b,.tf-chip.on small,.tf-chip.on .tf-ic{color:#fff;}
+:root[data-theme="dark"] .tf-chip.on{background:#bcd6f0;border-color:#bcd6f0;color:#09274C;}
+:root[data-theme="dark"] .tf-chip.on b,:root[data-theme="dark"] .tf-chip.on small,:root[data-theme="dark"] .tf-chip.on .tf-ic{color:#09274C;}
+.tf-chip.warn{border-color:var(--chip-amber-border);background:var(--chip-amber-bg);}
+.tf-chip.warn b{color:var(--chip-amber-fg);}
+@media(max-width:640px){.tf-l{flex-basis:100%;}.tf-chip{font-size:12.5px;padding:5px 10px;}}
