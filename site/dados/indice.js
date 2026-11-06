@@ -1,5 +1,31 @@
 /* Estados com dados publicados no Painel de Repasses APS. Gerado pela ferramenta de manutenção.
    NÃO editar à mão: é atualizado junto com o arquivo do estado (ver docs/ATUALIZAR_OS_DADOS.md). */
 PainelDados.registrarIndice({
-"RS":{"atualizadoEm":"2026-11-06","municipios":497,"ultimoQuad":"2026Q2"}
+"AC":{"atualizadoEm":"2026-11-06","municipios":22,"ultimoQuad":"2026Q2"},
+"AL":{"atualizadoEm":"2026-11-06","municipios":102,"ultimoQuad":"2026Q2"},
+"AM":{"atualizadoEm":"2026-11-06","municipios":62,"ultimoQuad":"2026Q2"},
+"AP":{"atualizadoEm":"2026-11-06","municipios":16,"ultimoQuad":"2026Q2"},
+"BA":{"atualizadoEm":"2026-11-06","municipios":417,"ultimoQuad":"2026Q2"},
+"CE":{"atualizadoEm":"2026-11-06","municipios":184,"ultimoQuad":"2026Q2"},
+"DF":{"atualizadoEm":"2026-11-06","municipios":1,"ultimoQuad":"2026Q2"},
+"ES":{"atualizadoEm":"2026-11-06","municipios":78,"ultimoQuad":"2026Q2"},
+"GO":{"atualizadoEm":"2026-11-06","municipios":246,"ultimoQuad":"2026Q2"},
+"MA":{"atualizadoEm":"2026-11-06","municipios":217,"ultimoQuad":"2026Q2"},
+"MG":{"atualizadoEm":"2026-11-06","municipios":853,"ultimoQuad":"2026Q2"},
+"MS":{"atualizadoEm":"2026-11-06","municipios":79,"ultimoQuad":"2026Q2"},
+"MT":{"atualizadoEm":"2026-11-06","municipios":142,"ultimoQuad":"2026Q2"},
+"PA":{"atualizadoEm":"2026-11-06","municipios":144,"ultimoQuad":"2026Q2"},
+"PB":{"atualizadoEm":"2026-11-06","municipios":223,"ultimoQuad":"2026Q2"},
+"PE":{"atualizadoEm":"2026-11-06","municipios":185,"ultimoQuad":"2026Q2"},
+"PI":{"atualizadoEm":"2026-11-06","municipios":224,"ultimoQuad":"2026Q2"},
+"PR":{"atualizadoEm":"2026-11-06","municipios":399,"ultimoQuad":"2026Q2"},
+"RJ":{"atualizadoEm":"2026-11-06","municipios":92,"ultimoQuad":"2026Q2"},
+"RN":{"atualizadoEm":"2026-11-06","municipios":167,"ultimoQuad":"2026Q2"},
+"RO":{"atualizadoEm":"2026-11-06","municipios":52,"ultimoQuad":"2026Q2"},
+"RR":{"atualizadoEm":"2026-11-06","municipios":15,"ultimoQuad":"2026Q2"},
+"RS":{"atualizadoEm":"2026-11-06","municipios":497,"ultimoQuad":"2026Q2"},
+"SC":{"atualizadoEm":"2026-11-06","municipios":295,"ultimoQuad":"2026Q2"},
+"SE":{"atualizadoEm":"2026-11-06","municipios":75,"ultimoQuad":"2026Q2"},
+"SP":{"atualizadoEm":"2026-11-06","municipios":645,"ultimoQuad":"2026Q2"},
+"TO":{"atualizadoEm":"2026-11-06","municipios":139,"ultimoQuad":"2026Q2"}
 });
