@@ -10,7 +10,7 @@ São dois relatórios públicos do SIAPS ("Avaliação do Quadrimestre"):
 
 1. **Vínculo e Acompanhamento Territorial e Qualidade**: por município, quadrimestre e classificação (Ótimo, Bom, Suficiente, Regular), traz a quantidade de equipes:
    - eSF e eAP em **Vínculo** (colunas `vEsf`, `vEap`);
-   - eSF, eAP, eSB e eMulti em **Qualidade** (`qEsf`, `qEap`, `qEsb`, `qEmulti`).
+   - eSF, eAP, eSB, eMulti, eSFR, eAPP e eCR em **Qualidade** (`qEsf`, `qEap`, `qEsb`, `qEmulti`, `qEsfr`, `qEapp`, `qEcr`).
 2. **Qualidade – Conceito obtido por indicador**: por município, quadrimestre, tipo de equipe e indicador, quantas equipes ficaram em cada classificação. Alimenta o **Raio-X por indicador** e o "indicador mais crítico" do ranking.
 
 Cada avaliação de quadrimestre define o repasse **dos meses seguintes**. O painel trata o valor calculado como **repasse mensal** e estima o quadrimestre como 4 × o valor mensal.
@@ -23,6 +23,8 @@ Cada avaliação de quadrimestre define o repasse **dos meses seguintes**. O pai
 | Modalidade eAP | 30h ou 20h | Padrão 30h; ajustável na manutenção |
 | Modalidade eSB | I ou II, comum ou quilombola/assentamento | Padrão II comum |
 | Modalidade eMulti | Ampliada, Complementar, Estratégica | Padrão Complementar |
+| Modalidade eCR | I, II ou III | Padrão I (menor valor; o SIAPS não informa a modalidade) |
+| Modalidade eAPP | Essencial ou Ampliada, 20h ou 30h | Padrão Essencial 20h (menor valor; o SIAPS não informa a modalidade) |
 
 Na tela do município, o usuário pode mudar esses parâmetros para **simular**. Nada é salvo. Os oficiais são os publicados pela manutenção.
 
@@ -33,14 +35,24 @@ Na tela do município, o usuário pode mudar esses parâmetros para **simular**.
 - **Componente Fixo/IED:** número de equipes × valor fixo por equipe.
   - eSF e eAP: o valor depende do **estrato** (e da carga horária, na eAP). A contagem usa as equipes da coluna de Vínculo.
   - eSB e eMulti: valor fixo pela modalidade.
+  - eSFR: custeio mensal de R$ 24.000 por equipe (PRC 6/2017, art. 69, redação da Portaria GM/MS nº 5.850/2024).
+  - eCR: custeio mensal pela modalidade: I R$ 20.000, II R$ 28.000, III R$ 36.000 (art. 84, redação da Portaria GM/MS nº 7.799/2025).
+  - eAPP: o custeio mensal **não entra**, por falta de valor federal vigente confirmado. Só a Qualidade é somada.
+  - A contagem de eSB, eMulti, eSFR, eAPP e eCR usa a coluna de Qualidade.
   - Sem estrato definido, o Fixo fica zerado. A manutenção avisa quando isso acontece.
 - **Vínculo (CVAT):** para cada classificação, equipes eSF/eAP nessa classificação × valor da classificação.
-- **Qualidade:** para cada classificação, equipes eSF/eAP/eSB/eMulti nessa classificação × valor da classificação para o tipo ou modalidade.
+- **Qualidade:** para cada classificação, equipes de cada tipo (eSF, eAP, eSFR, eSB, eMulti, eAPP, eCR) nessa classificação × valor da classificação para o tipo ou modalidade (Anexo XCIX-B, redação da Portaria GM/MS nº 7.799/2025).
 - **Potencial:** o mesmo cálculo com **todas as equipes em "Ótimo"**. O potencial de Qualidade usa a contagem de equipes avaliadas em Qualidade (corrigido na 1.27.0).
 - **Margem em aberto** = Potencial − Repasse atual (nunca negativa).
 - **% atingido** = Repasse atual ÷ Potencial.
 
-Tipos que o SIAPS também lista, mas que **não entram no cálculo**: eSFR, eAPP e eCR. Eles aparecem no Raio-X.
+Desde a versão 3.2.0, eSFR, eAPP e eCR entram no cálculo. O que ainda fica de fora:
+
+- **Vínculo da eSFR:** existe na Portaria (mesmos valores da eSF, Anexo XCIX-A), mas o relatório público do SIAPS não traz a classificação de Vínculo da eSFR.
+- **Custeio mensal da eAPP:** sem valor federal vigente confirmado.
+- **Regra dos 12 meses em "Bom":** a Portaria GM/MS nº 7.799/2025 manda pagar a Qualidade de eCR e eAPP nos valores de "Bom" durante as 12 primeiras parcelas, e a Portaria nº 5.850/2024 faz o mesmo para a eSFR. O painel usa sempre a classificação real do relatório.
+
+Na tela e nos PDFs, cada município só mostra os tipos de equipe que ele realmente tem.
 
 ## 4. Tendência (subiu, igual, caiu)
 

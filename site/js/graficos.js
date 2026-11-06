@@ -42,8 +42,8 @@ function tblRepasse(res){
 // Equipes no relatório e Componente Fixo/IED por tipo — explica de onde vem cada variação do Fixo
 function tblEquipesFixo(res){
   const t=document.getElementById('tbl-equipes-fixo');if(!t)return;
-  const tipos=[{k:'esf',l:'eSF'},{k:'eap',l:'eAP'},{k:'esb',l:'eSB'},{k:'emulti',l:'eMulti'}];
-  const cont=r=>({esf:r.byType.esf.n,eap:r.byType.eap.n,esb:r.byType.esb.n,emulti:r.byType.emulti.n});
+  const tipos=TIPOS_EQUIPE;
+  const cont=r=>Object.fromEntries(TIPOS_EQUIPE.map(t=>[t.k,r.byType[t.k].n]));
   const usados=tipos.filter(tp=>res.some(r=>r.byType[tp.k].n>0));
   let h='<thead><tr><th>Quadrim.</th>'+usados.map(tp=>`<th>${tp.l}</th>`).join('')+'<th>Fixo/IED</th></tr></thead><tbody>';
   res.forEach((r,i)=>{
@@ -62,7 +62,7 @@ function tblEquipesFixo(res){
 function chartClass(res){
   if(charts.c)charts.c.destroy();
   const tc=chartThemeColors();
-  const agg=res.map(r=>{const t={};['esf','eap','esb','emulti'].forEach(k=>Object.entries(r.cd[k]).forEach(([c,n])=>t[c]=(t[c]||0)+n));return t;});
+  const agg=res.map(r=>{const t={};TIPOS_EQUIPE.map(t=>t.k).forEach(k=>Object.entries(r.cd[k]).forEach(([c,n])=>t[c]=(t[c]||0)+n));return t;});
   charts.c=new Chart(document.getElementById('chart-class'),{type:'bar',
     data:{labels:res.map(r=>r.quad),datasets:CO.map(c=>({label:c,data:agg.map(a=>a[c]||0),backgroundColor:CC[c],stack:'s',borderRadius:3}))},
     options:{responsive:true,scales:{

@@ -188,7 +188,7 @@ function fraseProximoPasso(passos){
   if(!passos.length)return null;
   const top=passos[0].gain;
   const sel=passos.filter((p,i)=>i<3&&p.gain>=0.25*top);
-  const TL={esf:'eSF',eap:'eAP',esb:'eSB',emulti:'eMulti'};
+  const TL=Object.fromEntries(TIPOS_EQUIPE.map(t=>[t.k,t.l]));
   const compNome=p=>p.comp==='vin'?'no Vínculo (CVAT)':'em Qualidade';
   const segs=[{t:'Se '}];
   sel.forEach((p,i)=>{
@@ -460,6 +460,9 @@ function generatePDF(){
       {k:'eap',f:'qEap',lbl:'eAP — Atenção Primária',comp:'qual'},
       {k:'esb',f:'qEsb',lbl:'eSB — Saúde Bucal',comp:'qual'},
       {k:'emulti',f:'qEmulti',lbl:'eMulti — Multiprofissional',comp:'qual'},
+      {k:'esfr',f:'qEsfr',lbl:'eSFR — Saúde da Família Ribeirinha',comp:'qual'},
+      {k:'eapp',f:'qEapp',lbl:'eAPP — Atenção Primária Prisional',comp:'qual'},
+      {k:'ecr',f:'qEcr',lbl:'eCR — Consultório na Rua',comp:'qual'},
       {k:'esf',f:'vEsf',lbl:'CVAT (Vínculo) — eSF',comp:'vin'},
       {k:'eap',f:'vEap',lbl:'CVAT (Vínculo) — eAP',comp:'vin'}
     ].map(L=>({...L,cur:clsCounts(last.quad,L.f),prev:prev?clsCounts(prev.quad,L.f):null}))

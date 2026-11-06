@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 3.2.0
+
+O cálculo do repasse passa a incluir as equipes de Saúde da Família Ribeirinha (eSFR), Atenção Primária Prisional (eAPP) e Consultório na Rua (eCR), que antes ficavam de fora. Qualidade pelos valores do Anexo XCIX-B (redação da Portaria GM/MS nº 7.799/2025); custeio mensal da eSFR (R$ 24.000, Portaria nº 5.850/2024) e da eCR (I R$ 20.000, II R$ 28.000, III R$ 36.000, art. 84). O custeio mensal da eAPP e o Vínculo da eSFR não entram, por falta de valor confirmado ou de dado no relatório público. Novos campos de modalidade eCR e eAPP (padrão: os menores valores, eCR I e eAPP Essencial 20h), ajustáveis na tela e na manutenção. Cada município mostra só os tipos de equipe que tem: cartões, campos de modalidade, abas do Raio-X, tabelas, gráficos, alertas de equipes a menos, diagnóstico e PDFs. No Brasil, as três equipes somam cerca de R$ 20,6 milhões/mês a mais no quadrimestre mais recente.
+
 ## 3.1.0
 
 Raio-X por indicador na tela com abas para todos os tipos de equipe do relatório: além de ESF, eAP, eSB e eMulti, agora eSFR (Saúde da Família Ribeirinha), eAPP (Atenção Primária Prisional) e eCR (Consultório na Rua). O nome completo do tipo aparece ao passar o mouse na aba. Os indicadores dessas equipes ganharam sugestão de ação, como os demais. Os PDFs já traziam esses tipos.

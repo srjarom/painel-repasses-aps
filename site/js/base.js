@@ -35,14 +35,52 @@ function nomeComPrep(uf){const e=estadoInfo(uf);return `${e.de} ${e.nome}`;}   /
 function ufDoIbge(ib){const c=String(ib||'').slice(0,2);const e=ESTADOS.find(x=>x.cod===c);return e?e.uf:'';}
 
 const FIXO_ESTRATO={eSF:{1:18000,2:16000,3:14000,4:12000},eAP30:{1:10800,2:9600,3:8400,4:7200},eAP20:{1:7200,2:6400,3:5600,4:4800}};
-const FIXO_FLAT={I_comum:4014,II_comum:7064,I_quil:6021,II_quil:10596,ampliada:36000,complementar:24000,estrategica:12000};
+// Valor fixo mensal por equipe (não depende do estrato IED).
+//   eSB e eMulti: implantação/manutenção, conforme a modalidade.
+//   eSFR: custeio mensal de R$ 24.000 por equipe (PRC 6/2017, art. 69, redação da Portaria GM/MS nº 5.850/2024).
+//   eCR:  custeio mensal por modalidade — I R$ 20.000, II R$ 28.000, III R$ 36.000 (PRC 6/2017, art. 84,
+//         redação da Portaria GM/MS nº 7.799/2025).
+//   eAPP: o custeio mensal não entra no cálculo — não há valor federal vigente confirmado (só a Qualidade conta).
+const FIXO_FLAT={I_comum:4014,II_comum:7064,I_quil:6021,II_quil:10596,ampliada:36000,complementar:24000,estrategica:12000,
+  eSFR:24000,eCR_I:20000,eCR_II:28000,eCR_III:36000};
 const VINCULO={eSF:{"Ótimo":8000,"Bom":6000,"Suficiente":4000,"Regular":2000},eAP30:{"Ótimo":4000,"Bom":3000,"Suficiente":2000,"Regular":1000},eAP20:{"Ótimo":3000,"Bom":2250,"Suficiente":1500,"Regular":750}};
 const QUALIDADE={
   eSF:{"Ótimo":8000,"Bom":6000,"Suficiente":4000,"Regular":2000},eAP30:{"Ótimo":4000,"Bom":3000,"Suficiente":2000,"Regular":1000},eAP20:{"Ótimo":3000,"Bom":2250,"Suficiente":1500,"Regular":750},
   ampliada:{"Ótimo":9000,"Bom":6750,"Suficiente":4500,"Regular":2250},complementar:{"Ótimo":6000,"Bom":4500,"Suficiente":3000,"Regular":1500},estrategica:{"Ótimo":3000,"Bom":2250,"Suficiente":1500,"Regular":750},
   I_comum:{"Ótimo":2449,"Bom":1836.75,"Suficiente":1224.5,"Regular":612.25},II_comum:{"Ótimo":3267,"Bom":2450.25,"Suficiente":1633.5,"Regular":816.75},
-  I_quil:{"Ótimo":3673.5,"Bom":2755.13,"Suficiente":1836.75,"Regular":918.38},II_quil:{"Ótimo":4900.5,"Bom":3675.38,"Suficiente":2450.25,"Regular":1225.13}
+  I_quil:{"Ótimo":3673.5,"Bom":2755.13,"Suficiente":1836.75,"Regular":918.38},II_quil:{"Ótimo":4900.5,"Bom":3675.38,"Suficiente":2450.25,"Regular":1225.13},
+  // Anexo XCIX-B (redação da Portaria GM/MS nº 7.799/2025): eSFR, eCR (modalidades I a III) e eAPP
+  eSFR:{"Ótimo":8000,"Bom":6000,"Suficiente":4000,"Regular":2000},
+  eCR_III:{"Ótimo":8000,"Bom":6000,"Suficiente":4000,"Regular":2000},eCR_II:{"Ótimo":7000,"Bom":5250,"Suficiente":3500,"Regular":1750},
+  eCR_I:{"Ótimo":6000,"Bom":4500,"Suficiente":3000,"Regular":1500},
+  eAPP_amp30:{"Ótimo":8000,"Bom":6000,"Suficiente":4000,"Regular":2000},eAPP_amp20:{"Ótimo":6000,"Bom":4500,"Suficiente":3000,"Regular":1500},
+  eAPP_ess30:{"Ótimo":7000,"Bom":5250,"Suficiente":3500,"Regular":1750},eAPP_ess20:{"Ótimo":5000,"Bom":3750,"Suficiente":2500,"Regular":1250}
 };
+// Tipos de equipe do cálculo, na ordem em que aparecem na tela.
+//   n = coluna com o nº de equipes; q = coluna de Qualidade; v = coluna de Vínculo (CVAT, só eSF e eAP).
+const TIPOS_EQUIPE=[
+  {k:'esf',l:'eSF',n:'vEsf',q:'qEsf',v:'vEsf'},
+  {k:'eap',l:'eAP',n:'vEap',q:'qEap',v:'vEap'},
+  {k:'esfr',l:'eSFR',n:'qEsfr',q:'qEsfr'},
+  {k:'esb',l:'eSB',n:'qEsb',q:'qEsb'},
+  {k:'emulti',l:'eMulti',n:'qEmulti',q:'qEmulti'},
+  {k:'eapp',l:'eAPP',n:'qEapp',q:'qEapp'},
+  {k:'ecr',l:'eCR',n:'qEcr',q:'qEcr'}
+];
+// modalidades padrão (quando a modalidade real do município não é conhecida)
+const PARAMS_PADRAO_MUNI={estrato:'',eapMod:'30',esbMod:'II_comum',emultiMod:'complementar',ecrMod:'I',eappMod:'ess20'};
+// tabelas de Qualidade, Vínculo e valor fixo de cada tipo, conforme as modalidades do município
+function tabelasTipos(p){
+  const ek=p.eapMod==='30'?'eAP30':'eAP20';
+  const ecr='eCR_'+(p.ecrMod||PARAMS_PADRAO_MUNI.ecrMod),eapp='eAPP_'+(p.eappMod||PARAMS_PADRAO_MUNI.eappMod);
+  const est=p.estrato;
+  return{ek,
+    Q:{esf:QUALIDADE.eSF,eap:QUALIDADE[ek],esfr:QUALIDADE.eSFR,esb:QUALIDADE[p.esbMod],emulti:QUALIDADE[p.emultiMod],
+       eapp:QUALIDADE[eapp],ecr:QUALIDADE[ecr]},
+    V:{esf:VINCULO.eSF,eap:VINCULO[ek]},
+    F:{esf:est?FIXO_ESTRATO.eSF[est]:0,eap:est?FIXO_ESTRATO[ek][est]:0,esfr:FIXO_FLAT.eSFR,
+       esb:FIXO_FLAT[p.esbMod],emulti:FIXO_FLAT[p.emultiMod],eapp:0,ecr:FIXO_FLAT[ecr]}};
+}
 const CC={"Ótimo":"#2E6FE0","Bom":"#3E9B4F","Suficiente":"#E0A82E","Regular":"#D0483C"};
 const CO=["Ótimo","Bom","Suficiente","Regular"];
 // quadParts(): extrai {q:número do quadrimestre, y:ano} de qualquer um dos dois formatos

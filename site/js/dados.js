@@ -21,15 +21,16 @@
      quads       ["2025Q3","2026Q1","2026Q2"]  — os demais campos guardam o índice
      tipos       ["eSF","eAP","eSB","eMulti",…] — tipos de equipe do relatório por indicador
      indicadores ["Cuidado da Pessoa com Hipertensão",…]
-     municipios[]: { ibge, nome, params:{estrato,eapMod,esbMod,emultiMod},
-                     r:   [[quad, classe, vEsf, vEap, qEsf, qEap, qEsb, qEmulti], …],
+     municipios[]: { ibge, nome, params:{estrato,eapMod,esbMod,emultiMod[,ecrMod,eappMod]},
+                     r:   [[quad, classe, vEsf, vEap, qEsf, qEap, qEsb, qEmulti[, qEsfr, qEapp, qEcr]], …],
+                     (as 3 últimas colunas — eSFR, eAPP e eCR — só aparecem quando não são zero)
                      ind: [[quad, tipo, indicador, regular, suficiente, bom, otimo], …] }
      classe: 0=Regular 1=Suficiente 2=Bom 3=Ótimo
    Detalhes em docs/FORMATO_DOS_DADOS.md.
    ========================================================================= */
 const PainelDados=(function(){
   const CLASSES=['Regular','Suficiente','Bom','Ótimo'];
-  const COLS_R=['vEsf','vEap','qEsf','qEap','qEsb','qEmulti'];
+  const COLS_R=['vEsf','vEap','qEsf','qEap','qEsb','qEmulti','qEsfr','qEapp','qEcr'];
   const ufs={},geos={};
   let clientes=null,indice={};
 
@@ -73,7 +74,7 @@ const PainelDados=(function(){
         regular:x[3]||0,suficiente:x[4]||0,bom:x[5]||0,otimo:x[6]||0}));
       return{
         id:m.ibge,ibge:m.ibge,nomeMuni:m.nome,uf:d.uf,
-        params:Object.assign({estrato:'',eapMod:'30',esbMod:'II_comum',emultiMod:'complementar'},m.params||{}),
+        params:Object.assign({},PARAMS_PADRAO_MUNI,m.params||{}),
         parsed:{nomeMuni:m.nome,uf:d.uf,ibge:m.ibge,rows},
         indicadores:ind.length?{nomeMuni:m.nome,uf:d.uf,ibge:m.ibge,rows:ind}:null
       };
@@ -81,6 +82,14 @@ const PainelDados=(function(){
   }
 
   // ---- escrita (usada só pela ferramenta de manutenção) ----
+  // parâmetros gravados no arquivo: os quatro de sempre; ecrMod/eappMod só quando diferem do padrão
+  function paramsParaArquivo(p){
+    p=Object.assign({},PARAMS_PADRAO_MUNI,p||{});
+    const o={estrato:String(p.estrato||''),eapMod:p.eapMod,esbMod:p.esbMod,emultiMod:p.emultiMod};
+    if(p.ecrMod!==PARAMS_PADRAO_MUNI.ecrMod)o.ecrMod=p.ecrMod;
+    if(p.eappMod!==PARAMS_PADRAO_MUNI.eappMod)o.eappMod=p.eappMod;
+    return o;
+  }
   // lista: municípios no formato do painel ({ibge,nomeMuni,params,parsed:{rows},indicadores:{rows}})
   function codificarUF(uf,lista,meta){
     const qs=new Set(),ts=new Set(),is=new Set();
@@ -94,10 +103,11 @@ const PainelDados=(function(){
     const ord=(a,b)=>a.nomeMuni.localeCompare(b.nomeMuni,'pt-BR');
     const municipiosC=[...lista].sort(ord).map(m=>({
       ibge:String(m.ibge),nome:m.nomeMuni,
-      params:{estrato:String(m.params&&m.params.estrato||''),eapMod:m.params&&m.params.eapMod||'30',
-              esbMod:m.params&&m.params.esbMod||'II_comum',emultiMod:m.params&&m.params.emultiMod||'complementar'},
+      params:paramsParaArquivo(m.params),
       r:(m.parsed&&m.parsed.rows||[]).slice().sort((a,b)=>quadKey(a.quad)-quadKey(b.quad)||CLASSES.indexOf(a.classe)-CLASSES.indexOf(b.classe))
-        .map(r=>[qi.get(r.quad),CLASSES.indexOf(r.classe),...COLS_R.map(c=>+r[c]||0)]),
+        .map(r=>{const a=[qi.get(r.quad),CLASSES.indexOf(r.classe),...COLS_R.map(c=>+r[c]||0)];
+          while(a.length>8&&a[a.length-1]===0)a.pop();   // eSFR/eAPP/eCR zerados não ocupam espaço
+          return a;}),
       ind:(m.indicadores&&m.indicadores.rows||[]).slice().sort((a,b)=>quadKey(a.quad)-quadKey(b.quad))
         .map(r=>[qi.get(r.quad),ti.get(r.tipo),ii.get(r.indicador),r.regular||0,r.suficiente||0,r.bom||0,r.otimo||0])
     }));

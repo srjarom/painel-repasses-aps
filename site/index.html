@@ -77,6 +77,14 @@
         <label>Modalidade eMulti</label>
         <select id="sel-emulti"><option value="complementar">Complementar</option><option value="ampliada">Ampliada</option><option value="estrategica">Estratégica</option></select>
       </div>
+      <div class="pfield" id="field-ecr" style="display:none;">
+        <label>Modalidade eCR</label>
+        <select id="sel-ecr"><option value="I">eCR I</option><option value="II">eCR II</option><option value="III">eCR III</option></select>
+      </div>
+      <div class="pfield" id="field-eapp" style="display:none;">
+        <label>Modalidade eAPP</label>
+        <select id="sel-eapp"><option value="ess20">Essencial 20h</option><option value="ess30">Essencial 30h</option><option value="amp20">Ampliada 20h</option><option value="amp30">Ampliada 30h</option></select>
+      </div>
       <div class="pfield grow" id="field-destinatario">
         <label for="inp-destinatario">Destinatário do relatório <span class="opt">(opcional)</span></label>
         <input type="text" id="inp-destinatario" maxlength="90" autocomplete="off" placeholder="Ex.: Ester Cassol, Coordenação da APS">
@@ -268,6 +276,18 @@
           </tbody>
         </table>
 
+        <div class="guide-tbl-h">Custeio mensal — eSFR e eCR (valor único, não varia por Estrato)</div>
+        <table class="guide-tbl">
+          <thead><tr><th>Tipo de equipe</th><th>R$/mês</th></tr></thead>
+          <tbody>
+            <tr><td>eSFR — Saúde da Família Ribeirinha</td><td>R$ 24.000</td></tr>
+            <tr><td>eCR I — Consultório na Rua</td><td>R$ 20.000</td></tr>
+            <tr><td>eCR II</td><td>R$ 28.000</td></tr>
+            <tr><td>eCR III</td><td>R$ 36.000</td></tr>
+          </tbody>
+        </table>
+        <p class="guide-tbl-note">eSFR: art. 69 da Portaria de Consolidação nº 6/2017 (redação da Portaria GM/MS nº 5.850/2024). eCR: art. 84 (redação da Portaria GM/MS nº 7.799/2025). O custeio mensal das eAPP (Atenção Primária Prisional) não entra no cálculo deste painel, por falta de valor federal vigente confirmado: para elas, só o componente de Qualidade é somado.</p>
+
         <div class="guide-tbl-h">Vínculo e Acompanhamento Territorial (CVAT) por classificação — só ESF e eAP</div>
         <table class="guide-tbl">
           <thead><tr><th>Tipo de equipe</th><th>Regular</th><th>Suficiente</th><th>Bom</th><th>Ótimo</th></tr></thead>
@@ -277,7 +297,7 @@
             <tr><td>eAP 20h</td><td>R$ 750</td><td>R$ 1.500</td><td>R$ 2.250</td><td>R$ 3.000</td></tr>
           </tbody>
         </table>
-        <p class="guide-tbl-note">eSB e eMulti não têm componente de Vínculo — só Fixo e Qualidade.</p>
+        <p class="guide-tbl-note">eSB, eMulti, eCR e eAPP não têm componente de Vínculo. A eSFR tem Vínculo na Portaria (mesmos valores da ESF, Anexo XCIX-A), mas o relatório público do SIAPS não traz a classificação de Vínculo da eSFR, então essa parte não entra no cálculo.</p>
 
         <div class="guide-tbl-h">Qualidade por classificação — todos os tipos de equipe</div>
         <table class="guide-tbl">
@@ -293,9 +313,17 @@
             <tr><td>eSB II comum</td><td>R$ 816,75</td><td>R$ 1.633,50</td><td>R$ 2.450,25</td><td>R$ 3.267,00</td></tr>
             <tr><td>eSB I quilombola/assentamento</td><td>R$ 918,38</td><td>R$ 1.836,75</td><td>R$ 2.755,13</td><td>R$ 3.673,50</td></tr>
             <tr><td>eSB II quilombola/assentamento</td><td>R$ 1.225,13</td><td>R$ 2.450,25</td><td>R$ 3.675,38</td><td>R$ 4.900,50</td></tr>
+            <tr><td>eSFR — Saúde da Família Ribeirinha</td><td>R$ 2.000</td><td>R$ 4.000</td><td>R$ 6.000</td><td>R$ 8.000</td></tr>
+            <tr><td>eCR I</td><td>R$ 1.500</td><td>R$ 3.000</td><td>R$ 4.500</td><td>R$ 6.000</td></tr>
+            <tr><td>eCR II</td><td>R$ 1.750</td><td>R$ 3.500</td><td>R$ 5.250</td><td>R$ 7.000</td></tr>
+            <tr><td>eCR III</td><td>R$ 2.000</td><td>R$ 4.000</td><td>R$ 6.000</td><td>R$ 8.000</td></tr>
+            <tr><td>eAPP Essencial 20h</td><td>R$ 1.250</td><td>R$ 2.500</td><td>R$ 3.750</td><td>R$ 5.000</td></tr>
+            <tr><td>eAPP Essencial 30h</td><td>R$ 1.750</td><td>R$ 3.500</td><td>R$ 5.250</td><td>R$ 7.000</td></tr>
+            <tr><td>eAPP Ampliada 20h</td><td>R$ 1.500</td><td>R$ 3.000</td><td>R$ 4.500</td><td>R$ 6.000</td></tr>
+            <tr><td>eAPP Ampliada 30h</td><td>R$ 2.000</td><td>R$ 4.000</td><td>R$ 6.000</td><td>R$ 8.000</td></tr>
           </tbody>
         </table>
-        <p class="guide-tbl-note">São exatamente os valores que este portal usa para calcular o repasse — a mesma fonte, a Portaria GM/MS nº 3.493/2024 (art. 9º-B, Anexo XCIX-A e Anexo XCIX-B).</p>
+        <p class="guide-tbl-note">São exatamente os valores que este portal usa para calcular o repasse — a mesma fonte, a Portaria GM/MS nº 3.493/2024 (art. 9º-B, Anexo XCIX-A e Anexo XCIX-B), com a tabela de Qualidade na redação da Portaria GM/MS nº 7.799/2025, que incluiu eSFR, eCR e eAPP. Como o relatório do SIAPS não informa a modalidade de eCR e eAPP, o painel usa eCR I e eAPP Essencial 20h (os menores valores) até que a modalidade correta seja ajustada.</p>
       </div>
     </details>
   </div>

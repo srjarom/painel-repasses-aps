@@ -20,7 +20,7 @@ PainelDados.registrarUF(Object.assign(
   { municipios: [
     {"ibge":"430003","nome":"Aceguá",
      "params":{"estrato":"3","eapMod":"30","esbMod":"II_comum","emultiMod":"complementar"},
-     "r":  [[quad, classe, vEsf, vEap, qEsf, qEap, qEsb, qEmulti], …],
+     "r":  [[quad, classe, vEsf, vEap, qEsf, qEap, qEsb, qEmulti, qEsfr, qEapp, qEcr], …],   // as 3 últimas só quando não são zero
      "ind":[[quad, tipo, indicador, regular, suficiente, bom, otimo], …]},
     …                                               // um município por linha
   ]}));
@@ -30,7 +30,7 @@ PainelDados.registrarUF(Object.assign(
 |---|---|
 | `r` | Linhas do relatório "Vínculo e Acompanhamento Territorial e Qualidade". `quad` é um índice em `quads`. `classe`: 0 = Regular, 1 = Suficiente, 2 = Bom, 3 = Ótimo. As demais colunas são quantidades de equipes (ver [REGRAS_DE_NEGOCIO.md](REGRAS_DE_NEGOCIO.md)). |
 | `ind` | Linhas do relatório "Qualidade – Conceito obtido por indicador". `quad`, `tipo` e `indicador` são índices nas listas do cabeçalho; os 4 números são quantidades de equipes em cada classificação. |
-| `params` | Estrato IED (`"1"` a `"4"`) e modalidades: `eapMod` `"30"`/`"20"`; `esbMod` `I_comum`/`II_comum`/`I_quil`/`II_quil`; `emultiMod` `ampliada`/`complementar`/`estrategica`. |
+| `params` | Estrato IED (`"1"` a `"4"`) e modalidades: `eapMod` `"30"`/`"20"`; `esbMod` `I_comum`/`II_comum`/`I_quil`/`II_quil`; `emultiMod` `ampliada`/`complementar`/`estrategica`; e, só quando diferem do padrão, `ecrMod` `I`/`II`/`III` (padrão `I`) e `eappMod` `ess20`/`ess30`/`amp20`/`amp30` (padrão `ess20`). |
 | `nome` | Grafia oficial do IBGE (do arquivo do mapa). Se o município não estiver no mapa, vem do SIAPS com as iniciais maiúsculas. |
 
 O painel converte isso, em `PainelDados.municipios(uf)`, para o formato usado pelo código:

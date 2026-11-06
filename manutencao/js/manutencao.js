@@ -170,11 +170,14 @@ function carregarParams(){
   $('pm-eap').value=m.params.eapMod||'30';
   $('pm-esb').value=m.params.esbMod||'II_comum';
   $('pm-emulti').value=m.params.emultiMod||'complementar';
+  $('pm-ecr').value=m.params.ecrMod||PARAMS_PADRAO_MUNI.ecrMod;
+  $('pm-eapp').value=m.params.eappMod||PARAMS_PADRAO_MUNI.eappMod;
 }
 function aplicarParams(){
   const m=municipioPeloNome($('pm-busca').value);
   if(!m)return;
-  m.params={estrato:$('pm-estrato').value,eapMod:$('pm-eap').value,esbMod:$('pm-esb').value,emultiMod:$('pm-emulti').value};
+  m.params={estrato:$('pm-estrato').value,eapMod:$('pm-eap').value,esbMod:$('pm-esb').value,emultiMod:$('pm-emulti').value,
+    ecrMod:$('pm-ecr').value,eappMod:$('pm-eapp').value};
   alterado.ufs.add(m.uf);
   limparLog('log-params');
   logMsg('log-params','ok',`✓ Modalidades de <b>${esc(rotuloMuni(m))}</b> atualizadas.`);

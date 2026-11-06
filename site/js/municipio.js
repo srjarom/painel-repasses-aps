@@ -43,6 +43,8 @@ function render(){
   document.getElementById('field-eap').style.display=parsed.rows.some(r=>r.vEap||r.qEap)?'block':'none';
   document.getElementById('field-esb').style.display=parsed.rows.some(r=>r.qEsb)?'block':'none';
   document.getElementById('field-emulti').style.display=parsed.rows.some(r=>r.qEmulti)?'block':'none';
+  document.getElementById('field-ecr').style.display=parsed.rows.some(r=>r.qEcr)?'block':'none';
+  document.getElementById('field-eapp').style.display=parsed.rows.some(r=>r.qEapp)?'block':'none';
 
   // Auto-preenchimento do estrato pela base do Anexo VI (se o IBGE for conhecido)
   const est = ESTRATO_IED[String(parsed.ibge||'').trim()];
@@ -64,14 +66,14 @@ function render(){
     hint.innerHTML = 'Não localizado na base automática. Selecione conforme o <a href="https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-3.493-de-10-de-abril-de-2024-553573811" target="_blank">Anexo VI da Portaria 3.493/2024</a>.';
   }
 
-  ['sel-estrato','sel-eap','sel-esb','sel-emulti'].forEach(id=>document.getElementById(id).onchange=recompute);
+  ['sel-estrato','sel-eap','sel-esb','sel-emulti','sel-ecr','sel-eapp'].forEach(id=>document.getElementById(id).onchange=recompute);
   window.scrollTo({top:0,behavior:'auto'});
   recompute();
 }
 
 function recompute(){
   if(!parsed)return;
-  const p={estrato:sel('sel-estrato'),eapMod:sel('sel-eap'),esbMod:sel('sel-esb'),emultiMod:sel('sel-emulti')};
+  const p={estrato:sel('sel-estrato'),eapMod:sel('sel-eap'),esbMod:sel('sel-esb'),emultiMod:sel('sel-emulti'),ecrMod:sel('sel-ecr'),eappMod:sel('sel-eapp')};
   const res=compute(parsed.rows,p),last=res[res.length-1];
   lastRes=res;lastParams=p;
   const resumoBtn=document.getElementById('btn-resumo');
@@ -110,14 +112,17 @@ const TYPE_META={
   esf:{label:'ESF',full:'Equipes de Saúde da Família'},
   eap:{label:'eAP',full:'Equipes de Atenção Primária'},
   esb:{label:'eSB',full:'Equipes de Saúde Bucal'},
-  emulti:{label:'eMulti',full:'Equipes Multiprofissionais'}
+  emulti:{label:'eMulti',full:'Equipes Multiprofissionais'},
+  esfr:{label:'eSFR',full:'Equipes de Saúde da Família Ribeirinha'},
+  eapp:{label:'eAPP',full:'Equipes de Atenção Primária Prisional'},
+  ecr:{label:'eCR',full:'Equipes de Consultório na Rua'}
 };
 function renderByType(res,hasEstrato){
   const grid=document.getElementById('bytype-grid');
   const last=res[res.length-1];
   const sub=document.getElementById('bytype-sub');
   sub.textContent=`Repasse mensal de cada tipo de equipe em ${last.quad} e a margem que ainda pode ser conquistada — o CVAT tem um cartão próprio logo abaixo de ESF/eAP, já que é um componente que atravessa os dois tipos.`;
-  const order=['esf','eap','esb','emulti'];
+  const order=TIPOS_EQUIPE.map(t=>t.k);   // só aparecem os tipos que o município tem (n>0)
   const cardsByType={};
   order.forEach(k=>{
     const t=last.byType[k];
@@ -140,9 +145,11 @@ function renderByType(res,hasEstrato){
       ? `<div class="tcard-meta"><span>Potencial ${fmtBRL(t.potencial)}</span><span>Margem <b>+ ${fmtBRL(t.gap)}</b></span></div>`
       : `<div class="tcard-meta"><span>Selecione o estrato para o valor total</span></div>`;
     const nowVal=hasEstrato?fmtBRL(t.total):fmtBRL(t.vin+t.qual)+' *';
-    const nowLbl=hasEstrato?(hasVinculo?'Repasse mensal (Fixo + CVAT + Qualidade)':'Repasse mensal (Fixo + Qualidade)'):'Repasse mensal (sem Fixo)';
+    // eAPP: só o componente de Qualidade entra no cálculo (custeio mensal federal não confirmado)
+    const soQual=k==='eapp';
+    const nowLbl=soQual?'Repasse mensal (só Qualidade)':hasEstrato?(hasVinculo?'Repasse mensal (Fixo + CVAT + Qualidade)':'Repasse mensal (Fixo + Qualidade)'):'Repasse mensal (sem Fixo)';
     const compParts=[];
-    if(hasEstrato)compParts.push(`Fixo/IED <b>${fmtBRL(t.fixo)}</b>`);
+    if(hasEstrato&&!soQual)compParts.push(`${hasVinculo?'Fixo/IED':'Fixo'} <b>${fmtBRL(t.fixo)}</b>`);
     if(hasVinculo)compParts.push(`Vínculo (CVAT) <b>${fmtBRL(t.vin)}</b> <span style="color:var(--muted);font-weight:400;">— ver cartão CVAT</span>`);
     compParts.push(`Qualidade <b>${fmtBRL(t.qual)}</b>${gapQual>0.5?` <span class="comp-gap">+ ${fmtBRL(gapQual)} até Ótimo</span>`:''}`);
     const compLine=`<div class="tcard-comp">${compParts.map(p=>`<span>${p}</span>`).join('')}</div>`;
@@ -205,6 +212,7 @@ function renderByType(res,hasEstrato){
       </div>`;
   }
 
-  const html=(cardsByType.esf||'')+(cardsByType.eap||'')+cvatHtml+(cardsByType.esb||'')+(cardsByType.emulti||'');
+  // ESF, eAP, o cartão do CVAT e depois os demais tipos (só os que o município tem)
+  const html=(cardsByType.esf||'')+(cardsByType.eap||'')+cvatHtml+order.filter(k=>k!=='esf'&&k!=='eap').map(k=>cardsByType[k]||'').join('');
   grid.innerHTML=html || '<div style="color:var(--muted);font-size:13px;padding:10px 2px;">Nenhum tipo de equipe identificado no arquivo.</div>';
 }

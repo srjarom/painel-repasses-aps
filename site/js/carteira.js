@@ -121,6 +121,8 @@ function openFromCarteira(id){
   if(entry.params.eapMod)document.getElementById('sel-eap').value=entry.params.eapMod;
   if(entry.params.esbMod)document.getElementById('sel-esb').value=entry.params.esbMod;
   if(entry.params.emultiMod)document.getElementById('sel-emulti').value=entry.params.emultiMod;
+  document.getElementById('sel-ecr').value=entry.params.ecrMod||PARAMS_PADRAO_MUNI.ecrMod;
+  document.getElementById('sel-eapp').value=entry.params.eappMod||PARAMS_PADRAO_MUNI.eappMod;
   {const d=document.getElementById('inp-destinatario');if(d)d.value='';}
   recompute();
   // Se este município da carteira já tiver o relatório por indicador anexado

@@ -8,41 +8,45 @@
    computeProximosPassos(): o "próximo passo" realista (subir um nível de classificação).
    ========================================================================= */
 
+// Os tipos de equipe e as tabelas de valores estão em base.js (TIPOS_EQUIPE e tabelasTipos).
+//   eSF e eAP: Fixo/IED (pelo estrato) + Vínculo (CVAT) + Qualidade;
+//   eSFR, eSB, eMulti e eCR: valor fixo mensal da modalidade + Qualidade;
+//   eAPP: só Qualidade (o custeio mensal federal não está confirmado — ver base.js).
+// O nº de equipes de eSF/eAP vem da coluna de Vínculo; o dos demais, da coluna de Qualidade.
 function compute(rows,p){
-  const{estrato,eapMod,esbMod,emultiMod}=p,ek=eapMod==='30'?'eAP30':'eAP20',by={};
+  const tb=tabelasTipos(p),by={};
   rows.forEach(r=>{(by[r.quad]=by[r.quad]||[]).push(r);});
   return Object.keys(by).sort((a,b)=>quadKey(a)-quadKey(b)).map(q=>{
-    const rs=by[q];let tEsf=0,tEap=0,tEsb=0,tEm=0,tqEsf=0,tqEap=0,vin=0,qual=0;const cd={esf:{},eap:{},esb:{},emulti:{}};
-    // acumuladores por tipo de equipe
-    const T={esf:{n:0,fixo:0,vin:0,qual:0,vinOt:0,qualOt:0},
-             eap:{n:0,fixo:0,vin:0,qual:0,vinOt:0,qualOt:0},
-             esb:{n:0,fixo:0,vin:0,qual:0,vinOt:0,qualOt:0},
-             emulti:{n:0,fixo:0,vin:0,qual:0,vinOt:0,qualOt:0}};
-    const fEsf=estrato?FIXO_ESTRATO.eSF[estrato]:0, fEap=estrato?FIXO_ESTRATO[ek][estrato]:0;
-    rs.forEach(r=>{const c=r.classe;tEsf+=r.vEsf;tEap+=r.vEap;tEsb+=r.qEsb;tEm+=r.qEmulti;tqEsf+=r.qEsf;tqEap+=r.qEap;
-      vin+=r.vEsf*(VINCULO.eSF[c]||0)+r.vEap*(VINCULO[ek][c]||0);
-      qual+=r.qEsf*(QUALIDADE.eSF[c]||0)+r.qEap*(QUALIDADE[ek][c]||0)+r.qEsb*(QUALIDADE[esbMod][c]||0)+r.qEmulti*(QUALIDADE[emultiMod][c]||0);
-      cd.esf[c]=(cd.esf[c]||0)+r.vEsf;cd.eap[c]=(cd.eap[c]||0)+r.vEap;cd.esb[c]=(cd.esb[c]||0)+r.qEsb;cd.emulti[c]=(cd.emulti[c]||0)+r.qEmulti;
-      // por tipo
-      T.esf.n+=r.vEsf; T.esf.vin+=r.vEsf*(VINCULO.eSF[c]||0); T.esf.qual+=r.qEsf*(QUALIDADE.eSF[c]||0); T.esf.fixo+=r.vEsf*fEsf;
-      T.eap.n+=r.vEap; T.eap.vin+=r.vEap*(VINCULO[ek][c]||0); T.eap.qual+=r.qEap*(QUALIDADE[ek][c]||0); T.eap.fixo+=r.vEap*fEap;
-      T.esb.n+=r.qEsb; T.esb.qual+=r.qEsb*(QUALIDADE[esbMod][c]||0); T.esb.fixo+=r.qEsb*FIXO_FLAT[esbMod];
-      T.emulti.n+=r.qEmulti; T.emulti.qual+=r.qEmulti*(QUALIDADE[emultiMod][c]||0); T.emulti.fixo+=r.qEmulti*FIXO_FLAT[emultiMod];
+    const rs=by[q],T={},cd={},nq={},nv={};
+    TIPOS_EQUIPE.forEach(t=>{T[t.k]={n:0,fixo:0,vin:0,qual:0,vinOt:0,qualOt:0};cd[t.k]={};nq[t.k]=0;nv[t.k]=0;});
+    rs.forEach(r=>{
+      const c=r.classe;
+      TIPOS_EQUIPE.forEach(t=>{
+        const x=T[t.k],n=+r[t.n]||0,eq=+r[t.q]||0,ev=t.v?(+r[t.v]||0):0;
+        x.n+=n; x.fixo+=n*(tb.F[t.k]||0);
+        x.qual+=eq*((tb.Q[t.k]||{})[c]||0);
+        if(t.v)x.vin+=ev*((tb.V[t.k]||{})[c]||0);
+        cd[t.k][c]=(cd[t.k][c]||0)+n;
+        nq[t.k]+=eq;nv[t.k]+=ev;
+      });
     });
     // potenciais por tipo (tudo Ótimo). O potencial de Qualidade usa a contagem de equipes
-    // avaliadas em Qualidade (qEsf/qEap), não a de Vínculo — às vezes o SIAPS traz números
-    // diferentes nas duas colunas (ex.: equipe nova avaliada só num dos componentes), e usar a
-    // de Vínculo fazia a margem sair negativa.
-    T.esf.vinOt=tEsf*VINCULO.eSF['Ótimo']; T.esf.qualOt=tqEsf*QUALIDADE.eSF['Ótimo'];
-    T.eap.vinOt=tEap*VINCULO[ek]['Ótimo']; T.eap.qualOt=tqEap*QUALIDADE[ek]['Ótimo'];
-    T.esb.qualOt=tEsb*QUALIDADE[esbMod]['Ótimo'];
-    T.emulti.qualOt=tEm*QUALIDADE[emultiMod]['Ótimo'];
-    Object.values(T).forEach(t=>{t.total=t.fixo+t.vin+t.qual; t.potencial=t.fixo+t.vinOt+t.qualOt; t.gap=t.potencial-t.total;});
-    const fixo=estrato?tEsf*fEsf+tEap*fEap+tEsb*FIXO_FLAT[esbMod]+tEm*FIXO_FLAT[emultiMod]:0;
-    const vinOt=tEsf*VINCULO.eSF['Ótimo']+tEap*VINCULO[ek]['Ótimo'];
-    const qualOt=tqEsf*QUALIDADE.eSF['Ótimo']+tqEap*QUALIDADE[ek]['Ótimo']+tEsb*QUALIDADE[esbMod]['Ótimo']+tEm*QUALIDADE[emultiMod]['Ótimo'];
+    // avaliadas em Qualidade, não a de Vínculo — às vezes o SIAPS traz números diferentes nas
+    // duas colunas (ex.: equipe nova avaliada só num dos componentes), e usar a de Vínculo
+    // fazia a margem sair negativa.
+    let vin=0,qual=0,vinOt=0,qualOt=0,fixoTipos=0;
+    TIPOS_EQUIPE.forEach(t=>{
+      const x=T[t.k];
+      x.vinOt=t.v?nv[t.k]*tb.V[t.k]['Ótimo']:0;
+      x.qualOt=nq[t.k]*((tb.Q[t.k]||{})['Ótimo']||0);
+      x.total=x.fixo+x.vin+x.qual; x.potencial=x.fixo+x.vinOt+x.qualOt; x.gap=x.potencial-x.total;
+      vin+=x.vin;qual+=x.qual;vinOt+=x.vinOt;qualOt+=x.qualOt;fixoTipos+=x.fixo;
+    });
+    // sem estrato o Fixo fica fora do total (o painel pede o estrato para mostrar o valor completo)
+    const fixo=p.estrato?fixoTipos:0;
     const totalQ=fixo+vin+qual,potencialQ=fixo+vinOt+qualOt;
-    return{quad:q,tEsf,tEap,tEsb,tEm,fixo,vin,qual,vinOt,qualOt,total:totalQ,potencial:potencialQ,gap:Math.max(0,potencialQ-totalQ),cd,byType:T};
+    return{quad:q,tEsf:T.esf.n,tEap:T.eap.n,tEsb:T.esb.n,tEm:T.emulti.n,fixo,vin,qual,vinOt,qualOt,
+      total:totalQ,potencial:potencialQ,gap:Math.max(0,potencialQ-totalQ),cd,byType:T};
   });
 }
 
@@ -60,7 +64,7 @@ function compute(rows,p){
 const CLASS_ORDEM=['Regular','Suficiente','Bom','Ótimo'];
 function proximaClasse(c){const i=CLASS_ORDEM.indexOf(c);return(i>=0&&i<CLASS_ORDEM.length-1)?CLASS_ORDEM[i+1]:null;}
 function computeProximosPassos(rows,lastQuad,params){
-  const ek=params.eapMod==='30'?'eAP30':'eAP20';
+  const tb=tabelasTipos(params);
   const rs=rows.filter(r=>r.quad===lastQuad);
   const passos=[];
   const add=(tipo,componente,n,classe,tabela,comp)=>{
@@ -72,12 +76,10 @@ function computeProximosPassos(rows,lastQuad,params){
     passos.push({tipo,componente,comp,classeAtual:classe,classeProxima:nx,n,gain});
   };
   rs.forEach(r=>{
-    add('esf','vínculo com a comunidade',r.vEsf,r.classe,VINCULO.eSF,'vin');
-    add('esf','qualidade do atendimento',r.qEsf,r.classe,QUALIDADE.eSF,'qual');
-    add('eap','vínculo com a comunidade',r.vEap,r.classe,VINCULO[ek],'vin');
-    add('eap','qualidade do atendimento',r.qEap,r.classe,QUALIDADE[ek],'qual');
-    add('esb','qualidade do atendimento',r.qEsb,r.classe,QUALIDADE[params.esbMod],'qual');
-    add('emulti','qualidade do atendimento',r.qEmulti,r.classe,QUALIDADE[params.emultiMod],'qual');
+    TIPOS_EQUIPE.forEach(t=>{
+      if(t.v)add(t.k,'vínculo com a comunidade',+r[t.v]||0,r.classe,tb.V[t.k],'vin');
+      add(t.k,'qualidade do atendimento',+r[t.q]||0,r.classe,tb.Q[t.k],'qual');
+    });
   });
   return passos.sort((a,b)=>b.gain-a.gain);
 }

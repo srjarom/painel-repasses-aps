@@ -38,7 +38,10 @@ function parseLoteWorkbook(wb,fileName){
   const ibOf=r=>iIb>=0?String(r[iIb]||'').trim():fixIb;
   const nomeOf=r=>iMu>=0?String(r[iMu]||'').trim():fixNome;
   if(isMain){
-    const iC=find('classifica'),iVE=find('vínculo','esf'),iVA=find('vínculo','eap'),iQE=find('qualidade','esf'),iQA=find('qualidade','eap');
+    // colunas pelo nome exato do tipo ("eSF" ≠ "eSFR", "eAP" ≠ "eAPP")
+    const col=(comp,tipo)=>hd.findIndex(s=>s.includes(comp)&&new RegExp('\\b'+tipo+'\\b').test(s));
+    const iC=find('classifica'),iVE=col('vínculo','esf'),iVA=col('vínculo','eap'),iQE=col('qualidade','esf'),iQA=col('qualidade','eap');
+    const iFR=col('qualidade','esfr'),iPP=col('qualidade','eapp'),iCR=col('qualidade','ecr');
     let iB=-1,iM=-1;hd.forEach((l,i)=>{if(l.includes('qualidade')&&l.includes('sb'))iB=i;if(l.includes('qualidade')&&l.includes('multi'))iM=i;});
     const val=(r,i)=>i>=0?loteNum(r[i]):0;
     for(let i=h+1;i<rows.length;i++){
@@ -46,7 +49,8 @@ function parseLoteWorkbook(wb,fileName){
       const q=String(r[iQ]||'').trim(),ib=ibOf(r),classe=String(r[iC]||'').trim();
       if(!/^\d{6,7}$/.test(ib)||!quadKey(q)||!CLASS_ORDEM.includes(classe))continue;
       quads.add(q);
-      push(ib,nomeOf(r),{quad:q,classe,vEsf:val(r,iVE),vEap:val(r,iVA),qEsf:val(r,iQE),qEap:val(r,iQA),qEsb:val(r,iB),qEmulti:val(r,iM)});
+      push(ib,nomeOf(r),{quad:q,classe,vEsf:val(r,iVE),vEap:val(r,iVA),qEsf:val(r,iQE),qEap:val(r,iQA),qEsb:val(r,iB),qEmulti:val(r,iM),
+        qEsfr:val(r,iFR),qEapp:val(r,iPP),qEcr:val(r,iCR)});
     }
   }else{
     const iT=find('tipo','equipe'),iI=find('indicador'),iR=find('regular'),iS=find('suficiente'),iB=find('bom');

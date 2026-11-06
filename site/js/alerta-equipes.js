@@ -16,7 +16,7 @@
    - estima o impacto em R$/mês: equipes a menos × valor médio por equipe
      daquele tipo no quadrimestre em que elas ainda estavam lá.
    ========================================================================= */
-const PERDA_TIPOS=[{k:'esf',lbl:'eSF'},{k:'eap',lbl:'eAP'},{k:'esb',lbl:'eSB'},{k:'emulti',lbl:'eMulti'}];
+const PERDA_TIPOS=TIPOS_EQUIPE.map(t=>({k:t.k,lbl:t.l}));
 let carteiraRefKey=0; // quadrimestre mais recente entre todos os municípios da carteira
 function equipesPorQuad(rows){
   // soma cada coluna do relatório no quadrimestre e só depois pega o maior entre Vínculo e
@@ -24,11 +24,12 @@ function equipesPorQuad(rows){
   const by=new Map();
   (rows||[]).forEach(r=>{
     const k=quadKey(r.quad);if(!k)return;
-    if(!by.has(k))by.set(k,{quad:r.quad,key:k,s:{vEsf:0,qEsf:0,vEap:0,qEap:0,qEsb:0,qEmulti:0}});
+    if(!by.has(k))by.set(k,{quad:r.quad,key:k,s:{vEsf:0,qEsf:0,vEap:0,qEap:0,qEsb:0,qEmulti:0,qEsfr:0,qEapp:0,qEcr:0}});
     const e=by.get(k);Object.keys(e.s).forEach(c=>e.s[c]+=(+r[c]||0));
   });
   return[...by.values()].sort((a,b)=>a.key-b.key).map(e=>({quad:e.quad,key:e.key,
-    c:{esf:Math.max(e.s.vEsf,e.s.qEsf),eap:Math.max(e.s.vEap,e.s.qEap),esb:e.s.qEsb,emulti:e.s.qEmulti}}));
+    c:{esf:Math.max(e.s.vEsf,e.s.qEsf),eap:Math.max(e.s.vEap,e.s.qEap),esb:e.s.qEsb,emulti:e.s.qEmulti,
+      esfr:e.s.qEsfr,eapp:e.s.qEapp,ecr:e.s.qEcr}}));
 }
 // diferença por tipo (atual − base), descontando conversões entre eAP e eSF
 function difEquipes(base,atual){
@@ -68,7 +69,7 @@ function analisarPerdaEquipes(res,rows,refKey){
   // perda que já vinha de antes e não voltou: compara com o maior nº dos quadrimestres anteriores ao anterior
   const antes=serie.slice(0,-2);
   if(antes.length){
-    const pico={esf:0,eap:0,esb:0,emulti:0},picoQ={};
+    const pico=Object.fromEntries(PERDA_TIPOS.map(t=>[t.k,0])),picoQ={};
     antes.forEach(s=>PERDA_TIPOS.forEach(t=>{if(s.c[t.k]>=pico[t.k]){pico[t.k]=s.c[t.k];picoQ[t.k]=s;}}));
     const old=difEquipes(pico,prev.c); // o que já tinha caído até o quadrimestre anterior…
     PERDA_TIPOS.forEach(t=>{

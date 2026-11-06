@@ -21,7 +21,7 @@ function withSourceNote(text){
   return `Com base no relatório público do SIAPS, no âmbito do novo financiamento da Atenção Primária (Saúde Brasil 360), ${text.charAt(0).toLowerCase()}${text.slice(1)}`;
 }
 function diagnose(res,hasEstrato){
-  const order=['esf','eap','esb','emulti'];
+  const order=TIPOS_EQUIPE.map(t=>t.k);   // tipos que o município não tem são pulados logo abaixo (maxN=0)
   const last=res[res.length-1];
   const muni=parsed&&parsed.nomeMuni?parsed.nomeMuni:'seu município';
   const perdaDiag=parsed?analisarPerdaEquipes(res,parsed.rows,0):null;
