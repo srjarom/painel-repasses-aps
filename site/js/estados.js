@@ -155,3 +155,6 @@ function ajustarAlturaUtil(){
 function agendarAjusteAltura(){requestAnimationFrame(()=>requestAnimationFrame(ajustarAlturaUtil));}
 window.addEventListener('resize',agendarAjusteAltura);
 if(MQ_FIT.addEventListener)MQ_FIT.addEventListener('change',agendarAjusteAltura);
+// as fontes da marca mudam a altura dos textos ao terminar de carregar: recalcula depois delas
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(agendarAjusteAltura);
+window.addEventListener('load',agendarAjusteAltura);

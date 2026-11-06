@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.4.2
+
+Linha das abas (Mapa · Ranking · Equipes a menos) e seletor de cor do mapa mais finos, com menos espaço acima: o mapa ganha mais altura. As alturas do painel são recalculadas também depois que as fontes terminam de carregar.
+
 ## 4.4.1
 
 Ranking e Equipes a menos redesenhados para a coluna do painel. Ranking: uma linha por município, cabeçalho leve (sem a faixa azul), sem rolagem para os lados, tendência em selo curto (▲ +3,5%), barra de % do potencial, indicador mais crítico numa linha só, a linha inteira abre o relatório e o ícone mostra no mapa; busca na mesma linha do título; 50 por vez. Equipes a menos: título de uma linha com o botão "Ver só esses no mapa", resumo em três pílulas, tabela mais enxuta (os quadrimestres da série ficam na dica), 20 por vez. Na aba Equipes a menos, o quadro vazio que sobrava no painel do lado sumiu.

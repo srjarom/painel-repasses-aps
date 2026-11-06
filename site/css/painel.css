@@ -1149,3 +1149,11 @@ table.rk-table th:last-child,table.rk-table td:last-child,table.ae-table th:last
 :root[data-theme="dark"] .ae-table tr.aus td{background:rgba(217,96,90,.12);}
 .alerta-card .ae-more,.alerta-card .ae-note{padding:8px 18px 0;}
 .alerta-card .ae-note{font-size:11.5px;}
+
+/* v4.4.2 — linha das abas e seletor de cor do mapa mais finos */
+.estado-main .tabs-row{padding-bottom:4px;margin-bottom:10px;}
+.estado-main .tabs-row .tabs{margin-bottom:-6px;}
+.estado-main .tab-btn{font-size:13.5px;padding:6px 12px 8px;}
+.estado-main .tabs-row .map-metrics{padding:2px;border-radius:8px;}
+.estado-main .tabs-row .map-metric-btn{font-size:11.5px;padding:4px 10px;border-radius:6px;}
+#view-carteira .stage-compact{padding-top:12px;}
