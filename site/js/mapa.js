@@ -23,30 +23,53 @@ function rsMapColorAt(t){
   return `rgb(${r},${g},${bl})`;
 }
 const MAPA_CACHE={};
+// Ilhas longe da costa que espremeriam o mapa do estado: são desenhadas num quadro
+// ampliado, logo à direita do continente (como nos mapas oficiais).
+const MAPA_INSETS={'260545':{nome:'Fernando de Noronha',escala:3}};
+function bboxDe(lista,tf){
+  let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;
+  lista.forEach(m=>m.polys.forEach(poly=>poly.forEach(ring=>ring.forEach(p=>{
+    const [lon,lat]=tf?tf(m,p):p;
+    if(lon<x0)x0=lon;if(lon>x1)x1=lon;if(lat<y0)y0=lat;if(lat>y1)y1=lat;
+  }))));
+  return{x0,x1,y0,y1};
+}
 function buildRsMapGeometry(){
   if(MAPA_CACHE[UF_ATUAL])return MAPA_CACHE[UF_ATUAL];
-  let minLon=Infinity,maxLon=-Infinity,minLat=Infinity,maxLat=-Infinity;
-  PainelDados.geo(UF_ATUAL).forEach(m=>m.polys.forEach(poly=>poly.forEach(ring=>ring.forEach(pt=>{
-    const lon=pt[0],lat=pt[1];
-    if(lon<minLon)minLon=lon; if(lon>maxLon)maxLon=lon;
-    if(lat<minLat)minLat=lat; if(lat>maxLat)maxLat=lat;
-  }))));
-  const cosLat=Math.cos((minLat+maxLat)/2*Math.PI/180);
+  const geo=PainelDados.geo(UF_ATUAL);
+  const cont=geo.filter(m=>!MAPA_INSETS[m.id]),ilhas=geo.filter(m=>MAPA_INSETS[m.id]);
+  // reposiciona cada ilha: canto de cima à direita do continente, ampliada
+  const C=bboxDe(cont.length?cont:geo),gap=(C.x1-C.x0)*0.03;
+  const tfIlha={};let ax=C.x1+gap;
+  ilhas.forEach(m=>{
+    // um pouco acima do topo do continente, para o nome caber em cima do quadro
+    const I=bboxDe([m]),s=MAPA_INSETS[m.id].escala||1,x0=ax,y1=C.y1+(C.x1-C.x0)*0.045;
+    tfIlha[m.id]=p=>[x0+(p[0]-I.x0)*s,y1+(p[1]-I.y1)*s];
+    ax+=(I.x1-I.x0)*s+gap;
+  });
+  const tf=(m,p)=>tfIlha[m.id]?tfIlha[m.id](p):p;
+  const B=bboxDe(geo,tf);
+  const minLon=B.x0,maxLat=B.y1;
+  // a correção de cosseno usa só o continente (as ilhas deslocadas não têm latitude real)
+  const cosLat=Math.cos((C.y0+C.y1)/2*Math.PI/180);
   const W=640;
-  const scale=W/((maxLon-minLon)*cosLat);
-  const H=(maxLat-minLat)*scale;
-  const paths=PainelDados.geo(UF_ATUAL).map(m=>{
+  const scale=W/((B.x1-B.x0)*cosLat);
+  const H=(B.y1-B.y0)*scale;
+  const px=p=>[(p[0]-minLon)*cosLat*scale,(maxLat-p[1])*scale];
+  const paths=geo.map(m=>{
     const d=m.polys.map(poly=>poly.map(ring=>{
-      const pts=ring.map(pt=>{
-        const x=((pt[0]-minLon)*cosLat*scale).toFixed(2);
-        const y=((maxLat-pt[1])*scale).toFixed(2);
-        return x+','+y;
-      });
+      const pts=ring.map(pt=>{const [x,y]=px(tf(m,pt));return x.toFixed(2)+','+y.toFixed(2);});
       return 'M'+pts.join('L')+'Z';
     }).join(' ')).join(' ');
     return{id:m.id,name:m.name,d};
   });
-  MAPA_CACHE[UF_ATUAL]={paths,W,H};
+  // quadro tracejado em volta de cada ilha, com o nome
+  const insets=ilhas.map(m=>{
+    const I=bboxDe([m],tf),[x0,y0]=px([I.x0,I.y1]),[x1,y1]=px([I.x1,I.y0]),pad=6;
+    return{x:x0-pad,y:y0-pad,w:x1-x0+2*pad,h:y1-y0+2*pad,nome:MAPA_INSETS[m.id].nome};
+  });
+  // espaço extra no alto do desenho para o nome das ilhas
+  MAPA_CACHE[UF_ATUAL]={paths,W,H,insets,padTop:insets.length?20:8};
   return MAPA_CACHE[UF_ATUAL];
 }
 const MAP_METRICS=[
@@ -136,7 +159,7 @@ function renderCarteiraMap(rows){
   const span=(max-min)||1;
   const TC=trendColors(),PC=perdaColors();
   const perdaMode=isTrend&&trendFilter==='perda';
-  let svg=`<svg viewBox="0 0 ${geo.W.toFixed(1)} ${geo.H.toFixed(1)}" role="img" aria-label="Mapa ${nomeComPrep(UF_ATUAL)}, municípios coloridos por ${metric.label.toLowerCase()}. A tabela de ranking abaixo traz os mesmos dados.">`;
+  let svg=`<svg viewBox="-8 ${-geo.padTop} ${(geo.W+16).toFixed(1)} ${(geo.H+8+geo.padTop).toFixed(1)}" role="img" aria-label="Mapa ${nomeComPrep(UF_ATUAL)}, municípios coloridos por ${metric.label.toLowerCase()}. A tabela de ranking abaixo traz os mesmos dados.">`;
   geo.paths.forEach(p=>{
     const r=byIbge[p.id];
     let fill=cssVar('--map-nodata-fill')||'#e7ecef',cls='rsmap-muni';
@@ -148,6 +171,7 @@ function renderCarteiraMap(rows){
     const lbl=r?`${r.entry.nomeMuni}: ${trendTexto(r.trend)}`:'';
     svg+=`<path class="${cls}" fill-rule="evenodd" d="${p.d}" fill="${fill}" data-id="${p.id}" tabindex="${r?'0':'-1'}" role="${r?'button':'presentation'}"${r?` aria-label="${lbl.replace(/"/g,'&quot;')}"`:''}></path>`;
   });
+  (geo.insets||[]).forEach(b=>{svg+=`<rect class="rsmap-inset" x="${b.x.toFixed(1)}" y="${b.y.toFixed(1)}" width="${b.w.toFixed(1)}" height="${b.h.toFixed(1)}" rx="4"></rect><text class="rsmap-inset-l" x="${(b.x+b.w).toFixed(1)}" y="${(b.y-4).toFixed(1)}">${b.nome}</text>`;});
   svg+='</svg>';
   wrap.innerHTML=svg;
   renderMapLegend(metric,min,max,rows);
