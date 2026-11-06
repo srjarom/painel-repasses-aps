@@ -110,7 +110,7 @@ function mostrarAba(nome,opts={}){
   document.querySelectorAll('.tabs .tab-btn').forEach(b=>{const on=b.dataset.aba===nome;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;});
   ['mapa','ranking','perda'].forEach(a=>{const p=document.getElementById('painel-'+a);if(p)p.hidden=a!==nome;});
   // o filtro de tendência vale para o Mapa e o Ranking; na aba de equipes a menos ele some
-  {const ts=document.getElementById('trend-strip');if(ts)ts.hidden=nome==='perda';}
+  {const ts=document.getElementById('trend-strip');if(ts){ts.hidden=nome==='perda';const sec=ts.closest('.side-sec');if(sec)sec.hidden=nome==='perda';}}
   // a busca no mapa e o município selecionado (no painel do lado) só fazem sentido na aba Mapa
   {const sm=document.getElementById('side-mapa');if(sm)sm.hidden=nome!=='mapa';}
   {const mm=document.getElementById('rsmap-metrics');if(mm)mm.hidden=nome!=='mapa';}

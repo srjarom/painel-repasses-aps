@@ -1082,3 +1082,70 @@ button.kpi:hover{border-color:var(--line-2);}
 @media(max-width:999px){.estado-grid{grid-template-columns:1fr;}.tb-tools{flex-wrap:wrap;}}
 .tb-tools .cli-toggle{flex-wrap:nowrap;}
 .map-legend-row .rsmap-nodata{margin-left:0;}
+
+/* =========================================================================
+   v4.4.1 — RANKING E EQUIPES A MENOS COMPACTOS
+   Cabeçalho leve (sem a faixa azul pesada), uma linha por município, números
+   alinhados à direita, sem rolagem para os lados na coluna do painel.
+   ========================================================================= */
+.rk-card .card-h.ch-row,.alerta-card .card-h.ch-row{align-items:center;}
+.rk-card .card-h h3,.alerta-card .card-h h3{font-size:16px;}
+.rk-card .card-h p,.alerta-card .card-h p{font-size:12px;margin-top:2px;}
+.rk-card .rk-tools{margin:0;}
+.rk-card .rk-tools input{width:220px;padding:6px 10px;font-size:13px;border:1px solid var(--line-2);border-radius:8px;background:var(--panel-2);color:var(--ink);font:inherit;}
+.rk-card .card-b,.alerta-card .card-b{padding:0 0 10px;}
+
+table.rk-table,table.ae-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;}
+table.rk-table thead th,table.ae-table thead th{background:var(--panel-2);color:var(--muted);font-family:var(--font-texto);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;}
+table.rk-table td,table.ae-table td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle;}
+table.rk-table th.n,table.rk-table td.n,table.ae-table th.n,table.ae-table td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+table.rk-table .c{text-align:center;}
+table.rk-table th:first-child,table.rk-table td:first-child,table.ae-table th:first-child,table.ae-table td:first-child{padding-left:18px;}
+table.rk-table th:last-child,table.rk-table td:last-child,table.ae-table th:last-child,table.ae-table td:last-child{padding-right:16px;}
+.layout-fit .rk-table thead th,.layout-fit .ae-table thead th{top:0;}
+
+.rk-row{cursor:pointer;}
+.rk-row:hover td{background:var(--panel-2);}
+.rk-pos{width:34px;color:var(--muted);font-size:12px;text-align:right !important;}
+.rk-nome{white-space:nowrap;}
+.rk-nome .rk-abrir{font:inherit;font-weight:600;color:var(--navy);background:none;border:0;padding:0;cursor:pointer;text-align:left;}
+.rk-nome .rk-abrir:hover{text-decoration:underline;text-underline-offset:3px;}
+.rk-nome .cli-tag{margin-left:6px;}
+.rk-sub{display:block;font-size:11px;color:var(--muted);}
+.rk-t{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap;}
+.rk-t.up{background:var(--trend-up-bg,#e6efff);color:#2E6FE0;} .rk-t.dn{background:#fdecea;color:#c23a30;}
+.rk-t.eq,.rk-t.na{background:var(--chip-neutral-bg);color:var(--muted);} .rk-t.aus{background:var(--chip-amber-bg);color:var(--chip-amber-fg);}
+:root[data-theme="dark"] .rk-t.up{background:rgba(79,143,224,.18);color:#9cc5f7;} :root[data-theme="dark"] .rk-t.dn{background:rgba(217,96,90,.18);color:#f5a69c;}
+.rk-pctc{white-space:nowrap;font-variant-numeric:tabular-nums;font-size:12.5px;}
+.rk-pct{display:inline-block;width:56px;height:5px;border-radius:99px;background:var(--line);overflow:hidden;vertical-align:middle;margin-right:8px;}
+.rk-pct i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--lime));}
+.rk-ind{max-width:0;width:34%;}
+.rk-indt{display:inline-block;max-width:calc(100% - 40px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;color:var(--ink);}
+.rk-ind small{color:var(--muted);margin-left:6px;font-size:11.5px;}
+.rk-muted{color:var(--muted);}
+.rk-acts,.ae-acts{width:1%;white-space:nowrap;text-align:right !important;}
+.rk-mapa{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;border:1px solid var(--line-2);background:var(--panel);color:var(--muted);cursor:pointer;vertical-align:middle;}
+.rk-mapa:hover{color:var(--navy);border-color:var(--navy);}
+.rk-table tr.total td{font-weight:700;background:var(--panel-2);border-bottom:0;}
+.rk-mais{padding:10px 18px 0;}
+
+/* equipes a menos */
+.ae-head h3{display:flex;align-items:center;gap:8px;}
+.ae-ver-mapa{font:inherit;font-size:12.5px;font-weight:600;color:var(--navy);background:var(--panel);border:1.5px solid var(--chip-amber-border);border-radius:8px;padding:6px 12px;cursor:pointer;white-space:nowrap;}
+.ae-ver-mapa:hover{border-color:var(--navy);}
+.alerta-card .ae-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;padding:12px 18px;margin:0;}
+.alerta-card .ae-stat{padding:8px 12px;font-size:12.5px;line-height:1.4;border-left-width:4px;}
+.alerta-card .ae-stat b{font-family:var(--font-titulo);font-size:18px;margin-right:4px;}
+.alerta-card .ae-stat span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;}
+.ae-nome{white-space:nowrap;}
+.ae-nome .cli-tag{margin-left:6px;}
+.ae-hcell{font-size:12px;color:var(--ink);}
+.ae-hcell .ae-hist{display:inline-block;margin-right:12px;white-space:nowrap;}
+.ae-q{font-size:11px;color:var(--muted);}
+.ae-ganho{color:var(--darkgreen,#2e7d32);}
+.ae-rel{font:inherit;font-size:12px;font-weight:600;color:var(--navy);background:none;border:0;cursor:pointer;margin-left:8px;padding:4px 2px;}
+.ae-rel:hover{text-decoration:underline;}
+.ae-table tr.aus td{background:#fdf1ef;}
+:root[data-theme="dark"] .ae-table tr.aus td{background:rgba(217,96,90,.12);}
+.alerta-card .ae-more,.alerta-card .ae-note{padding:8px 18px 0;}
+.alerta-card .ae-note{font-size:11.5px;}

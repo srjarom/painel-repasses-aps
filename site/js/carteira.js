@@ -38,7 +38,7 @@ function renderCarteiraView(){
   if(trendFilter==='perda')rankRows=[...rankRows].sort((a,b)=>(b.perda.ausente?1:0)-(a.perda.ausente?1:0)||b.perda.impacto-a.perda.impacto);
   const rt=document.getElementById('ranking-title'),rsub=document.getElementById('ranking-sub');
   if(rt)rt.textContent=trendFilter==='perda'?'Ranking — municípios com equipes a menos':trendFilter==='up'?'Ranking — municípios em que o repasse subiu':trendFilter==='dn'?'Ranking — municípios em que o repasse caiu':trendFilter==='eq'?'Ranking — municípios com repasse igual ao anterior':'Ranking por margem em aberto';
-  if(rsub)rsub.textContent=trendFilter==='perda'?`${rankRows.length} municípios, do maior impacto estimado para o menor.`:trendFilter==='up'?`${rankRows.length} municípios, da maior alta para a menor.`:trendFilter==='dn'?`${rankRows.length} municípios, da maior queda para a menor — onde vale olhar primeiro.`:trendFilter==='eq'?`${rankRows.length} municípios, ordenados pela margem em aberto.`:`${rankRows.length} municípios, do maior para o menor valor mensal que ainda pode ser conquistado (diferença entre o repasse atual e o potencial), no quadrimestre mais recente.`;
+  if(rsub)rsub.textContent=trendFilter==='perda'?`${rankRows.length} municípios · do maior impacto estimado para o menor`:trendFilter==='up'?`${rankRows.length} municípios · da maior alta para a menor`:trendFilter==='dn'?`${rankRows.length} municípios · da maior queda para a menor`:trendFilter==='eq'?`${rankRows.length} municípios · pela margem em aberto`:`${rankRows.length} municípios · do maior para o menor valor que ainda dá para conquistar por mês`;
 
   const totAtual=rows.reduce((s,r)=>s+r.last.total,0);
   const totPot=rows.reduce((s,r)=>s+r.last.potencial,0);
@@ -69,7 +69,7 @@ function renderCarteiraView(){
 }
 
 /* ranking: mostra 25 por vez (com busca), para a página não virar uma lista de 500 linhas */
-const RANK_PASSO=25;
+const RANK_PASSO=50;
 let rankingAtual=null,rankLimite=RANK_PASSO,rankFiltroKey='',rankBusca='';
 function renderRanking(){
   const R=rankingAtual;if(!R)return;
@@ -78,19 +78,30 @@ function renderRanking(){
   const todas=R.rows.map((r,i)=>({r,pos:i+1}));
   const lista=termo?todas.filter(x=>normNomeCliente(x.r.entry.nomeMuni).includes(termo)):todas;
   const vis=lista.slice(0,rankLimite);
-  let h='<thead><tr><th class="rk-pos">#</th><th>Município</th><th>Tendência</th><th>Repasse atual</th><th>Potencial</th><th>Margem/mês</th><th>% atingido</th><th>Indicador mais crítico</th></tr></thead><tbody>';
+  // v4.4.1: tabela compacta (uma linha por município). A linha inteira abre o relatório;
+  // o ícone do alvo mostra o município no mapa. Os valores completos ficam na dica (title).
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let h='<thead><tr><th class="rk-pos">#</th><th>Município</th><th class="c">Tendência</th><th class="n">Repasse/mês</th><th class="n">Margem/mês</th><th>Do potencial</th><th>Indicador mais crítico</th><th class="sr-col"><span class="sr-only">Ações</span></th></tr></thead><tbody>';
   vis.forEach(({r,pos})=>{
     const worst=worstIndicadorFor(r.entry,r.last.quad);
     const worstTxt=worst?`${TYPE_META_IND[worst.tipo]||worst.tipo} · ${worst.item.indicador}`:'';
-    const worstHTML=worst?`<div class="ind-crit" title="${worstTxt.replace(/"/g,'&quot;')} (${Math.round(worst.item.score*100)}%)"><span class="ind-crit-t">${worstTxt}</span></div><div class="ind-crit-p">${Math.round(worst.item.score*100)}% do máximo</div>`:'<span style="color:var(--muted)">—</span>';
-    const tagCli=!R.filtrar&&R.cli.has(String(r.entry.id))?' <span class="cli-tag">cliente</span>':'';
-    const antigo=quadKey(r.last.quad)!==carteiraRefKey?`<div class="rk-sub">último dado: ${qShort(r.last.quad)}</div>`:'';
-    h+=`<tr><td class="rk-pos">${pos}</td><td class="rk-nome"><button type="button" class="rk-abrir" onclick="openFromCarteira('${r.entry.id}')" title="Abrir o relatório de ${r.entry.nomeMuni}">${r.entry.nomeMuni}</button>${tagCli}${antigo}`+
-      `<div class="rk-links"><span class="rowlink" onclick="openFromCarteira('${r.entry.id}')">Ver relatório</span><span class="rowlink" onclick="selectMapMuni('${r.entry.ibge||r.entry.id}',{scroll:true})">No mapa</span></div></td>`+
-      `<td>${trendChipHTML(r.trend,'compact')}</td><td>${fmtBRL(r.last.total)}</td><td>${fmtBRL(r.last.potencial)}</td><td>${fmtBRL(r.gap)}</td><td>${r.pct}%</td><td class="rk-ind">${worstHTML}</td></tr>`;
+    const worstHTML=worst?`<span class="rk-indt" title="${esc(worstTxt)} (${Math.round(worst.item.score*100)}% do máximo)">${esc(worstTxt)}</span><small>${Math.round(worst.item.score*100)}%</small>`:'<span class="rk-muted">—</span>';
+    const tagCli=!R.filtrar&&R.cli.has(String(r.entry.id))?'<span class="cli-tag">cliente</span>':'';
+    const antigo=quadKey(r.last.quad)!==carteiraRefKey?`<span class="rk-sub">último dado ${qShort(r.last.quad)}</span>`:'';
+    const t=r.trend,d=t&&t.ausente?'aus':(!t||t.dir==null?'na':t.dir>0?'up':t.dir<0?'dn':'eq');
+    const tTxt=d==='aus'?'⚠ fora':d==='na'?'–':d==='eq'?'= igual':`${t.dir>0?'▲':'▼'} ${t.pct!=null?fmtPctBR(t.pct):fmtBRLcurto(Math.abs(t.delta))}`;
+    const id=esc(r.entry.id),nome=esc(r.entry.nomeMuni);
+    h+=`<tr class="rk-row" onclick="openFromCarteira('${id}')" title="Abrir o relatório de ${nome}">`+
+      `<td class="rk-pos">${pos}</td>`+
+      `<td class="rk-nome"><button type="button" class="rk-abrir" onclick="event.stopPropagation();openFromCarteira('${id}')">${nome}</button>${tagCli}${antigo}</td>`+
+      `<td class="c"><span class="rk-t ${d}" title="${esc(trendTexto(t))}">${tTxt}</span></td>`+
+      `<td class="n">${fmtBRL(r.last.total)}</td><td class="n"><b>${fmtBRL(r.gap)}</b></td>`+
+      `<td class="rk-pctc"><span class="rk-pct"><i style="width:${Math.min(100,r.pct)}%"></i></span>${r.pct}%</td>`+
+      `<td class="rk-ind">${worstHTML}</td>`+
+      `<td class="rk-acts"><button type="button" class="rk-mapa" title="Mostrar ${nome} no mapa" aria-label="Mostrar ${nome} no mapa" onclick="event.stopPropagation();selectMapMuni('${esc(r.entry.ibge||r.entry.id)}',{scroll:true})"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="11" r="3"/><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/></svg></button></td></tr>`;
   });
-  if(!vis.length)h+=`<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:22px;">Nenhum município encontrado${termo?' para “'+rankBusca.replace(/</g,'&lt;')+'”':''}.</td></tr>`;
-  if(!termo)h+=`<tr class="total"><td></td><td>Total (${R.rows.length} municípios)</td><td></td><td>${fmtBRL(R.totAtual)}</td><td>${fmtBRL(R.totPot)}</td><td>${fmtBRL(R.totGap)}</td><td>${R.pctMed}%</td><td></td></tr>`;
+  if(!vis.length)h+=`<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:22px;">Nenhum município encontrado${termo?' para “'+esc(rankBusca)+'”':''}.</td></tr>`;
+  if(!termo)h+=`<tr class="total"><td></td><td>Total (${R.rows.length} municípios)</td><td></td><td class="n">${fmtBRL(R.totAtual)}</td><td class="n">${fmtBRL(R.totGap)}</td><td class="rk-pctc">${R.pctMed}%</td><td></td><td></td></tr>`;
   h+='</tbody>';
   document.getElementById('carteira-table').innerHTML=h;
   const mais=document.getElementById('ranking-mais');

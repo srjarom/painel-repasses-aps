@@ -458,9 +458,11 @@
 
       <div class="tab-panel" role="tabpanel" id="painel-ranking" aria-labelledby="tab-ranking" hidden>
         <div class="card rk-card fit-h">
-          <div class="card-h"><h3 id="ranking-title">Ranking por margem em aberto</h3><p id="ranking-sub"></p></div>
+          <div class="card-h ch-row">
+            <div><h3 id="ranking-title">Ranking por margem em aberto</h3><p id="ranking-sub"></p></div>
+            <div class="rk-tools"><label for="ranking-busca" class="sr-only">Buscar no ranking</label><input type="search" id="ranking-busca" placeholder="Filtrar pelo nome…" autocomplete="off"></div>
+          </div>
           <div class="card-b">
-            <div class="rk-tools"><label for="ranking-busca" class="sr-only">Buscar no ranking</label><input type="search" id="ranking-busca" placeholder="Buscar município no ranking…" autocomplete="off"></div>
             <div style="overflow-x:auto;"><table class="grid rk-table" id="carteira-table"></table></div>
             <div class="rk-mais" id="ranking-mais"></div>
           </div>

@@ -146,29 +146,32 @@ function renderAlertaCarteira(rows){
   const pares=new Map();rec.forEach(r=>{const k=`${qCode(r.perda.prevQuad)} → ${qCode(r.perda.quad)}`;pares.set(k,(pares.get(k)||0)+1);});
   const per=[...pares.entries()].sort((a,b)=>b[1]-a[1])[0];
   const lista=[...com].sort((a,b)=>(b.perda.ausente?1:0)-(a.perda.ausente?1:0)||b.perda.impacto-a.perda.impacto);
-  const mostrar=perdaVerTodos?lista:lista.slice(0,8);
+  const mostrar=perdaVerTodos?lista:lista.slice(0,20);
   const cli=clientesSet();
-  let h=`<div class="card-h"><h3><span class="ae-ic" aria-hidden="true">⚠</span> Possível perda de equipes</h3>
-    <p>Municípios com menos equipes no relatório do SIAPS do que antes — é o que derruba o Componente Fixo/IED. Ponto de apoio: entender com o município o que aconteceu.</p></div>
+  // v4.4.1: cabeçalho de uma linha (com o atalho para o mapa) e resumo em três pílulas
+  let h=`<div class="card-h ch-row ae-head"><div><h3><span class="ae-ic" aria-hidden="true">⚠</span> Possível perda de equipes</h3>
+    <p>Menos equipes no relatório do SIAPS do que antes — é o que derruba o Componente Fixo/IED.</p></div>
+    <button type="button" class="ae-ver-mapa" onclick="setTrendFilter('perda')">${trendFilter==='perda'?'✓ Filtrando o mapa e o ranking':'Ver só esses no mapa'}</button></div>
     <div class="card-b">
     <div class="ae-sum">`;
-  if(aus.length)h+=`<div class="ae-stat aus"><b>${aus.length}</b> município${aus.length>1?'s não aparecem':' não aparece'} no relatório de ${esc(aus[0].perda.ausente.ref)}<span>${aus.map(r=>esc(r.entry.nomeMuni)).join(', ')} — ${fmtBRL(aus.reduce((s,r)=>s+r.perda.ausente.repasse,0))}/mês em risco</span></div>`;
-  if(rec.length)h+=`<div class="ae-stat"><b>${rec.length}</b> com equipes a menos${per?' em '+esc(per[0]):''}<span>${Object.entries(porTipo).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`−${n} ${t}`).join(' · ')} — impacto estimado de −${fmtBRL(impRec)}/mês</span></div>`;
-  if(old.length)h+=`<div class="ae-stat old"><b>${old.length}</b> com perda anterior que ainda não voltou<span>equipes que saíram em quadrimestres anteriores e seguem fora</span></div>`;
+  if(aus.length)h+=`<div class="ae-stat aus" title="${esc(aus.map(r=>r.entry.nomeMuni).join(', '))}"><b>${aus.length}</b> fora do relatório de ${esc(aus[0].perda.ausente.ref)}<span>${fmtBRL(aus.reduce((s,r)=>s+r.perda.ausente.repasse,0))}/mês em risco</span></div>`;
+  if(rec.length)h+=`<div class="ae-stat" title="${esc(Object.entries(porTipo).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`−${n} ${t}`).join(' · '))}"><b>${rec.length}</b> com equipes a menos${per?' em '+esc(per[0].split(' → ')[1]||per[0]):''}<span>impacto estimado −${fmtBRL(impRec)}/mês</span></div>`;
+  if(old.length)h+=`<div class="ae-stat old"><b>${old.length}</b> com perda anterior que não voltou<span>saíram antes e seguem fora</span></div>`;
   h+=`</div>
-    <div class="ae-actions"><span class="rowlink" onclick="setTrendFilter('perda')">${trendFilter==='perda'?'✓ Filtrando o mapa e o ranking':'Mostrar só esses no mapa e no ranking'}</span></div>
-    <div style="overflow-x:auto;"><table class="grid ae-table"><thead><tr><th>Município</th><th>O que mudou</th><th>Equipes por quadrimestre</th><th>Impacto estimado</th><th></th></tr></thead><tbody>`;
+    <div style="overflow-x:auto;"><table class="grid ae-table"><thead><tr><th>Município</th><th>O que mudou</th><th>Equipes por quadrimestre</th><th class="n">Impacto/mês</th><th><span class="sr-only">Ações</span></th></tr></thead><tbody>`;
   mostrar.forEach(r=>{
     const p=r.perda;
     const tipos=p.ausente?PERDA_TIPOS.filter(t=>p.serie.some(s=>s.c[t.k]>0)):PERDA_TIPOS.filter(t=>[...p.recente,...p.antiga,...(p.ganhos||[])].some(x=>x.k===t.k));
     const hist=tipos.map(t=>`<span class="ae-hist">${t.lbl}: ${p.serie.map(s=>s.c[t.k]).join(' → ')}${p.ausente?' → —':''}</span>`).join('');
     const tag=cli.has(String(r.entry.id))?' <span class="cli-tag">cliente</span>':'';
-    h+=`<tr${p.ausente?' class="aus"':''}><td><b>${esc(r.entry.nomeMuni)}</b>${tag}</td><td>${perdaChips(p)}</td><td class="ae-hcell">${hist}<div class="ae-q">${p.serie.map(s=>qCode(s.quad)).join(' → ')}${p.ausente?' → '+esc(p.ausente.ref):''}</div></td>
-      <td>${p.impacto>0?`<b>−${fmtBRL(p.impacto)}</b>/mês${p.ausente?'<div class="ae-q">repasse inteiro</div>':''}${!p.ausente&&p.ganhos&&p.ganhos.length?`<div class="ae-q">entraram ${p.ganhos.map(x=>'+'+x.n+' '+x.tipo).join(', ')} (≈ +${fmtBRL(p.ganhos.reduce((a,x)=>a+x.valor,0))})</div>`:''}`:'—'}</td>
-      <td style="white-space:nowrap;text-align:right;"><span class="rowlink" onclick="selectMapMuni('${esc(r.entry.ibge||r.entry.id)}',{scroll:true})">No mapa</span><span class="rowlink" onclick="openFromCarteira('${esc(r.entry.id)}')">Ver relatório</span></td></tr>`;
+    // os quadrimestres da série ficam na dica (title) da célula, em vez de uma linha a mais por município
+    const quads=p.serie.map(s=>qCode(s.quad)).join(' → ')+(p.ausente?' → '+p.ausente.ref:'');
+    h+=`<tr${p.ausente?' class="aus"':''}><td class="ae-nome"><b>${esc(r.entry.nomeMuni)}</b>${tag}</td><td>${perdaChips(p)}</td><td class="ae-hcell" title="${esc(quads)}">${hist}</td>
+      <td class="n">${p.impacto>0?`<b>−${fmtBRL(p.impacto)}</b>${p.ausente?'<div class="ae-q">repasse inteiro</div>':''}${!p.ausente&&p.ganhos&&p.ganhos.length?`<div class="ae-q ae-ganho">entraram ${p.ganhos.map(x=>'+'+x.n+' '+x.tipo).join(', ')}</div>`:''}`:'—'}</td>
+      <td class="ae-acts"><button type="button" class="rk-mapa" title="Mostrar no mapa" aria-label="Mostrar ${esc(r.entry.nomeMuni)} no mapa" onclick="selectMapMuni('${esc(r.entry.ibge||r.entry.id)}',{scroll:true})"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="11" r="3"/><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/></svg></button><button type="button" class="ae-rel" onclick="openFromCarteira('${esc(r.entry.id)}')">Relatório</button></td></tr>`;
   });
   h+=`</tbody></table></div>`;
-  if(lista.length>8)h+=`<div class="ae-more"><span class="rowlink" onclick="perdaVerTodos=!perdaVerTodos;renderCarteiraView();">${perdaVerTodos?'Mostrar só os 8 maiores':`Ver todos os ${lista.length}`}</span></div>`;
+  if(lista.length>20)h+=`<div class="ae-more"><span class="rowlink" onclick="perdaVerTodos=!perdaVerTodos;renderCarteiraView();">${perdaVerTodos?'Mostrar só os 20 maiores':`Ver todos os ${lista.length}`}</span></div>`;
   h+=`<div class="ae-note"><b>Como ler.</b> O impacto é uma estimativa: equipes a menos × valor médio por equipe daquele tipo no quadrimestre em que elas ainda estavam no relatório (Fixo + Vínculo + Qualidade). Conversões entre eAP e eSF não contam como perda. Quando no mesmo período entraram equipes de outro tipo, elas aparecem em verde (+) e podem compensar a perda no repasse total. ${PERDA_CAUSAS}</div></div>`;
   el.innerHTML=h;
 }

@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.4.1
+
+Ranking e Equipes a menos redesenhados para a coluna do painel. Ranking: uma linha por município, cabeçalho leve (sem a faixa azul), sem rolagem para os lados, tendência em selo curto (▲ +3,5%), barra de % do potencial, indicador mais crítico numa linha só, a linha inteira abre o relatório e o ícone mostra no mapa; busca na mesma linha do título; 50 por vez. Equipes a menos: título de uma linha com o botão "Ver só esses no mapa", resumo em três pílulas, tabela mais enxuta (os quadrimestres da série ficam na dica), 20 por vez. Na aba Equipes a menos, o quadro vazio que sobrava no painel do lado sumiu.
+
 ## 4.4.0
 
 Painel do estado redesenhado em duas colunas, no padrão da tela do Brasil. À esquerda, o mapa (ou o ranking, ou as equipes a menos) ocupa toda a altura da tela; os botões de cor do mapa subiram para a linha das abas e o título repetido saiu, então o mapa ficou bem maior. À direita, um painel com os quatro números em grade, os filtros de tendência em lista (um por linha) e a busca/município selecionado. O filtro "Todos / Clientes" foi para a barra do topo, ao lado da busca. A legenda do mapa fica numa linha embaixo dele. No celular, o painel de números aparece antes do mapa.
