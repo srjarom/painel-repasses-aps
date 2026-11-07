@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.9.0
+
+Tela inicial do Brasil em três colunas, com o mapa quase duas vezes maior. À esquerda, o resumo: o cartão azul (mesmo estilo da tela do município) com o repasse mensal do país, a variação contra o quadrimestre anterior, o potencial, a margem em aberto e a barra de quanto já foi alcançado; abaixo, uma barra mostrando quantos municípios subiram, ficaram iguais ou caíram, e o quadro de equipes a menos com o impacto estimado e os estados onde mais aparece (clicáveis). No meio, o mapa ocupa toda a altura, com a legenda e a dica na mesma linha. À direita, a lista dos estados, mais compacta. Em telas médias o resumo vira uma faixa em cima; no celular, tudo em uma coluna, com margem lateral de 16px.
+
 ## 4.8.0
 
 Tela do município mais limpa. O cartão azul destaca o repasse mensal e a tendência; logo abaixo, Fixo/IED, Vínculo e Qualidade em três números lado a lado, e o potencial e a margem em aberto com a barra de quanto já foi alcançado. O alerta de equipes a menos virou uma lista curta (uma linha por tipo, com "eram X, agora Y"); a explicação fica em "Entender". Os cartões por tipo de equipe ficaram enxutos: nome, quantidade e selo do potencial no topo, valor por mês em destaque, margem em aberto e a composição em selos pequenos. O botão do Raio-X (PDF) foi para a barra do topo, junto dos outros PDFs. Ajustes para celular.

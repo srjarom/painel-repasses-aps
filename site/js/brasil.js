@@ -56,6 +56,7 @@ function renderBrasil(){
   if(!lista.length){
     if(info)info.textContent='Nenhum estado com dados publicados ainda.';
     if(kpis)kpis.innerHTML='';
+    const hl0=document.getElementById('br-headline');if(hl0)hl0.innerHTML='';
     return;
   }
   const T=totaisBrasil(lista);
@@ -63,12 +64,47 @@ function renderBrasil(){
   const dt=lista.map(x=>x.atualizadoEm).sort().pop();
   const up=quadParts(ult);
   if(info)info.textContent=`${up?up.q+'º quadrimestre de '+up.y:ult} · ${fmtNum(T.municipios)} municípios em ${lista.length} estados · histórico desde ${pri||'—'} · atualizado em ${new Date(dt+'T12:00:00').toLocaleDateString('pt-BR')}`;
-  const pctTxt=Math.round(T.pct).toLocaleString('pt-BR');
-  if(kpis)kpis.innerHTML=
-    kpiHTML({label:'Repasse atual por mês',valor:fmtBRLcurto(T.total),titulo:fmtBRL(T.total),sub:fmtVar(T.delta,T.deltaPct)+' vs. quadrimestre anterior'})+
-    kpiHTML({label:'Margem em aberto por mês',valor:fmtBRLcurto(T.gap),titulo:fmtBRL(T.gap),barra:T.pct,sub:`${pctTxt}% do potencial (${fmtBRLcurto(T.potencial)}) já alcançado`})+
-    kpiHTML({label:'Tendência dos municípios',valor:`<span class="var up">▲ ${fmtNum(T.sobe)}</span> <span class="var eq">= ${fmtNum(T.igual)}</span> <span class="var dn">▼ ${fmtNum(T.desce)}</span>`,sub:'subiram · iguais · caíram, vs. quadrimestre anterior'})+
-    kpiHTML({label:'Municípios com equipes a menos',valor:fmtNum(T.perda),cls:T.perda?'warn':'',sub:T.perda?`impacto estimado de −${fmtBRLcurto(T.perdaImpacto)}/mês`:'nenhum no momento'});
+  const pct=Math.round(T.pct);
+  // cartão azul: o número do país em destaque, a variação e o quanto ainda dá para ganhar
+  const hl=document.getElementById('br-headline');
+  if(hl){
+    const d=T.delta>0?'up':T.delta<0?'dn':'eq';
+    const qa=up?(up.q>1?`${up.y}Q${up.q-1}`:`${up.y-1}Q3`):'anterior';
+    const varTxt=T.delta?`${fmtBRLcurto(Math.abs(T.delta))}${T.deltaPct!=null?` (${fmtPctBR(T.deltaPct)})`:''} vs. ${qa}`:`igual a ${qa}`;
+    hl.innerHTML=`
+      <div class="primary">
+        <div class="cap">Repasse mensal · Brasil · ${qCode(ult)}</div>
+        <div class="big mono" title="${escHTML(fmtBRL(T.total))} por mês">${fmtBRLcurto(T.total)}</div>
+        <div class="hl-trend"><span class="trend-chip onnavy ${d}"><span class="ti" aria-hidden="true">${d==='up'?'▲':d==='dn'?'▼':'='}</span>${varTxt}</span></div>
+      </div>
+      <div class="hl-pot">
+        <div class="mini"><div class="l" title="Se todas as equipes chegassem a Ótimo">Potencial</div><div class="v mono" title="${escHTML(fmtBRL(T.potencial))}">${fmtBRLcurto(T.potencial)}</div></div>
+        <div class="mini gap"><div class="l">Margem em aberto</div><div class="v mono" title="${escHTML(fmtBRL(T.gap))}">+ ${fmtBRLcurto(T.gap)}</div></div>
+        <div class="hl-bar"><div class="barwrap"><i style="width:${Math.min(100,pct)}%"></i></div><div class="barlbl">${pct}% do potencial já alcançado</div></div>
+      </div>
+      <div class="quad-footnote">${fmtNum(T.municipios)} municípios · ${lista.length} estados · valores por mês</div>`;
+  }
+  // dois quadros: como os municípios variaram e onde há equipes a menos
+  const n=T.sobe+T.igual+T.desce||1,p=v=>(v/n*100);
+  const topPerda=[...lista].filter(x=>x.perda).sort((a,b)=>b.perda-a.perda).slice(0,4);
+  if(kpis)kpis.innerHTML=`
+    <div class="kpi br-k">
+      <div class="kpi-l" title="Repasse de ${qCode(ult)} comparado ao quadrimestre anterior">Como os municípios variaram</div>
+      <div class="br-tbar" role="img" aria-label="${fmtNum(T.sobe)} subiram, ${fmtNum(T.igual)} iguais, ${fmtNum(T.desce)} caíram">
+        <i class="up" style="width:${p(T.sobe)}%"></i><i class="eq" style="width:${p(T.igual)}%"></i><i class="dn" style="width:${p(T.desce)}%"></i>
+      </div>
+      <div class="br-tleg">
+        <span><b class="var up">▲ ${fmtNum(T.sobe)}</b> subiram</span>
+        <span><b class="var eq">= ${fmtNum(T.igual)}</b> iguais</span>
+        <span><b class="var dn">▼ ${fmtNum(T.desce)}</b> caíram</span>
+      </div>
+    </div>
+    <div class="kpi br-k${T.perda?' warn':''}">
+      <div class="kpi-l">⚠ Municípios com equipes a menos</div>
+      <div class="br-perda"><b>${fmtNum(T.perda)}</b><span>${T.perda?`impacto estimado<br><b class="br-imp">−${fmtBRLcurto(T.perdaImpacto)}/mês</b>`:'nenhum no momento'}</span></div>
+      ${topPerda.length?`<div class="br-top"><span class="kpi-s">Onde mais aparece:</span>${topPerda.map(x=>
+        `<button type="button" class="br-top-uf" onclick="irEstado('${x.uf}')" title="Abrir ${escHTML(x.nome)}: ${x.perda} municípios com equipes a menos">${x.uf} <b>${fmtNum(x.perda)}</b></button>`).join('')}</div>`:'<div class="kpi-s">nenhum município no momento</div>'}
+    </div>`;
   renderBrasilLista(lista);
   renderBrasilMapa(lista);
   agendarAjusteAltura();
@@ -86,7 +122,7 @@ function renderBrasilLista(lista){
     const d=x.delta>0?'up':x.delta<0?'dn':'eq';
     return`<button type="button" class="br-row" role="listitem" data-uf="${x.uf}" onclick="irEstado('${x.uf}')" title="Abrir ${escHTML(x.nome)}">
       <span class="br-pos">${brOrdem==='nome'?'':i+1}</span>
-      <span class="br-nome"><b>${escHTML(x.nome)}</b><small>${fmtNum(x.municipios)} municípios${x.perda?` · <span class="br-warn">⚠ ${x.perda} com equipes a menos</span>`:''}</small></span>
+      <span class="br-nome"><b>${escHTML(x.nome)}</b><small>${fmtNum(x.municipios)} municípios${x.perda?` · <span class="br-warn" title="${x.perda} município${x.perda>1?'s':''} com equipes a menos">⚠ ${x.perda}</span>`:''}</small></span>
       <span class="br-pct" title="${Math.round(x.pct)}% do potencial alcançado"><i style="width:${Math.min(100,x.pct)}%"></i></span>
       <span class="br-val"><b>${val(x)}</b><small>${lbl}</small></span>
       <span class="br-t ${d}" aria-label="variação">${d==='up'?'▲':d==='dn'?'▼':'='}</span>

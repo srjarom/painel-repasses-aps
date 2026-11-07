@@ -356,8 +356,11 @@
   </div>
 </section>
 <div class="stage stage-compact">
-  <div class="kpi-row" id="br-kpis"></div>
-  <div class="br-grid fit-h">
+  <div class="br-grid br3 fit-h">
+    <aside class="br-side" aria-label="Resumo do Brasil">
+      <div class="headline br-headline" id="br-headline"></div>
+      <div class="br-kpis" id="br-kpis"></div>
+    </aside>
     <div class="card br-map-card">
       <div class="card-h ch-row">
         <h3>Mapa do Brasil</h3>
@@ -373,8 +376,10 @@
           <div id="br-map"></div>
           <div class="rsmap-tooltip" id="br-tooltip" role="status" aria-live="polite"></div>
         </div>
-        <div class="br-legend" id="br-legend"></div>
-        <p class="br-hint">Clique num estado para ver os municípios dele.</p>
+        <div class="br-map-foot">
+          <div class="br-legend" id="br-legend"></div>
+          <p class="br-hint">Clique num estado para ver os municípios dele.</p>
+        </div>
       </div>
     </div>
     <div class="card br-list-card">

@@ -29,10 +29,11 @@ const ok=(cond,msg)=>{console.log((cond?'  ✓ ':'  ✗ ')+msg);if(!cond)falhas.
     estados:document.querySelectorAll('#br-list .br-row').length,
     mapa:document.querySelectorAll('#br-map path.has-data').length,
     kpis:document.querySelectorAll('#br-kpis .kpi').length,
+    resumo:!!document.querySelector('#br-headline .big'),
   }));
   ok(br.estados===27,`lista com ${br.estados} estados`);
   ok(br.mapa===27,`mapa do Brasil com ${br.mapa} estados`);
-  ok(br.kpis===4,'quatro números do Brasil');
+  ok(br.resumo&&br.kpis===2,'resumo do Brasil (cartão azul e dois quadros)');
   // busca do topo: "Alegrete" + Enter abre o município (e o estado dele)
   await page.click('#busca-br');
   await page.waitForFunction(()=>document.querySelectorAll('#busca-lista option').length>5000,null,{timeout:15000});

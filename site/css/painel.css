@@ -1426,3 +1426,71 @@ button.kpi:hover,.tcard:hover{box-shadow:var(--sh-2);}
   .hl-pot .mini .v{font-size:16px;}
   .hl-pot .mini .l{font-size:9.5px;}
 }
+
+/* =========================================================================
+   v4.9.0 — TELA INICIAL DO BRASIL EM TRÊS COLUNAS
+   resumo (cartão azul + 2 quadros) · mapa grande · lista dos estados
+   ========================================================================= */
+.br-grid.br3{grid-template-columns:300px minmax(0,1fr) minmax(340px,400px);gap:16px;}
+.br-side{display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0;}
+.br-side>*{flex-shrink:0;}
+.br-side .headline{grid-template-columns:1fr;padding:18px 20px 14px;border-radius:14px;margin:0;gap:14px;}
+.br-side .headline::after{width:200px;height:200px;right:-70px;bottom:-80px;}
+.br-side .headline .primary .cap{font-size:11px;}
+.br-side .headline .primary .big{font-size:40px;margin:6px 0 10px;cursor:default;}
+.br-side .headline .hl-trend{margin:0;}
+.br-side .headline .trend-chip.onnavy{white-space:normal;font-size:12px;}
+.br-side .headline .quad-footnote{font-size:10.5px;padding-top:8px;margin-top:0;border-top:1px solid rgba(255,255,255,.12);}
+.br-kpis{display:flex;flex-direction:column;gap:12px;}
+.br-k{display:flex;flex-direction:column;gap:8px;padding:14px 16px;}
+.br-k .kpi-l{margin:0;}
+.br-tbar{display:flex;height:10px;border-radius:99px;overflow:hidden;gap:2px;background:var(--line);}
+.br-tbar i{display:block;height:100%;}
+.br-tbar i.up{background:var(--trend-up);}
+.br-tbar i.eq{background:var(--muted);opacity:.45;}
+.br-tbar i.dn{background:var(--trend-dn);}
+.br-tleg{display:flex;justify-content:space-between;gap:6px;font-size:12px;color:var(--muted);}
+.br-tleg span{display:flex;flex-direction:column;line-height:1.25;}
+.br-tleg b{font-family:var(--font-titulo);font-size:16px;font-variant-numeric:tabular-nums;}
+.br-perda{display:flex;align-items:center;gap:10px;}
+.br-perda b{font-family:var(--font-titulo);font-size:28px;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink);}
+.br-perda span{font-size:12px;color:var(--muted);line-height:1.35;}
+.br-top{display:flex;flex-wrap:wrap;align-items:center;gap:5px;}
+.br-top .kpi-s{margin:0 2px 0 0;}
+.br-top-uf{font:inherit;font-size:11.5px;font-weight:600;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:2px 9px;cursor:pointer;}
+.br-top-uf b{color:var(--chip-amber-fg,#8a5a00);font-variant-numeric:tabular-nums;}
+.br-top-uf:hover{border-color:var(--teal);}
+.br-map-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:8px;}
+.br-map-foot .br-legend{margin:0;flex:1 1 260px;}
+.br-map-foot .br-hint{margin:0;}
+.layout-fit .br-map-foot .br-legend,.layout-fit .br-map-foot .br-hint{margin:0;}
+.layout-fit .br-side{height:var(--fit-h,auto);overflow-y:auto;}
+.br-list .br-row{grid-template-columns:22px minmax(0,1fr) 54px 84px 14px;gap:8px;padding:8px 6px;}
+/* telas médias: resumo vira uma faixa em cima; mapa e lista lado a lado */
+@media(max-width:1279px){
+  .br-grid.br3{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);}
+  .br-grid.br3 .br-side{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);}
+  .br-grid.br3 .br-kpis{display:contents;}
+  .layout-fit .br-grid.br3 .br-side{height:auto;overflow:visible;}
+  .layout-fit .br-grid.br3{height:auto;}
+  .layout-fit .br-grid.br3 .card{height:min(560px,calc(100vh - 130px));}
+}
+@media(max-width:900px){
+  .br-grid.br3{grid-template-columns:1fr;grid-template-rows:none;}
+  .br-grid.br3 .br-side{grid-template-columns:1fr;}
+  .br-grid.br3 .br-map-card #br-map svg{max-height:70vh;}
+}
+.br-side .headline{padding:16px 18px 12px;gap:12px;}
+.br-side .headline .primary .big{font-size:36px;margin:4px 0 8px;}
+.br-side .headline .trend-chip.onnavy{white-space:nowrap;}
+.br-list-card .card-h{flex-wrap:nowrap;gap:10px;}
+.br-list-card .br-ordem{display:flex;align-items:center;gap:6px;white-space:nowrap;min-width:0;}
+.br-list-card .br-ordem select{max-width:190px;}
+@media(min-width:1280px){.br-list-card .br-ordem>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}}
+.br-top .kpi-s{flex-basis:100%;margin:0;}
+.br-list .br-nome small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.br-perda span b.br-imp{font-family:var(--font-texto);font-size:13px;line-height:1.3;color:var(--trend-dn);}
+@media(max-width:900px){
+  .br-grid.br3,.br-grid.br3 .br-side{grid-template-columns:minmax(0,1fr);}
+}
+@media(max-width:600px){.stage-compact{padding-left:16px;padding-right:16px;}}
