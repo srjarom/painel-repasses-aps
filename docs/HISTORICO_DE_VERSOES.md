@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.16.1
+
+Página "Sobre o painel": removida a pergunta sobre o registro das visitas dos ACS da lista de perguntas que abrem a conversa.
+
 ## 4.16.0
 
 Correções na página "Sobre o painel" e fim da mistura de versões. Os atalhos e os cartões "Para quem é" voltavam para a tela inicial: viraram botões que só rolam a página, e a navegação do painel passou a ignorar mudanças só de âncora. O navegador guardava arquivos antigos por até 10 minutos e misturava com a página nova (isso também explicava o quadro "confira" vazio, a numeração repetida e o checklist que não aparecia no Raio-X): agora todos os arquivos do painel vão com a versão no endereço (?v=4.16.0) e o teste confere. Textos revistos: a frase principal inclui a investigação de chamados e as ações de retenção; saíram as regionais; investigação pode ser remota; "visita ou contato"; equipes a menos podem ser configuração (profissionais sem vínculo com a equipe no sistema, equipe sem produção, substituída ou transformada em outra), também no alerta da tela do estado e do município; perguntas mais profissionais e quatro perguntas novas para abrir a conversa; no checklist geral, cadastro da unidade, da equipe e vínculo/CBO no CNES.
