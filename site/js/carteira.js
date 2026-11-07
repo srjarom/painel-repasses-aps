@@ -48,12 +48,25 @@ function renderCarteiraView(){
   // quatro quadros numa linha só (v4.0.0) — o detalhe fica nas abas logo abaixo
   const totDelta=rows.reduce((s,r)=>s+(r.trend&&r.trend.dir!=null?r.trend.delta:0),0);
   const totDeltaPct=totAtual-totDelta>0?totDelta/(totAtual-totDelta)*100:null;
-  document.getElementById('carteira-summary-grid').innerHTML=
-    kpiHTML({label:'Repasse atual por mês',valor:fmtBRLcurto(totAtual),titulo:fmtBRL(totAtual),sub:fmtVar(Math.round(totDelta),totDeltaPct)+' vs. quadrimestre anterior'})+
-    kpiHTML({label:'Potencial por mês',valor:fmtBRLcurto(totPot),titulo:fmtBRL(totPot),sub:'se todas as equipes estivessem em "Ótimo"'})+
-    kpiHTML({label:'Margem em aberto por mês',valor:fmtBRLcurto(totGap),titulo:fmtBRL(totGap),barra:pctMed,sub:`${pctMed}% do potencial já alcançado`})+
-    kpiHTML({label:filtrar?'Clientes '+CLIENTES_ROTULO:'Municípios',valor:fmtNum(rows.length),
-      sub:filtrar?`de ${fmtNum(list.length)} municípios do estado`:(cli.size?`${fmtNum(cli.size)} clientes ${CLIENTES_ROTULO}`:'no relatório publicado')});
+  // cartão azul do estado (mesmo padrão da tela do Brasil e do município)
+  const qy=Math.floor(carteiraRefKey/10),qq=carteiraRefKey%10;
+  const qAnt=carteiraRefKey?(qq>1?`${qy}Q${qq-1}`:`${qy-1}Q3`):'anterior';
+  const dRound=Math.round(totDelta),dCls=dRound>0?'up':dRound<0?'dn':'eq';
+  const varTxt=dRound?`${fmtBRLcurto(Math.abs(dRound))}${totDeltaPct!=null?` (${fmtPctBR(totDeltaPct)})`:''} vs. ${qAnt}`:`igual a ${qAnt}`;
+  const quem=filtrar?`${fmtNum(rows.length)} clientes ${CLIENTES_ROTULO} de ${fmtNum(list.length)} municípios`:
+    `${fmtNum(rows.length)} municípios${cli.size?` · ${fmtNum(cli.size)} clientes ${CLIENTES_ROTULO}`:''}`;
+  document.getElementById('carteira-summary-grid').innerHTML=`
+    <div class="primary">
+      <div class="cap">Repasse mensal · ${escHTML(estadoInfo(UF_ATUAL)?estadoInfo(UF_ATUAL).nome:UF_ATUAL)}${filtrar?' · clientes':''} · ${carteiraRefKey?qCodeKey(carteiraRefKey):''}</div>
+      <div class="big mono" title="${escHTML(fmtBRL(totAtual))} por mês">${fmtBRLcurto(totAtual)}</div>
+      <div class="hl-trend"><span class="trend-chip onnavy ${dCls}"><span class="ti" aria-hidden="true">${dCls==='up'?'▲':dCls==='dn'?'▼':'='}</span>${varTxt}</span></div>
+    </div>
+    <div class="hl-pot">
+      <div class="mini"><div class="l" title="Se todas as equipes chegassem a Ótimo">Potencial</div><div class="v mono" title="${escHTML(fmtBRL(totPot))}">${fmtBRLcurto(totPot)}</div></div>
+      <div class="mini gap"><div class="l">Margem em aberto</div><div class="v mono" title="${escHTML(fmtBRL(totGap))}">+ ${fmtBRLcurto(totGap)}</div></div>
+      <div class="hl-bar"><div class="barwrap"><i style="width:${Math.min(100,pctMed)}%"></i></div><div class="barlbl">${pctMed}% do potencial já alcançado</div></div>
+    </div>
+    <div class="quad-footnote">${quem} · valores por mês</div>`;
 
   // aba "Equipes a menos": número na aba; some quando não há nenhum
   const nPerda=rows.filter(r=>temAlertaEquipes(r.perda)).length;

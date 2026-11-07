@@ -1601,3 +1601,24 @@ button.kpi:hover,.tcard:hover{box-shadow:var(--sh-2);}
 #sec-detalhe table.grid th,#sec-detalhe table.grid td{padding:8px 9px;}
 #sec-detalhe #tbl-repasse td:first-child{white-space:normal;min-width:62px;}
 #sec-detalhe #tbl-repasse{font-size:12.5px;}
+
+/* =========================================================================
+   v4.11.0 — PAINEL DO ESTADO NO MESMO PADRÃO
+   cartão azul no lugar dos quatro quadros; legenda do mapa numa linha
+   ========================================================================= */
+.estado-side .st-headline{grid-template-columns:1fr;padding:16px 18px 12px;border-radius:14px;margin:0;gap:12px;}
+.estado-side .st-headline::after{width:200px;height:200px;right:-70px;bottom:-80px;}
+.estado-side .st-headline .primary .cap{font-size:11px;}
+.estado-side .st-headline .primary .big{font-size:34px;margin:4px 0 8px;cursor:default;}
+.estado-side .st-headline .hl-trend{margin:0;}
+.estado-side .st-headline .trend-chip.onnavy{font-size:12px;white-space:nowrap;}
+.estado-side .st-headline .quad-footnote{font-size:10.5px;padding-top:8px;margin-top:0;border-top:1px solid rgba(255,255,255,.12);}
+.map-legend-row{flex-wrap:nowrap;gap:6px 12px;}
+.map-legend-row .rsmap-legend{flex:0 1 auto;}
+.map-legend-row .rsmap-legend-list{gap:3px 11px;}
+.map-legend-row .rsmap-legend-title{white-space:nowrap;}
+.map-legend-row .rsmap-nodata{white-space:nowrap;}
+@media(max-width:1300px){.map-legend-row{flex-wrap:wrap;}}
+.estado-side .side-sec{padding:12px 14px;}
+.estado-side .tf-chip{padding:5px 10px;}
+.estado-side .tf-bar{gap:3px;}

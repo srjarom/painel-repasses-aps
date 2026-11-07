@@ -133,11 +133,13 @@ function renderMapLegend(metric,min,max,rows){
     return;
   }
   if(metric.key==='trend'){
-    if(title)title.textContent='Tendência do repasse';
+    if(title)title.textContent='Tendência';
     const C=trendColors(),cnt={};
     rows.forEach(r=>{const k=trendBin(r.trend);cnt[k]=(cnt[k]||0)+1;});
-    el.innerHTML='<ul class="rsmap-legend-list">'+TREND_BINS.filter(b=>(b.k!=='na'&&b.k!=='aus')||cnt[b.k]).map(b=>
-      `<li><span class="rsmap-swatch" style="background:${C[b.k]}"></span><span class="lg-ic ${b.k==='aus'?'warn':b.dir===1?'up':b.dir===-1?'dn':'eq'}" aria-hidden="true">${b.k==='aus'?'⚠':b.dir==null?'–':TREND_ICON[b.dir]}</span><span class="lg-l">${b.label}</span><span class="lg-n">${cnt[b.k]||0}</span></li>`).join('')+'</ul>';
+    // rótulos curtos para a legenda caber numa linha embaixo do mapa (o texto completo fica no title)
+    const CURTO={up3:'mais de +5%',up2:'+2% a +5%',up1:'até +2%',eq:'igual',dn1:'até −2%',dn2:'−2% a −5%',dn3:'mais de −5%',na:'sem anterior',aus:'fora do relatório'};
+    el.innerHTML='<ul class="rsmap-legend-list lg-curta">'+TREND_BINS.filter(b=>(b.k!=='na'&&b.k!=='aus')||cnt[b.k]).map(b=>
+      `<li title="${b.label}: ${cnt[b.k]||0} municípios"><span class="rsmap-swatch" style="background:${C[b.k]}"></span><span class="lg-l">${CURTO[b.k]||b.label}</span><span class="lg-n">${cnt[b.k]||0}</span></li>`).join('')+'</ul>';
     return;
   }
   if(title)title.textContent='Legenda';

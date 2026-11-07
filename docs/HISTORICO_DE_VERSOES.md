@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.11.0
+
+Painel do estado no mesmo padrão das outras telas. Os quatro quadros brancos do lado direito viraram o cartão azul (igual ao do Brasil e do município): repasse mensal do estado, variação contra o quadrimestre anterior, potencial, margem em aberto, barra de quanto já foi alcançado e o número de municípios (ou de clientes, quando o filtro de clientes está ligado). A legenda do mapa cabe numa linha só, com rótulos curtos ("mais de +5%", "até −2%"…; o texto completo aparece ao passar o mouse). A lista de tendência ficou um pouco mais compacta, e a coluna da direita cabe inteira na tela.
+
 ## 4.10.0
 
 Abas do município redesenhadas. Raio-X: os tipos de equipe e o quadrimestre ficam numa linha só, cada tipo mostra quantos indicadores estão em prioridade, e um resumo no topo traz a contagem (prioridade / consolidados) e a legenda de cores; cada indicador mostra a barra mais larga com as quantidades por faixa embaixo e a nota colorida (vermelho abaixo de 50%, verde a partir de 90%). Diagnóstico: os pontos agora ficam agrupados por tipo de equipe, com o histórico de classificação uma vez só no topo do bloco (antes se repetia em cada cartão), e aparecem todos (antes só 6); no topo, a contagem por tipo de ponto; o botão virou "Copiar agenda". Detalhamento: tabelas com cabeçalho claro e valores sem quebra de linha, e a classificação das equipes em barras horizontais com as quantidades dentro e a % em Ótimo/Bom ao lado, no lugar do gráfico pequeno.
