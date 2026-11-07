@@ -151,6 +151,7 @@ function showView(view){
   ['brasil','carteira','municipio','guia'].forEach(v=>{
     const el=document.getElementById('view-'+v);if(el)el.style.display=view===v?'block':'none';
   });
+  {const vis=document.getElementById('view-'+view);if(typeof animarEntrada==='function')animarEntrada(vis);}
   const notas=document.getElementById('notas-gerais');if(notas)notas.style.display=(view==='brasil'||view==='carteira')?'block':'none';
   const tc=document.getElementById('nav-tab-carteira'),tg=document.getElementById('nav-tab-guia');
   if(tc)tc.classList.toggle('active',view!=='guia');

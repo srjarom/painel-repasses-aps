@@ -27,6 +27,7 @@ function showSecTab(sec){
     if(panel)panel.classList.toggle('sec-inactive',s!==sec);
   });
   document.querySelectorAll('.sec-tab').forEach(t=>t.classList.toggle('active',t.dataset.sec===sec));
+  if(typeof animarEntrada==='function')animarEntrada(document.getElementById('sec-'+sec));
   if(sec==='geral'){
     if(charts.r)charts.r.resize();
     if(charts.c)charts.c.resize();

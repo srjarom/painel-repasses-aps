@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.7.0
+
+Padrão visual único em todo o painel: uma escala só para tamanhos de texto, espaços, cantos arredondados e sombras (variáveis no início do bloco 4.7.0 do CSS). Todos os cartões têm a mesma borda, canto e sombra leve; os títulos de seção, os textos de apoio e os rótulos pequenos seguem o mesmo tamanho e peso; os números usam algarismos de mesma largura (as colunas não "dançam"); os botões seguem três estilos (azul principal, contorno secundário e o verde de destaque). Transições suaves ao trocar de tela, aba e ao passar o mouse (desligadas para quem prefere menos movimento no sistema). Ao abrir um estado, um esqueleto de carregamento no formato da tela substitui a rodinha. Se o mapa do Brasil não carregar, aparece um aviso em vez de um desenho quebrado.
+
 ## 4.6.0
 
 Novo gráfico de evolução do repasse. A visão padrão agora é a curva do repasse mensal, com a escala ajustada aos valores do município (nas barras empilhadas, o Fixo/IED, que quase não muda, escondia a variação), a linha do potencial e, entre as duas, a faixa verde da margem em aberto; o valor do primeiro e do último quadrimestre fica escrito no gráfico. Acima, um resumo: valor do mês, variação vs. o quadrimestre anterior, variação desde o início do histórico e margem em aberto. As barras de composição (Fixo/IED + Vínculo + Qualidade) continuam na chave "Composição". Topo do município mais limpo: "Brasil › estado" pequeno em cima e o nome do município em destaque, com UF e IBGE discretos ao lado.

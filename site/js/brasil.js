@@ -122,6 +122,7 @@ function projetarGeo(lista,W){
 async function renderBrasilMapa(lista){
   const wrap=document.getElementById('br-map');if(!wrap)return;
   if(!PainelDados.geo('BR').length)await PainelDados.carregarScript('dados/geo/BR.js');
+  if(!PainelDados.geo('BR').length){wrap.innerHTML='<p class="br-hint">Não foi possível carregar o mapa do Brasil. Recarregue a página.</p>';return;}
   const geo=BR_GEO_CACHE.g||(BR_GEO_CACHE.g=projetarGeo(PainelDados.geo('BR'),600));
   const por=Object.fromEntries(lista.map(x=>[x.uf,x]));
   const val=x=>brMetric==='gap'?x.gap:brMetric==='total'?x.total:brMetric==='pct'?x.pct:(x.deltaPct||0);

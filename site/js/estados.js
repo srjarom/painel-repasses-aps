@@ -43,7 +43,8 @@ async function aplicarRota(r){
   }
   const vinhaDoMunicipio=document.getElementById('view-municipio').style.display!=='none';
   if(r.uf!==ufCarregada){
-    if(loading)loading.style.display='';
+    // enquanto o estado carrega, mostra só o esqueleto (blocos no formato da tela)
+    if(loading){['brasil','carteira','municipio','guia'].forEach(v=>{const el=document.getElementById('view-'+v);if(el)el.style.display='none';});loading.style.display='';}
     const ok=await trocarEstado(r.uf);
     if(loading)loading.style.display='none';
     if(!ok)return;   // o usuário já foi para outro lugar enquanto carregava
@@ -109,6 +110,7 @@ function mostrarAba(nome,opts={}){
   agendarAjusteAltura();
   document.querySelectorAll('.tabs .tab-btn').forEach(b=>{const on=b.dataset.aba===nome;b.classList.toggle('on',on);b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;});
   ['mapa','ranking','perda'].forEach(a=>{const p=document.getElementById('painel-'+a);if(p)p.hidden=a!==nome;});
+  if(!opts.semRender)animarEntrada(document.getElementById('painel-'+nome));
   // o filtro de tendência vale para o Mapa e o Ranking; na aba de equipes a menos ele some
   {const ts=document.getElementById('trend-strip');if(ts){ts.hidden=nome==='perda';const sec=ts.closest('.side-sec');if(sec)sec.hidden=nome==='perda';}}
   // a busca no mapa e o município selecionado (no painel do lado) só fazem sentido na aba Mapa
@@ -158,3 +160,11 @@ if(MQ_FIT.addEventListener)MQ_FIT.addEventListener('change',agendarAjusteAltura)
 // as fontes da marca mudam a altura dos textos ao terminar de carregar: recalcula depois delas
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(agendarAjusteAltura);
 window.addEventListener('load',agendarAjusteAltura);
+
+// entrada suave de uma tela ou aba (some se a pessoa preferir menos movimento — ver CSS)
+function animarEntrada(el){
+  if(!el)return;
+  el.classList.remove('anim-entrar');void el.offsetWidth;el.classList.add('anim-entrar');
+  // a altura dos quadros é medida de novo quando o movimento termina
+  el.addEventListener('animationend',()=>{if(typeof agendarAjusteAltura==='function')agendarAjusteAltura();},{once:true});
+}
