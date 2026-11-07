@@ -7,9 +7,9 @@
 <link rel="icon" type="image/x-icon" href="img/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
-<link rel="stylesheet" href="css/painel.css">
+<link rel="stylesheet" href="css/painel.css?v=4.16.0">
 <!-- aplica o tema claro/escuro antes de desenhar a página (evita "piscar") -->
-<script src="js/tema-inicial.js"></script>
+<script src="js/tema-inicial.js?v=4.16.0"></script>
 </head>
 <body>
 
@@ -228,7 +228,7 @@
       <div class="g-parte total"><small>o que o painel mostra</small><b>Repasse mensal</b></div>
     </div>
     <nav class="g-nav" aria-label="Seções do guia">
-      <a href="#g-comp">Os 3 componentes</a><a href="#g-nota">A classificação</a><a href="#g-quando">Quando é pago</a><a href="#g-uso">Como usar o painel</a><a href="#g-termos">Palavras do painel</a>
+      <button type="button" data-alvo="g-comp">Os 3 componentes</button><button type="button" data-alvo="g-nota">A classificação</button><button type="button" data-alvo="g-quando">Quando é pago</button><button type="button" data-alvo="g-uso">Como usar o painel</button><button type="button" data-alvo="g-termos">Palavras do painel</button>
     </nav>
 
     <h3 class="g-sec" id="g-comp">Os 3 componentes</h3>
@@ -404,33 +404,33 @@
     <div class="tut-head">
       <span class="tut-kicker">Sobre o painel</span>
       <h2>Para que serve este painel</h2>
-      <p>Chegar a qualquer conversa sobre um município — com o prefeito, o secretário de saúde, a regional ou a própria equipe — sabendo como ele está, com números públicos, em poucos minutos.</p>
+      <p>Saber como um município está — com números públicos, em poucos minutos — para preparar conversas com prefeitos e secretários de saúde, investigar chamados técnicos e planejar ações de retenção e manutenção dos clientes.</p>
     </div>
 
     <h3 class="g-sec" id="sobre-porque">Por que ele existe</h3>
     <div class="sb-tres">
       <div class="sb-card"><b>Os dados existem, mas estão espalhados</b><p>O Ministério da Saúde publica no SIAPS como as equipes de cada município foram avaliadas — em planilhas grandes, um quadrimestre por vez, difíceis de ler.</p></div>
-      <div class="sb-card"><b>As conversas costumavam começar sem base</b><p>Reuniões com gestores e regionais aconteciam sem saber quanto o município recebe, se o repasse sobe ou cai e onde estão os problemas — e a investigação técnica pedia agendas longas.</p></div>
-      <div class="sb-card"><b>O painel dá uma leitura própria, com fatos</b><p>Junta os relatórios, estima o repasse, compara os quadrimestres e aponta equipes e indicadores com dificuldade. A conversa passa a partir de dados, não de percepções.</p></div>
+      <div class="sb-card"><b>O trabalho costumava começar sem base</b><p>Reuniões com gestores aconteciam sem uma estimativa de quanto o município recebe ou de se o repasse sobe ou cai — e a investigação técnica pedia agendas longas, presenciais ou remotas, até achar onde estava o problema.</p></div>
+      <div class="sb-card"><b>O painel dá uma leitura própria, com fatos</b><p>Junta os relatórios, estima o repasse, compara os quadrimestres e aponta equipes e indicadores com dificuldade. Conversas, investigações e ações de retenção partem da avaliação de dados, não de percepções — e boa parte da investigação pode ser feita a distância, deixando a ida ao município para a conversa e a entrega ao gestor.</p></div>
     </div>
 
     <h3 class="g-sec">Para quem é</h3>
     <div class="sb-publicos">
-      <a class="sb-pub" href="#sobre-gestao">
+      <button type="button" class="sb-pub" data-alvo="sobre-gestao">
         <span class="sb-pub-ic" aria-hidden="true">🤝</span>
         <b>Gestão e equipe comercial</b>
-        <p>Preparar visitas e reuniões, entender o momento do município e encontrar oportunidades de serviço — sem precisar dominar a Saúde Pública.</p>
+        <p>Preparar visitas, reuniões e contatos, entender o momento do município e encontrar oportunidades de serviço e de retenção — sem precisar dominar a Saúde Pública.</p>
         <span class="sb-pub-go">Ver como usar →</span>
-      </a>
-      <a class="sb-pub" href="#sobre-tecnico">
+      </button>
+      <button type="button" class="sb-pub" data-alvo="sobre-tecnico">
         <span class="sb-pub-ic" aria-hidden="true">🛠️</span>
         <b>Consultor técnico e analista</b>
         <p>Cortar caminho num chamado (“os indicadores caíram”): ver qual equipe e qual indicador caiu e ir direto ao que revisar no sistema.</p>
         <span class="sb-pub-go">Ver o roteiro técnico →</span>
-      </a>
+      </button>
     </div>
     <nav class="g-nav" aria-label="Seções desta página">
-      <a href="#sobre-gestao">Gestão e comercial</a><a href="#sobre-tecnico">Consultor técnico</a><a href="#sobre-limites">O que o painel não sabe</a><a href="#sobre-fontes">De onde vêm os dados</a>
+      <button type="button" data-alvo="sobre-gestao">Gestão e comercial</button><button type="button" data-alvo="sobre-tecnico">Consultor técnico</button><button type="button" data-alvo="sobre-limites">O que o painel não sabe</button><button type="button" data-alvo="sobre-fontes">De onde vêm os dados</button>
     </nav>
 
     <!-- ===== GESTÃO E COMERCIAL ===== -->
@@ -440,18 +440,18 @@
       <div><dt>Quanto recebe por mês na Atenção Primária?</dt><dd>Cartão azul da tela do município, com a faixa possível do valor.</dd></div>
       <div><dt>O repasse está subindo ou caindo?</dt><dd>Selo de tendência e gráfico de evolução por quadrimestre.</dd></div>
       <div><dt>Quanto ainda dá para ganhar com as equipes que já existem?</dt><dd>Margem em aberto e os cartões por tipo de equipe.</dd></div>
-      <div><dt>Alguma equipe sumiu do relatório?</dt><dd>Alerta de equipes a menos — assunto urgente para o gestor, mas que precisa ser confirmado.</dd></div>
-      <div><dt>Em quais indicadores as equipes vão mal?</dt><dd>Abas Raio-X por indicador e Diagnóstico.</dd></div>
-      <div><dt>Como está perto dos outros municípios do estado?</dt><dd>Mapa e Ranking do painel do estado.</dd></div>
+      <div><dt>Alguma equipe sumiu do relatório?</dt><dd>Alerta de equipes a menos. Pode ser descredenciamento, mas também configuração: profissionais que existem no CNES e não estão vinculados à equipe no sistema, equipe sem produção, ou que foi substituída ou virou outra. Precisa ser confirmado.</dd></div>
+      <div><dt>Em quais indicadores as equipes foram mal avaliadas?</dt><dd>Abas Raio-X por indicador e Diagnóstico.</dd></div>
+      <div><dt>Como o município se compara aos outros do estado?</dt><dd>Mapa e Ranking do painel do estado.</dd></div>
     </dl>
-    <h4 class="sb-sub" id="sobre-visita">Como preparar uma visita — o dever de casa</h4>
+    <h4 class="sb-sub" id="sobre-visita">Como preparar uma visita ou um contato — o dever de casa</h4>
     <div class="sb-visita">
       <ol class="sb-passos">
         <li><b>Busque o município</b> no topo da tela e abra o relatório dele.</li>
         <li><b>Anote três números:</b> o repasse mensal (com a faixa), se subiu ou caiu, e a margem em aberto.</li>
-        <li><b>Veja se há equipes a menos.</b> É um assunto sensível e urgente — leve como pergunta, não como afirmação.</li>
+        <li><b>Veja se há equipes a menos.</b> É um assunto sensível e urgente — leve como pergunta, não como afirmação: a resposta pode ser que a equipe foi substituída ou se transformou em outra.</li>
         <li><b>Abra o Raio-X.</b> Os indicadores em prioridade são bons temas de conversa (ex.: “como está o registro do pré-natal?”).</li>
-        <li><b>Abra o Diagnóstico</b> e copie a sugestão de agenda, se fizer sentido para a visita.</li>
+        <li><b>Abra o Diagnóstico</b> e copie a sugestão de agenda, se fizer sentido para a visita ou o contato com o cliente.</li>
         <li><b>Gere o “Resumo p/ secretário”</b> para deixar com o gestor. O Raio-X em PDF é de uso interno.</li>
       </ol>
       <div class="sb-perg">
@@ -461,18 +461,22 @@
           <li>Houve equipe descredenciada, desativada no CNES ou com produção não enviada?</li>
           <li>Quem cuida do registro da produção e do envio das fichas?</li>
           <li>Quais indicadores mais preocupam a coordenação hoje?</li>
+          <li>Houve troca de profissionais, equipe nova ou mudança de equipe nos últimos meses?</li>
+          <li>Os resultados do último quadrimestre foram discutidos com as equipes?</li>
+          <li>Vocês acompanham a produção ao longo do mês, antes do fechamento do envio?</li>
+          <li>Os ACS registram as visitas marcando o acompanhamento (gestante, criança, pessoa com hipertensão ou diabetes)?</li>
         </ul>
       </div>
     </div>
 
     <!-- ===== CONSULTOR TÉCNICO ===== -->
     <h3 class="g-sec" id="sobre-tecnico">Para o consultor técnico</h3>
-    <p class="sb-lead">Quando chega um chamado ou um comentário — “os indicadores estão todos baixos”, “perdemos recurso” — quase nunca vem junto qual equipe, qual indicador ou desde quando. O painel responde isso antes da visita, e a agenda técnica já começa no ponto certo.</p>
+    <p class="sb-lead">Quando chega um chamado ou um comentário — “os indicadores estão todos baixos”, “perdemos recurso” — quase nunca vem junto qual equipe, qual indicador ou desde quando. O painel responde isso antes da visita ou do contato, e a investigação — muitas vezes remota — já começa no ponto certo.</p>
     <ol class="sb-fluxo">
-      <li><span class="g-n">1</span><div><b>Abra o município</b><p>Veja a tendência e se há <b>equipes a menos</b>: perda de equipe derruba o Fixo e não se resolve com configuração.</p></div></li>
+      <li><span class="g-n">1</span><div><b>Abra o município</b><p>Veja a tendência e se há <b>equipes a menos</b>. Antes de concluir que foi descredenciamento, confira se os profissionais estão vinculados à equipe no sistema e no CNES, se a equipe tem produção e se não foi substituída ou virou outra.</p></div></li>
       <li><span class="g-n">2</span><div><b>Raio-X por indicador</b><p>Escolha o tipo de equipe e veja os indicadores <b>em prioridade</b> (nota abaixo de 50%) e quantas equipes estão em Regular.</p></div></li>
       <li><span class="g-n">3</span><div><b>“O que revisar no sistema”</b><p>Em cada indicador do Raio-X há o checklist: o que o Ministério conta e quais campos precisam estar preenchidos.</p></div></li>
-      <li><span class="g-n">4</span><div><b>Decida a ação</b><p>Configuração do sistema, capacitação da equipe, cadastro (INE, CBO, vínculo das famílias) ou envio das fichas — antes de marcar a visita.</p></div></li>
+      <li><span class="g-n">4</span><div><b>Decida a ação</b><p>Configuração do sistema, capacitação da equipe, cadastro (unidade, equipe, INE, CBO, vínculo das famílias) ou envio das fichas.</p></div></li>
     </ol>
     <div class="sb-geral">
       <b>Antes de olhar um indicador específico, confira</b>
@@ -726,7 +730,7 @@
 <script src="vendor/jspdf.umd.min.js"></script>
 
 <!-- Dados publicados (gerados pela ferramenta de manutenção — ver docs/ATUALIZAR_OS_DADOS.md) -->
-<script src="js/dados.js"></script>
+<script src="js/dados.js?v=4.16.0"></script>
 <script src="dados/estratos-ied.js"></script>
 <script src="dados/indice.js"></script>
 <script src="dados/clientes.js"></script>
@@ -734,29 +738,29 @@
 
 
 <!-- Painel (a ordem importa: base primeiro, inicio.js por último) -->
-<script src="js/base.js"></script>
-<script src="js/calculo.js"></script>
-<script src="js/mapa.js"></script>
-<script src="js/versao.js"></script>
-<script src="js/guia-tecnico.js"></script>
-<script src="js/raiox.js"></script>
-<script src="js/municipio.js"></script>
-<script src="js/carteira.js"></script>
-<script src="js/clientes.js"></script>
-<script src="js/tendencia.js"></script>
-<script src="js/alerta-equipes.js"></script>
-<script src="js/diagnostico.js"></script>
-<script src="js/tema.js"></script>
-<script src="js/graficos.js"></script>
-<script src="js/pdf/fontes-pdf.js"></script>
-<script src="js/pdf/comum.js"></script>
-<script src="js/pdf/logos.js"></script>
-<script src="js/pdf/relatorio-quadrimestre.js"></script>
-<script src="js/pdf/resumo-secretario.js"></script>
-<script src="js/pdf/raiox.js"></script>
-<script src="js/resumo.js"></script>
-<script src="js/brasil.js"></script>
-<script src="js/estados.js"></script>
-<script src="js/inicio.js"></script>
+<script src="js/base.js?v=4.16.0"></script>
+<script src="js/calculo.js?v=4.16.0"></script>
+<script src="js/mapa.js?v=4.16.0"></script>
+<script src="js/versao.js?v=4.16.0"></script>
+<script src="js/guia-tecnico.js?v=4.16.0"></script>
+<script src="js/raiox.js?v=4.16.0"></script>
+<script src="js/municipio.js?v=4.16.0"></script>
+<script src="js/carteira.js?v=4.16.0"></script>
+<script src="js/clientes.js?v=4.16.0"></script>
+<script src="js/tendencia.js?v=4.16.0"></script>
+<script src="js/alerta-equipes.js?v=4.16.0"></script>
+<script src="js/diagnostico.js?v=4.16.0"></script>
+<script src="js/tema.js?v=4.16.0"></script>
+<script src="js/graficos.js?v=4.16.0"></script>
+<script src="js/pdf/fontes-pdf.js?v=4.16.0"></script>
+<script src="js/pdf/comum.js?v=4.16.0"></script>
+<script src="js/pdf/logos.js?v=4.16.0"></script>
+<script src="js/pdf/relatorio-quadrimestre.js?v=4.16.0"></script>
+<script src="js/pdf/resumo-secretario.js?v=4.16.0"></script>
+<script src="js/pdf/raiox.js?v=4.16.0"></script>
+<script src="js/resumo.js?v=4.16.0"></script>
+<script src="js/brasil.js?v=4.16.0"></script>
+<script src="js/estados.js?v=4.16.0"></script>
+<script src="js/inicio.js?v=4.16.0"></script>
 </body>
 </html>

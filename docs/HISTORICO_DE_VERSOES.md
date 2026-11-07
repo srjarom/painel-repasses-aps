@@ -2,7 +2,7 @@
 
 Mais recente primeiro. A mesma lista aparece no rodapé do painel (clique no número da versão).
 
-Ao publicar uma mudança no código: suba o número em `site/js/versao.js` (`APP_VERSION`), acrescente uma entrada no topo de `APP_CHANGELOG` e copie o texto para cá.
+Ao publicar uma mudança no código: suba o número em `site/js/versao.js` (`APP_VERSION`), acrescente uma entrada no topo de `APP_CHANGELOG`, copie o texto para cá e troque o `?v=<versão>` de todos os arquivos `js/` e `css/` em `site/index.html` (o teste automático confere).
 
 Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
@@ -11,6 +11,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 - **CORREÇÃO** (2.0.0 → 2.0.1): conserto ou ajuste de texto.
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
+
+## 4.16.0
+
+Correções na página "Sobre o painel" e fim da mistura de versões. Os atalhos e os cartões "Para quem é" voltavam para a tela inicial: viraram botões que só rolam a página, e a navegação do painel passou a ignorar mudanças só de âncora. O navegador guardava arquivos antigos por até 10 minutos e misturava com a página nova (isso também explicava o quadro "confira" vazio, a numeração repetida e o checklist que não aparecia no Raio-X): agora todos os arquivos do painel vão com a versão no endereço (?v=4.16.0) e o teste confere. Textos revistos: a frase principal inclui a investigação de chamados e as ações de retenção; saíram as regionais; investigação pode ser remota; "visita ou contato"; equipes a menos podem ser configuração (profissionais sem vínculo com a equipe no sistema, equipe sem produção, substituída ou transformada em outra), também no alerta da tela do estado e do município; perguntas mais profissionais e quatro perguntas novas para abrir a conversa; no checklist geral, cadastro da unidade, da equipe e vínculo/CBO no CNES.
 
 ## 4.15.0
 

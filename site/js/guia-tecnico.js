@@ -134,8 +134,9 @@ const GUIA_TECNICO_ALIAS={
 };
 // o que vale para todos os indicadores — conferir antes de mergulhar num indicador específico
 const GUIA_TECNICO_GERAL=[
+  '<b>Cadastro da unidade e da equipe</b>, e o <b>vínculo de cada profissional</b> com a equipe e o <b>CBO</b> que consta no CNES — confira no CNES local ou no CNES web, buscando pelo nome do profissional.',
   'Profissional <b>sem INE</b> não conta para os indicadores de Qualidade.',
-  'Cadastro dos profissionais no CNES com <b>CBO e carga horária compatíveis</b> com a equipe.',
+  'Profissionais com <b>CBO e carga horária compatíveis</b> com a equipe, e vinculados à equipe certa também <b>no sistema</b> (usuário criado e com produção registrada).',
   'Usuários identificados (nome, data de nascimento, CNS ou CPF válido) e <b>vinculados</b> à equipe — base cadastral e cobertura do território pesam no resultado.',
   'A avaliação é <b>por equipe</b>: uma equipe mal configurada pode puxar a nota mesmo com as demais bem.',
   'Os dados são extraídos pelo SIAPS no <b>20º dia útil de cada mês</b> e a avaliação é quadrimestral: o que não foi enviado até lá não entra.'
@@ -158,3 +159,6 @@ function renderGuiaTecnicoSobre(){
   if(geral)geral.innerHTML=GUIA_TECNICO_GERAL.map(t=>`<li>${t}</li>`).join('');
   el.dataset.ok='1';
 }
+// preenche a página Sobre assim que o arquivo carrega (não depende de outra parte do painel)
+if(document.readyState!=='loading')renderGuiaTecnicoSobre();
+else document.addEventListener('DOMContentLoaded',renderGuiaTecnicoSobre);

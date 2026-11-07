@@ -30,7 +30,13 @@ function irBrasil(){return irPara({});}
 function irEstado(uf){return irPara({uf});}
 function irMunicipio(ibge){return irPara({uf:ufDoIbge(ibge),m:String(ibge)});}
 let entrouNoMunicipioPeloPainel=false;   // o "Voltar" da tela do município só usa o histórico se veio do painel
-window.addEventListener('popstate',()=>{entrouNoMunicipioPeloPainel=false;aplicarRota(lerRota());});
+// mudança só de âncora (#secao, ex.: atalhos de uma página de texto) não é navegação do painel
+let buscaAtual=location.search;
+window.addEventListener('popstate',()=>{
+  if(location.search===buscaAtual&&location.hash)return;
+  buscaAtual=location.search;
+  entrouNoMunicipioPeloPainel=false;aplicarRota(lerRota());
+});
 
 let ufCarregada='',voltandoDoMunicipio=false;
 async function aplicarRota(r){

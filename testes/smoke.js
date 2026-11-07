@@ -14,6 +14,17 @@ const falhas=[];
 const ok=(cond,msg)=>{console.log((cond?'  ✓ ':'  ✗ ')+msg);if(!cond)falhas.push(msg);};
 
 (async()=>{
+  // os arquivos do painel são chamados com ?v=<versão> (o GitHub Pages guarda cada arquivo 10 min no
+  // navegador; sem isso, a página nova roda com CSS/JS antigos). Confere que todos batem com APP_VERSION.
+  {
+    const fs=require('fs');
+    const html=fs.readFileSync(path.resolve(__dirname,'..','site','index.html'),'utf8');
+    const ver=(fs.readFileSync(path.resolve(__dirname,'..','site','js','versao.js'),'utf8').match(/APP_VERSION='([^']+)'/)||[])[1];
+    const refs=[...html.matchAll(/(?:src|href)="((?:js|css)\/[^"]+)"/g)].map(m=>m[1]);
+    const erradas=refs.filter(r=>!r.endsWith('?v='+ver));
+    console.log('Versão nos arquivos');
+    ok(refs.length>0&&!erradas.length,erradas.length?`${erradas.length} arquivo(s) sem ?v=${ver}: ${erradas.slice(0,3).join(', ')}`:`${refs.length} arquivos com ?v=${ver}`);
+  }
   const browser=await chromium.launch();
   const ctx=await browser.newContext({viewport:{width:1280,height:900},acceptDownloads:true});
   await ctx.route('**/*',r=>r.request().url().startsWith('file://')?r.continue():r.abort());

@@ -129,7 +129,7 @@ function perdaTexto(p){
   const b=p.antiga.map(x=>`${x.n} ${x.tipo} a menos desde ${qCode(x.desde)} (eram ${x.de} em ${qCode(x.deQuad)})`);
   return[...a,...b].join('; ');
 }
-const PERDA_CAUSAS='Possíveis causas: equipe descredenciada ou desativada no CNES, suspensa por falta de envio de produção, não avaliada no quadrimestre, ou dado ainda preliminar no SIAPS. Vale conferir no e-Gestor AB (pagamento por equipe) e no CNES antes de falar com o município.';
+const PERDA_CAUSAS='Possíveis causas: equipe descredenciada ou desativada no CNES; suspensa por falta de envio de produção; profissionais que existem no CNES mas não estão vinculados à equipe no sistema (ou sem produção registrada); equipe substituída ou transformada em outra; não avaliada no quadrimestre; ou dado ainda preliminar no SIAPS. Vale conferir no e-Gestor AB (pagamento por equipe), no CNES e na configuração do sistema antes de falar com o município.';
 
 let perdaVerTodos=false;
 function renderAlertaCarteira(rows){

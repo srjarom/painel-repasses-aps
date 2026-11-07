@@ -1810,3 +1810,9 @@ button.kpi:hover,.tcard:hover{box-shadow:var(--sh-2);}
 .ind-tec .gt-rev{font-weight:400;}
 @media(max-width:1000px){.sb-fluxo{grid-template-columns:repeat(2,minmax(0,1fr));}.gt-lista{grid-template-columns:1fr;}}
 @media(max-width:820px){.sb-publicos,.sb-fluxo,.sb-geral ul{grid-template-columns:1fr;}}
+/* atalhos agora são botões (não mudam o endereço da página) */
+.g-nav button{font:inherit;font-size:12.5px;font-weight:600;color:var(--navy);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 13px;cursor:pointer;transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease);}
+.g-nav button:hover{border-color:var(--teal);background:var(--panel-2);}
+button.sb-pub{font:inherit;text-align:left;width:100%;cursor:pointer;}
+.sb-fluxo,.sb-fluxo li{list-style:none;}
+.sb-fluxo li::marker{content:none;}

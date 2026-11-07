@@ -210,8 +210,8 @@ function abrirSobre(secao){
 // atalhos do guia ("Os 3 componentes", "Como usar o painel"…): só rolam a página, sem mexer no
 // endereço (o "#" no endereço dispararia a navegação do painel e tiraria a pessoa do guia)
 document.addEventListener('click',e=>{
-  const a=e.target.closest&&e.target.closest('.g-nav a, a.sb-pub');if(!a)return;
+  const a=e.target.closest&&e.target.closest('[data-alvo]');if(!a)return;
   e.preventDefault();
-  const t=document.querySelector(a.getAttribute('href'));
+  const t=document.getElementById(a.dataset.alvo);
   if(t)t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
 });
