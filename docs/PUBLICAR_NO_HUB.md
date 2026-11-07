@@ -56,7 +56,7 @@ No terminal (PowerShell), na pasta do projeto:
 
 ```
 cd testes
-npm run pacote
+npm.cmd run pacote
 ```
 
 O comando faz tudo em ordem e para se algo der errado:

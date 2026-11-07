@@ -54,9 +54,13 @@ function lerIndice(){
   }else console.log('2/4 Teste pulado (--sem-teste).');
 
   const reg=fs.existsSync(REGISTRO)?JSON.parse(fs.readFileSync(REGISTRO,'utf8')):{versao:'2.4.0',dados:null};
-  const desde=typeof opcao('--desde')==='string'?opcao('--desde'):reg.versao;
+  // gerar de novo o MESMO pacote (mesma versão e mesmos dados) refaz a mesma nota, em vez de dizer "nada mudou"
+  const repeticao=reg.versao===ver&&reg.dados===dados&&reg.baseVersao!==undefined;
+  const baseVersao=typeof opcao('--desde')==='string'?opcao('--desde'):(repeticao?reg.baseVersao:reg.versao);
+  const baseDados=repeticao?reg.baseDados:reg.dados;
+  const desde=baseVersao;
   const mudouCodigo=cmpVer(ver,desde)>0;
-  const mudouDados=reg.dados!==dados;
+  const mudouDados=baseDados!==dados;
   const idx=lerIndice();
   const nome=`painel-repasses-aps-v${ver}`+(!mudouCodigo&&mudouDados&&idx.atualizadoEm?`-dados-${idx.atualizadoEm}`:'');
   const zip=path.join(PACOTE,nome+'.zip');
@@ -76,7 +80,7 @@ function lerIndice(){
     `Gerado em ${new Date().toLocaleDateString('pt-BR')}`,
     '',
     `Arquivo: ${nome}.zip (${mb} MB)`,
-    `Substitui: versão ${desde}${reg.arquivo?` (${reg.arquivo})`:''}`,
+    `Substitui: versão ${desde}`,
     `O que mudou: ${tipo}`,
     `Dados: ${idx.ufs} estados · quadrimestre mais recente ${idx.ultimoQuad||'—'} · atualizados em ${dataBR(idx.atualizadoEm)}`,
     '',
@@ -91,8 +95,8 @@ function lerIndice(){
     linhas.push('Mudanças: atualização dos dados do SIAPS (sem mudança no código).','');
   }
   const notas=path.join(PACOTE,`NOTAS-${nome}.txt`);
-  fs.writeFileSync(notas,linhas.join('\r\n'),'utf8');
-  fs.writeFileSync(REGISTRO,JSON.stringify({versao:ver,dados,arquivo:nome+'.zip',geradoEm:new Date().toISOString().slice(0,10)},null,2));
+  fs.writeFileSync(notas,'﻿'+linhas.join('\r\n'),'utf8');   // com BOM: Bloco de Notas e Outlook leem os acentos certo
+  fs.writeFileSync(REGISTRO,JSON.stringify({versao:ver,dados,arquivo:nome+'.zip',geradoEm:new Date().toISOString().slice(0,10),baseVersao:desde,baseDados:baseDados===undefined?null:baseDados},null,2));
 
   console.log(`\nPronto!\n  Pacote: pacote/${nome}.zip (${mb} MB)\n  Nota:   pacote/NOTAS-${nome}.txt\n  O que mudou: ${tipo}\n`);
 })();

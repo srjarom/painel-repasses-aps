@@ -91,7 +91,7 @@ Para o navegador de quem usa o painel baixar os dados novos (e não mostrar os q
 
 ```
 cd testes
-npm run carimbar
+npm.cmd run carimbar
 ```
 
 Deve aparecer `Carimbado: versão … · dados …`. Se você for gerar o pacote para o hub (`npm run pacote`, veja [PUBLICAR_NO_HUB.md](PUBLICAR_NO_HUB.md)), pode pular este passo: o pacote carimba sozinho. A publicação no GitHub também carimba sozinha, mas carimbar aqui deixa o `index.html` do projeto em dia.
