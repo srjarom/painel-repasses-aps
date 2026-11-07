@@ -48,7 +48,11 @@ const PainelDados=(function(){
   function carregarScript(src){
     if(!carregados[src])carregados[src]=new Promise(ok=>{
       const s=document.createElement('script');
-      s.src=src;s.onload=()=>ok(true);s.onerror=()=>{delete carregados[src];ok(false);};
+      // arquivos de dados vão com o carimbo dos dados (window.DADOS_VERSAO, no index.html): quando os
+      // dados mudam, o navegador baixa os novos em vez de usar os guardados
+      const ehDado=src.indexOf('dados/')===0||src.indexOf('/dados/')>=0;
+      const carimbo=(window.DADOS_VERSAO&&ehDado&&src.indexOf('?')<0)?'?d='+window.DADOS_VERSAO:'';
+      s.src=src+carimbo;s.onload=()=>ok(true);s.onerror=()=>{delete carregados[src];ok(false);};
       document.head.appendChild(s);
     });
     return carregados[src];

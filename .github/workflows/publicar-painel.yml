@@ -26,6 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      # carimba o index.html (versão nos arquivos de código, carimbo nos dados) antes de publicar,
+      # para o navegador de quem abre baixar os arquivos novos mesmo que alguém esqueça de carimbar
+      - name: Carimbar versão e dados
+        run: node manutencao/ferramentas/carimbar.js
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

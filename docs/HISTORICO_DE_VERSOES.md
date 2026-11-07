@@ -2,7 +2,7 @@
 
 Mais recente primeiro. A mesma lista aparece no rodapé do painel (clique no número da versão).
 
-Ao publicar uma mudança no código: suba o número em `site/js/versao.js` (`APP_VERSION`), acrescente uma entrada no topo de `APP_CHANGELOG`, copie o texto para cá e troque o `?v=<versão>` de todos os arquivos `js/` e `css/` em `site/index.html` (o teste automático confere).
+Ao publicar uma mudança no código: suba o número em `site/js/versao.js` (`APP_VERSION`), acrescente uma entrada no topo de `APP_CHANGELOG`, copie o texto para cá e rode `npm run carimbar` na pasta `testes/` (põe a versão e o carimbo dos dados no `site/index.html`; o teste automático confere).
 
 Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
@@ -11,6 +11,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 - **CORREÇÃO** (2.0.0 → 2.0.1): conserto ou ajuste de texto.
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
+
+## 4.16.3
+
+Entregas mais seguras para o hub. Os arquivos de dados (estados, índice do Brasil, clientes, estratos) passam a ser chamados com um carimbo que muda sempre que os dados mudam (?d=…), como já acontecia com o código (?v=…): depois de uma atualização de quadrimestre, o navegador baixa os dados novos em vez de mostrar os guardados. Dois comandos novos na pasta testes: "npm run carimbar" (atualiza os carimbos do index.html sozinho — não precisa mais trocar o ?v= à mão) e "npm run pacote" (carimba, roda o teste, gera o .zip para a TI e escreve a nota da versão com o que mudou desde o último pacote). A publicação no GitHub também carimba sozinha, e o teste avisa se o carimbo estiver velho.
 
 ## 4.16.2
 

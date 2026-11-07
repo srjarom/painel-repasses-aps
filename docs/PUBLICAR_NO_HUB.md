@@ -47,16 +47,28 @@ Se no futuro o painel for para o hub da empresa, as instruções abaixo continua
 
 - Endereço do painel: (a definir pela TI)
 - Onde/como enviar os arquivos: um **.zip com o conteúdo da pasta `site/`** (o `index.html` na raiz do zip), entregue à TI de sistemas internos, que publica no Hub corporativo. A TI pretende converter a plataforma para .NET antes de publicar.
-- Versões enviadas: 2.4.0 (só RS, novembro de 2026) e depois **4.16.2** (Brasil todo), que substitui a anterior.
+- Versões enviadas: 2.4.0 (só RS, novembro de 2026) e depois **4.16.3** (Brasil todo), que substitui a anterior.
 - Observações: o site é estático e usa caminhos relativos; os arquivos são chamados com `?v=<versão>` no `index.html` para o navegador não misturar versões — se a conversão mexer nisso, manter um mecanismo parecido.
 
-### Como gerar o pacote .zip
+### Como gerar o pacote .zip (com a nota para a TI)
 
-No PowerShell, na pasta do projeto (o `tar` do Windows grava o zip no formato padrão, com `/` nos caminhos):
+No terminal (PowerShell), na pasta do projeto:
 
 ```
-cd site
-tar.exe -a -c -f ..pacotepainel-repasses-aps-v<versão>.zip *
+cd testes
+npm run pacote
 ```
 
-A pasta `pacote/` não vai para o GitHub (está no `.gitignore`).
+O comando faz tudo em ordem e para se algo der errado:
+
+1. Carimba o `site/index.html` (versão nos arquivos de código, carimbo nos dados).
+2. Roda o teste automático. Se falhar, o pacote **não** é gerado.
+3. Gera `pacote/painel-repasses-aps-v<versão>.zip`, com o conteúdo de `site/` e o `index.html` na raiz. Se só os dados mudaram, o nome leva a data dos dados (`…-v<versão>-dados-<data>.zip`).
+4. Escreve `pacote/NOTAS-<nome do zip>.txt`: o texto para mandar junto, com o que mudou desde o último pacote gerado, se é só dado ou também código, e o quadrimestre mais recente.
+
+Opções:
+
+- `npm run pacote -- --desde 4.16.2`: lista as mudanças desde uma versão específica (útil se um pacote gerado não chegou a ser enviado).
+- `npm run pacote -- --sem-teste`: pula o teste (não recomendado).
+
+O último pacote gerado fica anotado em `pacote/ultimo-envio.json`. A pasta `pacote/` não vai para o GitHub (está no `.gitignore`).

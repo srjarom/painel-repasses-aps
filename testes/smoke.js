@@ -14,16 +14,18 @@ const falhas=[];
 const ok=(cond,msg)=>{console.log((cond?'  ✓ ':'  ✗ ')+msg);if(!cond)falhas.push(msg);};
 
 (async()=>{
-  // os arquivos do painel são chamados com ?v=<versão> (o GitHub Pages guarda cada arquivo 10 min no
-  // navegador; sem isso, a página nova roda com CSS/JS antigos). Confere que todos batem com APP_VERSION.
+  // os arquivos do painel são chamados com carimbo no endereço (?v=<versão> no código, ?d=<carimbo> nos
+  // dados) para o navegador não misturar arquivos novos e guardados. Confere que o index.html está em dia.
   {
     const fs=require('fs');
-    const html=fs.readFileSync(path.resolve(__dirname,'..','site','index.html'),'utf8');
-    const ver=(fs.readFileSync(path.resolve(__dirname,'..','site','js','versao.js'),'utf8').match(/APP_VERSION='([^']+)'/)||[])[1];
-    const refs=[...html.matchAll(/(?:src|href)="((?:js|css)\/[^"]+)"/g)].map(m=>m[1]);
-    const erradas=refs.filter(r=>!r.endsWith('?v='+ver));
-    console.log('Versão nos arquivos');
-    ok(refs.length>0&&!erradas.length,erradas.length?`${erradas.length} arquivo(s) sem ?v=${ver}: ${erradas.slice(0,3).join(', ')}`:`${refs.length} arquivos com ?v=${ver}`);
+    const C=require('../manutencao/ferramentas/carimbar.js');
+    const html=fs.readFileSync(C.INDEX,'utf8');
+    const ver=C.versaoDoPainel(),dados=C.carimboDosDados();
+    console.log('Carimbos no index.html');
+    const refs=[...html.matchAll(/(?:src|href)="(?:js|css)\/[^"]+"/g)].length;
+    ok(refs>0&&C.carimbarTexto(html,ver,dados)===html,
+      C.carimbarTexto(html,ver,dados)===html?`${refs} arquivos com ?v=${ver} e dados com ?d=${dados}`
+        :'carimbo desatualizado — rode "npm run carimbar" (na pasta testes) e teste de novo');
   }
   const browser=await chromium.launch();
   const ctx=await browser.newContext({viewport:{width:1280,height:900},acceptDownloads:true});

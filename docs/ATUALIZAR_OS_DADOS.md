@@ -85,11 +85,22 @@ Dê dois cliques em `site/index.html`. Escolha no seletor de estado os estados q
 - o mapa aparece colorido;
 - ao abrir um município que você conhece, os valores fazem sentido.
 
-## Passo 9: envie para o GitHub
+## Passo 9: carimbe os dados
+
+Para o navegador de quem usa o painel baixar os dados novos (e não mostrar os que ele guardou), o `site/index.html` leva um "carimbo" que muda quando os dados mudam. No terminal (PowerShell), na pasta do projeto:
+
+```
+cd testes
+npm run carimbar
+```
+
+Deve aparecer `Carimbado: versão … · dados …`. Se você for gerar o pacote para o hub (`npm run pacote`, veja [PUBLICAR_NO_HUB.md](PUBLICAR_NO_HUB.md)), pode pular este passo: o pacote carimba sozinho. A publicação no GitHub também carimba sozinha, mas carimbar aqui deixa o `index.html` do projeto em dia.
+
+## Passo 10: envie para o GitHub
 
 No **GitHub Desktop**:
 
-1. À esquerda, aparecem os arquivos alterados (por exemplo, `site/dados/uf/RS.js`, `site/dados/indice.js` e, talvez, `clientes.js`).
+1. À esquerda, aparecem os arquivos alterados (por exemplo, `site/dados/uf/RS.js`, `site/dados/indice.js`, `site/index.html` e, talvez, `clientes.js`).
 2. Embaixo, em **Summary**, escreva algo como `Dados 2026Q3 — todos os estados` ou `Lista de clientes atualizada`.
 3. Clique em **Commit to main** e depois em **Push origin**.
 

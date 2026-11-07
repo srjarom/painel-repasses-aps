@@ -5,11 +5,12 @@
    Histórico de mudanças desta ferramenta. Ao publicar uma alteração, adicione
    uma nova entrada no topo do array (mais recente primeiro) e atualize
    APP_VERSION (e docs/HISTORICO_DE_VERSOES.md). Fica visível só na tela (rodapé), não entra no PDF do cliente.
-   IMPORTANTE (v4.16.0): troque também o ?v=<versão> de todos os arquivos js/ e css/ no site/index.html
-   (o teste automático confere). Sem isso, o navegador pode misturar a página nova com arquivos antigos.
+   Depois, rode "npm run carimbar" na pasta testes/: ele põe a versão (?v=) e o carimbo dos dados (?d=)
+   no site/index.html, para o navegador não misturar a página nova com arquivos antigos (o teste confere).
    ========================================================================= */
-const APP_VERSION='4.16.2';
+const APP_VERSION='4.16.3';
 const APP_CHANGELOG=[
+  {v:'4.16.3',desc:'Entregas mais seguras para o hub. Os arquivos de dados (estados, índice do Brasil, clientes, estratos) passam a ser chamados com um carimbo que muda sempre que os dados mudam (?d=…), como já acontecia com o código (?v=…): depois de uma atualização de quadrimestre, o navegador baixa os dados novos em vez de mostrar os guardados. Dois comandos novos na pasta testes: "npm run carimbar" (atualiza os carimbos do index.html sozinho — não precisa mais trocar o ?v= à mão) e "npm run pacote" (carimba, roda o teste, gera o .zip para a TI e escreve a nota da versão com o que mudou desde o último pacote). A publicação no GitHub também carimba sozinha, e o teste avisa se o carimbo estiver velho.'},
   {v:'4.16.2',desc:'Página "Sobre o painel", checklist geral do consultor técnico: o item sobre a avaliação por equipe foi reescrito com mais clareza (o Ministério avalia cada equipe separadamente; o problema costuma estar concentrado em algumas equipes, que se identificam no sistema comparando a produção e a configuração equipe por equipe).'},
   {v:'4.16.1',desc:'Página "Sobre o painel": removida a pergunta sobre o registro das visitas dos ACS da lista de perguntas que abrem a conversa.'},
   {v:'4.16.0',desc:'Correções na página "Sobre o painel" e fim da mistura de versões. Os atalhos e os cartões "Para quem é" voltavam para a tela inicial: viraram botões que só rolam a página, e a navegação do painel passou a ignorar mudanças só de âncora. O navegador guardava arquivos antigos por até 10 minutos e misturava com a página nova (isso também explicava o quadro "confira" vazio, a numeração repetida e o checklist que não aparecia no Raio-X): agora todos os arquivos do painel vão com a versão no endereço (?v=4.16.0) e o teste confere. Textos revistos: a frase principal inclui a investigação de chamados e as ações de retenção; saíram as regionais; investigação pode ser remota; "visita ou contato"; equipes a menos podem ser configuração (profissionais sem vínculo com a equipe no sistema, equipe sem produção, substituída ou transformada em outra), também no alerta da tela do estado e do município; perguntas mais profissionais e quatro perguntas novas para abrir a conversa; no checklist geral, cadastro da unidade, da equipe e vínculo/CBO no CNES.'},
