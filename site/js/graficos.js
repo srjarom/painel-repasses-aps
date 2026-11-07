@@ -107,11 +107,11 @@ function chartRepasse(res){
   });
 })();
 function fmtPerda(v){
-  return v>0?`<span style="color:var(--regular);font-weight:600;">− ${fmtBRL(v)}</span>`:'—';
+  return v>0?`<span class="perda-v">−&nbsp;${fmtBRL(v)}</span>`:'—';
 }
 function tblRepasse(res){
   const t=document.getElementById('tbl-repasse');
-  let h='<thead><tr><th>Quadrim.</th><th>Fixo/IED</th><th>CVAT</th><th>Qualidade</th><th>Total</th><th>Perda/mês¹</th></tr></thead><tbody>';
+  let h='<thead><tr><th>Quadrim.</th><th>Fixo/IED</th><th>CVAT</th><th>Qualidade</th><th>Total</th><th title="Diferença para o potencial (tudo Ótimo) naquele quadrimestre">Perda/mês¹</th></tr></thead><tbody>';
   res.forEach((r,i)=>{const c=i===res.length-1?' class="hl"':'';h+=`<tr${c}><td>${r.quad}</td><td>${fmtBRL(r.fixo)}</td><td>${fmtBRL(r.vin)}</td><td>${fmtBRL(r.qual)}</td><td>${fmtBRL(r.total)}</td><td>${fmtPerda(r.gap)}</td></tr>`;});
   const l=res[res.length-1];
   h+=`<tr class="total"><td>Potencial máximo</td><td>${fmtBRL(l.fixo)}</td><td>${fmtBRL(l.vinOt)}</td><td>${fmtBRL(l.qualOt)}</td><td>${fmtBRL(l.potencial)}</td><td>—</td></tr></tbody>`;
@@ -146,15 +146,17 @@ function tblEquipesFixo(res){
   });
   t.innerHTML=h+'</tbody>';
 }
+// classificação por quadrimestre: uma barra 100% por quadrimestre (lê melhor que o gráfico de colunas)
 function chartClass(res){
-  if(charts.c)charts.c.destroy();
-  const tc=chartThemeColors();
-  const agg=res.map(r=>{const t={};TIPOS_EQUIPE.map(t=>t.k).forEach(k=>Object.entries(r.cd[k]).forEach(([c,n])=>t[c]=(t[c]||0)+n));return t;});
-  charts.c=new Chart(document.getElementById('chart-class'),{type:'bar',
-    data:{labels:res.map(r=>r.quad),datasets:CO.map(c=>({label:c,data:agg.map(a=>a[c]||0),backgroundColor:CC[c],stack:'s',borderRadius:3}))},
-    options:{responsive:true,scales:{
-        x:{stacked:true,grid:{display:false},ticks:{color:tc.text,maxRotation:0,minRotation:0,callback:(v,i)=>abbrevQuad(res[i].quad)}},
-        y:{stacked:true,ticks:{color:tc.text,maxTicksLimit:6,precision:0},grid:{color:tc.grid},title:{display:true,text:'equipes',color:tc.text}}
-      },
-      plugins:{legend:{display:false},tooltip:{mode:'index'}}}});
+  if(charts.c){charts.c.destroy();charts.c=null;}
+  const el=document.getElementById('cls-list');if(!el)return;
+  const agg=res.map(r=>{const t={};TIPOS_EQUIPE.map(t=>t.k).forEach(k=>Object.entries(r.cd[k]||{}).forEach(([c,n])=>t[c]=(t[c]||0)+n));return t;});
+  el.innerHTML=res.map((r,i)=>{
+    const a=agg[i],tot=CO.reduce((s,c)=>s+(a[c]||0),0);
+    if(!tot)return`<div class="cls-row"><span class="cls-q">${abbrevQuad(r.quad)}</span><span class="cls-bar vazia">sem classificação</span><span class="cls-pct">—</span></div>`;
+    const boa=((a['Ótimo']||0)+(a['Bom']||0))/tot*100;
+    const segs=CO.map(c=>{const n=a[c]||0;if(!n)return'';const w=n/tot*100;
+      return`<span style="width:${w.toFixed(1)}%;background:${CC[c]}" class="${c==='Suficiente'?'esc':''}" title="${c}: ${n}">${w>=8?n:''}</span>`;}).join('');
+    return`<div class="cls-row${i===res.length-1?' is-last':''}"><span class="cls-q">${abbrevQuad(r.quad)}</span><span class="cls-bar">${segs}</span><span class="cls-pct" title="${Math.round(boa)}% em Ótimo ou Bom">${Math.round(boa)}%</span></div>`;
+  }).join('');
 }

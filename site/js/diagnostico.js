@@ -148,7 +148,7 @@ function renderDiagHist(historico){
     const isLast=i===historico.length-1;
     return `<div class="dh-row${isLast?' is-last':''}"><span class="dh-q">${abbrevQuad(s.quad)}</span><span class="dh-bar">${bar}</span><span class="dh-pct">${Math.round(s.boaPct*100)}%</span></div>`;
   }).join('');
-  return `<div class="diag-hist"><div class="diag-hist-label">Ótimo/Bom por quadrimestre</div>${rows}</div>`;
+  return `<div class="diag-hist"><div class="diag-hist-label">Classificação por quadrimestre · % em Ótimo/Bom</div>${rows}</div>`;
 }
 function renderDiagnostico(allFinds){
   const wrap=document.getElementById('diag-wrap'),grid=document.getElementById('diag-grid'),more=document.getElementById('diag-more');
@@ -162,20 +162,39 @@ function renderDiagnostico(allFinds){
   wrap.style.display='block';
   if(emptyHint)emptyHint.style.display='none';
   if(flag){flag.textContent=` (${allFinds.length})`;flag.classList.add('warn');}
-  const MAXCARDS=6;
-  const finds=allFinds.slice(0,MAXCARDS);
-  window.__diagFinds=finds;
-  grid.innerHTML=finds.map((f,i)=>{
-    const dm=DIAG_META[f.kind];
-    return `<div class="diag-card diag-${f.kind}">
-      <div class="diag-top"><span class="diag-badge">${dm.icon} ${dm.label}</span>${f.impacto?`<span class="diag-impacto">${fmtBRL(f.impacto)}/mês</span>`:''}</div>
-      <div class="diag-title">${f.title}</div>
-      <div class="diag-detail">${f.detail}</div>
-      ${renderDiagHist(f.historico)}
-      <button class="diag-copy" type="button" data-i="${i}" onclick="copyDiag(${i})">📋 Copiar sugestão de agenda</button>
-    </div>`;
+  window.__diagFinds=allFinds;
+  // resumo no topo: quantos pontos de cada tipo
+  const cont={};allFinds.forEach(f=>cont[f.kind]=(cont[f.kind]||0)+1);
+  const resumo=Object.keys(DIAG_META).filter(k=>cont[k]).map(k=>
+    `<span class="dg-chip dg-${k}">${DIAG_META[k].icon} <b>${cont[k]}</b> ${DIAG_META[k].label.toLowerCase()}</span>`).join('');
+  // um bloco por tipo de equipe (na ordem do ponto mais grave), com o histórico uma vez só
+  const grupos=[],idx={};
+  allFinds.forEach((f,i)=>{
+    if(!(f.k in idx)){idx[f.k]=grupos.length;grupos.push({k:f.k,hist:f.historico,itens:[]});}
+    grupos[idx[f.k]].itens.push({f,i});
+  });
+  const semTipo=(t,l)=>{const s=t.startsWith(l+' — ')?t.slice(l.length+3):t;return s.charAt(0).toUpperCase()+s.slice(1);};
+  grid.innerHTML=`<div class="dg-sum">${resumo}</div>`+grupos.map(g=>{
+    const meta=TYPE_META[g.k];
+    return `<section class="dg-group">
+      <header class="dg-gh">
+        <div class="dg-gid"><b>${meta.label}</b><span>${meta.full}</span><small>${g.itens.length} ponto${g.itens.length>1?'s':''} de atenção</small></div>
+        ${renderDiagHist(g.hist)}
+      </header>
+      <ul class="dg-items">${g.itens.map(({f,i})=>{const dm=DIAG_META[f.kind];
+        return `<li class="dg-item dg-${f.kind}">
+          <div class="dg-main">
+            <div class="dg-top"><span class="dg-badge">${dm.icon} ${dm.label}</span><span class="dg-title">${semTipo(f.title,meta.label)}</span></div>
+            <p class="dg-detail">${f.detail}</p>
+          </div>
+          <div class="dg-side">
+            ${f.impacto?`<span class="diag-impacto" title="Valor envolvido por mês">${fmtBRL(f.impacto)}/mês</span>`:''}
+            <button class="diag-copy" type="button" data-i="${i}" onclick="copyDiag(${i})" title="Copia um texto pronto para propor a agenda ao município">📋 Copiar agenda</button>
+          </div>
+        </li>`;}).join('')}</ul>
+    </section>`;
   }).join('');
-  more.textContent=allFinds.length>MAXCARDS?`+ ${allFinds.length-MAXCARDS} outro(s) ponto(s) identificado(s) — refine os filtros de modalidade para reduzir o escopo.`:'';
+  more.textContent='';
 }
 function copyDiag(i){
   const f=(window.__diagFinds||[])[i];

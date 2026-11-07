@@ -1494,3 +1494,110 @@ button.kpi:hover,.tcard:hover{box-shadow:var(--sh-2);}
   .br-grid.br3,.br-grid.br3 .br-side{grid-template-columns:minmax(0,1fr);}
 }
 @media(max-width:600px){.stage-compact{padding-left:16px;padding-right:16px;}}
+
+/* =========================================================================
+   v4.10.0 — ABAS DO MUNICÍPIO (Raio-X, Diagnóstico, Detalhamento)
+   ========================================================================= */
+/* Raio-X: tipos de equipe e quadrimestre numa linha; resumo com legenda; linhas alinhadas */
+.rx-bar{display:flex;align-items:center;justify-content:space-between;gap:10px 16px;flex-wrap:wrap;margin-bottom:12px;}
+.rx-bar .ind-tabs{margin:0;}
+.rx-bar .raiox-quad-badge{margin:0;padding:4px 12px 4px 10px;font-size:12px;}
+.ind-tabs .tb{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;}
+.ind-tabs .tb-n{font-size:10.5px;font-weight:700;line-height:1;min-width:17px;text-align:center;padding:3px 5px;border-radius:99px;background:var(--chip-red-bg);color:var(--chip-red-fg);}
+.ind-tabs .tb.active .tb-n{background:#ff9b90;color:#09274C;}
+.rx-sum{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--muted);padding:10px 12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;margin-bottom:4px;}
+.rx-sum b{color:var(--ink);font-family:var(--font-titulo);font-size:14px;}
+.rx-sum small{font-size:11px;}
+.rx-s.crit b{color:var(--chip-red-fg);}
+.rx-s.ok b{color:var(--darkgreen,#2e7d32);}
+:root[data-theme="dark"] .rx-s.ok b{color:#b6e07a;}
+.rx-leg{margin-left:auto;display:flex;align-items:center;gap:4px 10px;flex-wrap:wrap;font-size:11.5px;}
+.rx-leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px;}
+.ind-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,240px) 52px 100px;gap:16px;align-items:center;padding:11px 4px;}
+.ind-row .ind-name{min-width:0;}
+.ind-barw{min-width:0;}
+.ind-row .ind-bar{height:10px;border-radius:99px;gap:2px;}
+.ind-row .ind-bar span{border-radius:2px;}
+.ind-n{font-size:10.5px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ind-row .ind-score{font-size:16px;}
+.ind-score.crit{color:var(--trend-dn);}
+.ind-score.ok{color:var(--darkgreen,#2e7d32);}
+:root[data-theme="dark"] .ind-score.ok{color:#b6e07a;}
+.ind-tagw{display:flex;justify-content:flex-start;}
+.ind-row.crit{background:linear-gradient(90deg,rgba(208,72,60,.06),transparent 60%);border-radius:8px;}
+#raiox-foot{font-size:11.5px;color:var(--muted);line-height:1.5;}
+@media(max-width:760px){
+  .ind-row{grid-template-columns:minmax(0,1fr) 52px;gap:6px 12px;}
+  .ind-barw{grid-column:1/-1;grid-row:2;}
+  .ind-tagw{grid-column:1/-1;}
+  .ind-tagw:empty{display:none;}
+  .rx-leg{margin-left:0;}
+}
+
+/* Diagnóstico: um bloco por tipo de equipe */
+.diag-head{margin:2px 0 10px;}
+.diag-grid{display:flex;flex-direction:column;gap:14px;}
+.dg-sum{display:flex;flex-wrap:wrap;gap:6px;}
+.dg-chip{font-size:12px;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--muted);border-radius:8px;padding:4px 10px;}
+.dg-chip b{font-family:var(--font-titulo);}
+.dg-chip.dg-estagnacao{border-left-color:var(--suficiente);}
+.dg-chip.dg-gap{border-left-color:var(--otimo);}
+.dg-chip.dg-queda,.dg-chip.dg-anomalia{border-left-color:var(--regular);}
+.dg-chip.dg-cvat{border-left-color:var(--teal);}
+.dg-group{background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg,14px);box-shadow:var(--sh-1);overflow:hidden;}
+.dg-gh{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);gap:18px;align-items:center;padding:14px 18px;background:var(--panel-2);border-bottom:1px solid var(--line);}
+.dg-gid{display:flex;flex-direction:column;gap:1px;min-width:0;}
+.dg-gid b{font-family:var(--font-titulo);font-size:18px;color:var(--navy);}
+.dg-gid span{font-size:12.5px;color:var(--muted);}
+.dg-gid small{font-size:11.5px;color:var(--ink);font-weight:600;margin-top:4px;}
+.dg-gh .diag-hist{margin:0;padding:0;border:0;}
+.dg-gh .dh-row{margin-bottom:3px;}
+.dg-items{list-style:none;margin:0;padding:0;}
+.dg-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:13px 18px;border-left:4px solid var(--muted);}
+.dg-item+.dg-item{border-top:1px solid var(--line);}
+.dg-item.dg-estagnacao{border-left-color:var(--suficiente);}
+.dg-item.dg-gap{border-left-color:var(--otimo);}
+.dg-item.dg-queda,.dg-item.dg-anomalia{border-left-color:var(--regular);}
+.dg-item.dg-cvat{border-left-color:var(--teal);}
+.dg-top{display:flex;align-items:baseline;gap:4px 10px;flex-wrap:wrap;}
+.dg-badge{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);white-space:nowrap;}
+.dg-title{font-family:var(--font-titulo);font-weight:700;color:var(--navy);font-size:14.5px;}
+.dg-detail{margin:4px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5;}
+.dg-side{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.dg-side .diag-copy{margin:0;padding:6px 11px;font-size:12px;white-space:nowrap;}
+:root[data-theme="dark"] .diag-impacto{background:rgba(46,111,224,.18);color:#9cc0ff;}
+@media(max-width:760px){
+  .dg-gh{grid-template-columns:1fr;}
+  .dg-item{grid-template-columns:1fr;}
+  .dg-side{flex-direction:row;align-items:center;justify-content:space-between;}
+}
+
+/* Detalhamento: tabelas mais leves, sem quebra de valores; classificação em barras */
+#sec-detalhe .grid2{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;}
+#sec-detalhe .card{margin-bottom:16px;}
+#sec-detalhe table.grid{font-size:13px;}
+#sec-detalhe table.grid th,#sec-detalhe table.grid td{padding:8px 12px;white-space:nowrap;font-variant-numeric:tabular-nums;}
+#sec-detalhe table.grid thead th{background:var(--panel-2);color:var(--muted);font-family:var(--font-texto);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line);}
+#sec-detalhe table.grid tr.total td{background:var(--chip-navy-tint-bg,#eaf1fc);color:var(--navy);border-top:2px solid var(--line-2);}
+#sec-detalhe table.grid tr.total td:first-child{color:var(--navy);}
+:root[data-theme="dark"] #sec-detalhe table.grid tr.total td{background:rgba(111,191,209,.10);color:#e8f2fb;}
+#sec-detalhe .eqf-table td{vertical-align:top;}
+.perda-v{color:var(--regular);font-weight:600;}
+.tbl-repasse-note{margin:8px 18px 14px !important;}
+.cls-legend{margin-bottom:12px;}
+.cls-list{display:flex;flex-direction:column;gap:9px;}
+.cls-row{display:grid;grid-template-columns:44px minmax(0,1fr) 40px;gap:10px;align-items:center;}
+.cls-q{font-size:11.5px;color:var(--muted);}
+.cls-bar{display:flex;height:22px;border-radius:6px;overflow:hidden;gap:2px;background:var(--line);}
+.cls-bar.vazia{background:none;font-size:11px;color:var(--muted);align-items:center;}
+.cls-bar span{display:flex;align-items:center;justify-content:center;height:100%;font-size:11px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums;}
+.cls-bar span.esc{color:#3a2a00;}
+.cls-pct{font-size:12px;font-weight:700;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums;}
+.cls-row.is-last .cls-q,.cls-row.is-last .cls-pct{color:var(--navy);font-weight:700;}
+.cls-note{font-size:11px;color:var(--muted);margin:12px 0 0;}
+@media(max-width:1100px){#sec-detalhe .grid2{grid-template-columns:1fr;}}
+#sec-detalhe .grid2{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);}
+#sec-detalhe .grid2>.card:first-child>.card-b{padding-left:10px;padding-right:10px;}
+#sec-detalhe table.grid th,#sec-detalhe table.grid td{padding:8px 9px;}
+#sec-detalhe #tbl-repasse td:first-child{white-space:normal;min-width:62px;}
+#sec-detalhe #tbl-repasse{font-size:12.5px;}

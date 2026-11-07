@@ -139,8 +139,9 @@ function renderRaioX(){
   if(badgeVal)badgeVal.textContent=usedQuad?quadLabel(usedQuad):'quadrimestre não identificado';
 
   const tabsEl=document.getElementById('ind-tabs');
-  if(tabsEl)tabsEl.innerHTML=tiposPresentes.map(t=>
-    `<div class="tb${t===raioxActiveTipo?' active':''}" onclick="raioxSetTipo('${t}')" title="${TIPO_NOME_IND[t]||t}">${TYPE_META_IND[t]||t}</div>`).join('');
+  if(tabsEl)tabsEl.innerHTML=tiposPresentes.map(t=>{
+    const crit=diag[t].filter(it=>it.score<0.5).length;
+    return `<div class="tb${t===raioxActiveTipo?' active':''}" role="tab" tabindex="0" aria-selected="${t===raioxActiveTipo}" onclick="raioxSetTipo('${t}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();raioxSetTipo('${t}');}" title="${TIPO_NOME_IND[t]||t}${crit?` — ${crit} indicador${crit>1?'es':''} em prioridade`:''}">${TYPE_META_IND[t]||t}${crit?`<span class="tb-n">${crit}</span>`:''}</div>`;}).join('');
 
   renderIndList(raioxActiveTipo?(diag[raioxActiveTipo]||[]):[]);
 
@@ -160,20 +161,29 @@ function renderIndList(list){
   if(!wrap)return;
   if(!list.length){wrap.innerHTML='<div class="ind-empty-hint">Sem indicadores para este tipo de equipe no quadrimestre de referência.</div>';return;}
   const CHAVE={'Ótimo':'otimo',Bom:'bom',Suficiente:'suficiente',Regular:'regular'};
-  wrap.innerHTML='<div class="ind-list">'+list.map(it=>{
+  const nCrit=list.filter(it=>it.score<0.5).length,nOk=list.filter(it=>it.score>=0.9).length;
+  const resumo=`<div class="rx-sum">
+    <span><b>${list.length}</b> indicador${list.length>1?'es':''}</span>
+    <span class="rx-s crit"><b>${nCrit}</b> em prioridade <small>(nota abaixo de 50%)</small></span>
+    <span class="rx-s ok"><b>${nOk}</b> consolidado${nOk===1?'':'s'} <small>(90% ou mais)</small></span>
+    <span class="rx-leg">${CO.map(c=>`<i style="background:${CC[c]}"></i>${c}`).join('')}</span>
+  </div>`;
+  wrap.innerHTML=resumo+'<div class="ind-list">'+list.map(it=>{
     const pct=Math.round(it.score*100);
     const segs=CO.map(c=>{
       const n=it[CHAVE[c]]||0;if(!n)return'';
       const w=(n/it.total*100).toFixed(1);
       return `<span style="width:${w}%;background:${CC[c]}" title="${c}: ${n} equipe(s)"></span>`;
     }).join('');
-    const tagHtml=pct<50?'<div class="ind-tag crit">Prioridade</div>':(pct>=90?'<div class="ind-tag ok">Consolidado</div>':'');
+    const nivel=pct<50?'crit':pct>=90?'ok':'mid';
+    const tagHtml=pct<50?'<span class="ind-tag crit">Prioridade</span>':(pct>=90?'<span class="ind-tag ok">Consolidado</span>':'');
     const acao=ACAO_INDICADOR[it.indicador];
-    return `<div class="ind-row">
+    const det=CO.filter(c=>it[CHAVE[c]]).map(c=>`${it[CHAVE[c]]} ${c}`).join(' · ');
+    return `<div class="ind-row ${nivel}">
       <div class="ind-name">${it.indicador}${acao?`<div class="ind-acao">${acao}</div>`:''}</div>
-      <div class="ind-bar">${segs}</div>
-      <div class="ind-score">${pct}%</div>
-      ${tagHtml}
+      <div class="ind-barw"><div class="ind-bar">${segs}</div><div class="ind-n" title="${det}">${it.total} equipe${it.total>1?'s':''} · ${det}</div></div>
+      <div class="ind-score ${nivel}">${pct}%</div>
+      <div class="ind-tagw">${tagHtml}</div>
     </div>`;
   }).join('')+'</div>';
 }

@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.10.0
+
+Abas do município redesenhadas. Raio-X: os tipos de equipe e o quadrimestre ficam numa linha só, cada tipo mostra quantos indicadores estão em prioridade, e um resumo no topo traz a contagem (prioridade / consolidados) e a legenda de cores; cada indicador mostra a barra mais larga com as quantidades por faixa embaixo e a nota colorida (vermelho abaixo de 50%, verde a partir de 90%). Diagnóstico: os pontos agora ficam agrupados por tipo de equipe, com o histórico de classificação uma vez só no topo do bloco (antes se repetia em cada cartão), e aparecem todos (antes só 6); no topo, a contagem por tipo de ponto; o botão virou "Copiar agenda". Detalhamento: tabelas com cabeçalho claro e valores sem quebra de linha, e a classificação das equipes em barras horizontais com as quantidades dentro e a % em Ótimo/Bom ao lado, no lugar do gráfico pequeno.
+
 ## 4.9.0
 
 Tela inicial do Brasil em três colunas, com o mapa quase duas vezes maior. À esquerda, o resumo: o cartão azul (mesmo estilo da tela do município) com o repasse mensal do país, a variação contra o quadrimestre anterior, o potencial, a margem em aberto e a barra de quanto já foi alcançado; abaixo, uma barra mostrando quantos municípios subiram, ficaram iguais ou caíram, e o quadro de equipes a menos com o impacto estimado e os estados onde mais aparece (clicáveis). No meio, o mapa ocupa toda a altura, com a legenda e a dica na mesma linha. À direita, a lista dos estados, mais compacta. Em telas médias o resumo vira uma faixa em cima; no celular, tudo em uma coluna, com margem lateral de 16px.

@@ -99,11 +99,13 @@
             <div class="ind-empty-hint">Este município não tem dados por indicador no relatório publicado (relatório "Qualidade – Conceito obtido por indicador" do SIAPS).</div>
           </div>
           <div id="raiox-content" style="display:none;">
-            <div class="raiox-quad-badge" id="raiox-quad-badge">
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M3 10h18"/></svg>
-              <span>Indicadores de <b id="raiox-quad-badge-val">—</b></span>
+            <div class="rx-bar">
+              <div class="ind-tabs" id="ind-tabs" role="tablist" aria-label="Tipo de equipe"></div>
+              <div class="raiox-quad-badge" id="raiox-quad-badge">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path stroke-linecap="round" d="M8 3v4M16 3v4M3 10h18"/></svg>
+                <span>Indicadores de <b id="raiox-quad-badge-val">—</b></span>
+              </div>
             </div>
-            <div class="ind-tabs" id="ind-tabs"></div>
             <div id="ind-list-wrap"></div>
           </div>
         </div>
@@ -132,15 +134,16 @@
           <div class="card-b" style="overflow-x:auto;"><table class="grid" id="tbl-repasse"></table></div>
         </div>
         <div class="card">
-          <div class="card-h"><h3>Classificação das equipes</h3><p>Distribuição por faixa, padrão SIAPS.</p></div>
+          <div class="card-h"><h3>Classificação das equipes</h3><p>Quantas classificações caíram em cada faixa, por quadrimestre (padrão SIAPS).</p></div>
           <div class="card-b">
-            <div class="legend">
+            <div class="legend cls-legend">
               <span class="chip"><i style="background:var(--otimo)"></i>Ótimo</span>
               <span class="chip"><i style="background:var(--bom)"></i>Bom</span>
               <span class="chip"><i style="background:var(--suficiente)"></i>Suficiente</span>
               <span class="chip"><i style="background:var(--regular)"></i>Regular</span>
             </div>
-            <canvas id="chart-class" height="150"></canvas>
+            <div class="cls-list" id="cls-list"></div>
+            <p class="cls-note">Número dentro da barra = quantidade; % à direita = parte em Ótimo ou Bom.</p>
           </div>
         </div>
       </div>
