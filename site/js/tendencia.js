@@ -125,7 +125,7 @@ function renderMapDetail(){
   const sec=el.closest('.side-sec');
   if(!r){
     // v4.4.3: sem município selecionado, só uma dica de uma linha (a busca fica no topo da página)
-    el.innerHTML=`<div class="rd-hint">Clique num município no mapa para ver os números dele e abrir o relatório.</div>`;
+    el.innerHTML=`<div class="rd-hint">Clique num município no mapa para abrir o relatório.</div>`;
     if(sec)sec.classList.remove('com-muni');
     return;
   }

@@ -28,6 +28,14 @@ Cada avaliação de quadrimestre define o repasse **dos meses seguintes**. O pai
 
 Na tela do município, o usuário pode mudar esses parâmetros para **simular**. Nada é salvo. Os oficiais são os publicados pela manutenção.
 
+**A modalidade não é pública.** O relatório do SIAPS traz quantas equipes de cada tipo ficaram em cada classificação, mas não a modalidade de cada uma. Hoje todos os municípios usam as modalidades padrão da tabela acima. Por isso, desde a versão 4.14.0, o painel mostra uma **faixa**:
+
+- **Mínimo:** eAP 20h, eSB I comum, eMulti Estratégica, eCR I, eAPP Essencial 20h.
+- **Máximo:** eAP 30h, eSB II comum, eMulti Ampliada, eCR III, eAPP Ampliada 30h. A eSB quilombola/assentamento fica de fora do máximo (só existe em territórios específicos); se o município estiver configurado assim, a faixa vai até o valor configurado.
+- Só a modalidade muda; quantidade e classificação das equipes e o estrato ficam iguais. Como o cálculo é uma soma por equipe, qualquer mistura de modalidades no município cai dentro da faixa.
+- Onde aparece: cartão azul do município (faixa do quadrimestre mais recente), cartão azul do estado (soma das faixas dos municípios), aviso no Brasil, e quadro "Valores estimados" no Relatório do quadrimestre e no Resumo para o secretário (com as modalidades consideradas).
+- Função: `faixaModalidade()` em `site/js/calculo.js`.
+
 ## 3. Cálculo do repasse mensal (por quadrimestre)
 
 **Repasse = Fixo/IED + Vínculo (CVAT) + Qualidade**

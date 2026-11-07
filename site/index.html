@@ -21,7 +21,8 @@
     </div>
     <div class="navtabs" id="navtabs">
       <div class="tab" id="nav-tab-carteira">Painel</div>
-      <div class="tab" id="nav-tab-guia">Como funciona o repasse</div>
+      <div class="tab" id="nav-tab-guia">Como funciona<span class="t-long"> o repasse</span></div>
+      <div class="tab" id="nav-tab-sobre">Sobre<span class="t-long"> o painel</span></div>
     </div>
     <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Alternar modo claro/escuro" title="Alternar modo claro/escuro">
       <svg class="ic-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -196,7 +197,7 @@
         <div class="hint">Aparece no cabeçalho do PDF como "Para: …"</div>
       </div>
     </div>
-    <div class="sim-note">Estrato e modalidades vêm dos dados publicados. Se mudar algo acima, vale só como simulação nesta tela — os dados oficiais não mudam.</div>
+    <div class="sim-note sim-mod"><b>Modalidades não são públicas.</b> O estrato vem da Portaria (Anexo VI), mas a modalidade das equipes não aparece no relatório do SIAPS: o painel assume eAP 30h, eSB II comum, eMulti Complementar, eCR I e eAPP Essencial 20h. Se o município informar as modalidades reais, ajuste acima — a estimativa e os PDFs gerados agora passam a usar esses valores (não fica salvo).</div>
       </details>
     </aside>
   </div>
@@ -391,6 +392,105 @@
         <p class="guide-tbl-note">São exatamente os valores que este portal usa para calcular o repasse — a mesma fonte, a Portaria GM/MS nº 3.493/2024 (art. 9º-B, Anexo XCIX-A e Anexo XCIX-B), com a tabela de Qualidade na redação da Portaria GM/MS nº 7.799/2025, que incluiu eSFR, eCR e eAPP. Como o relatório do SIAPS não informa a modalidade de eCR e eAPP, o painel usa eCR I e eAPP Essencial 20h (os menores valores) até que a modalidade correta seja ajustada.</p>
       </div>
     </details>
+  </div>
+</section>
+</div>
+
+<!-- ======================= SOBRE O PAINEL (v4.14.0) ======================= -->
+<div id="view-sobre" style="display:none;">
+<section class="guide sobre" id="sobre">
+  <div class="guide-in">
+    <button type="button" class="sobre-voltar" id="sobre-voltar" style="display:none;">← Voltar para onde eu estava</button>
+    <div class="tut-head">
+      <span class="tut-kicker">Sobre o painel</span>
+      <h2>Para que serve este painel</h2>
+      <p>Chegar a uma conversa com o prefeito ou o secretário de saúde sabendo como está o município — com números públicos, organizados em poucos minutos.</p>
+    </div>
+    <nav class="g-nav" aria-label="Seções desta página">
+      <a href="#sobre-porque">Por que existe</a><a href="#sobre-descobrir">O que dá para descobrir</a><a href="#sobre-visita">Como preparar uma visita</a><a href="#sobre-limites">O que o painel não sabe</a><a href="#sobre-fontes">De onde vêm os dados</a>
+    </nav>
+
+    <h3 class="g-sec" id="sobre-porque">Por que ele existe</h3>
+    <div class="sb-tres">
+      <div class="sb-card"><b>Os dados existem, mas estão espalhados</b><p>O Ministério da Saúde publica no SIAPS como as equipes de cada município foram avaliadas — em planilhas grandes, um quadrimestre por vez, difíceis de ler.</p></div>
+      <div class="sb-card"><b>A conversa costuma começar sem base</b><p>Antes de uma visita, é raro saber quanto o município recebe, se o repasse está subindo ou caindo, ou onde estão os problemas das equipes.</p></div>
+      <div class="sb-card"><b>O painel junta e traduz</b><p>Calcula uma estimativa do repasse, compara os quadrimestres e aponta onde há valor em aberto e equipes com dificuldade — em linguagem simples.</p></div>
+    </div>
+
+    <h3 class="g-sec" id="sobre-descobrir">O que dá para descobrir de cada município</h3>
+    <dl class="sb-perguntas">
+      <div><dt>Quanto recebe por mês na Atenção Primária?</dt><dd>Cartão azul da tela do município, com a faixa possível do valor.</dd></div>
+      <div><dt>O repasse está subindo ou caindo?</dt><dd>Selo de tendência e gráfico de evolução por quadrimestre.</dd></div>
+      <div><dt>Quanto ainda dá para ganhar com as equipes que já existem?</dt><dd>Margem em aberto e os cartões por tipo de equipe.</dd></div>
+      <div><dt>Alguma equipe sumiu do relatório?</dt><dd>Alerta de equipes a menos — assunto urgente para o gestor, mas que precisa ser confirmado.</dd></div>
+      <div><dt>Em quais indicadores as equipes vão mal?</dt><dd>Abas Raio-X por indicador e Diagnóstico.</dd></div>
+      <div><dt>Como está perto dos outros municípios do estado?</dt><dd>Mapa e Ranking do painel do estado.</dd></div>
+    </dl>
+
+    <h3 class="g-sec" id="sobre-visita">Como preparar uma visita — o dever de casa</h3>
+    <div class="sb-visita">
+      <ol class="sb-passos">
+        <li><b>Busque o município</b> no topo da tela e abra o relatório dele.</li>
+        <li><b>Anote três números:</b> o repasse mensal (com a faixa), se subiu ou caiu, e a margem em aberto.</li>
+        <li><b>Veja se há equipes a menos.</b> É um assunto sensível e urgente — leve como pergunta, não como afirmação.</li>
+        <li><b>Abra o Raio-X.</b> Os indicadores em prioridade são bons temas de conversa (ex.: “como está o registro do pré-natal?”).</li>
+        <li><b>Abra o Diagnóstico</b> e copie a sugestão de agenda, se fizer sentido para a visita.</li>
+        <li><b>Gere o “Resumo p/ secretário”</b> para deixar com o gestor. O Raio-X em PDF é de uso interno.</li>
+      </ol>
+      <div class="sb-perg">
+        <b>Perguntas que abrem a conversa</b>
+        <ul>
+          <li>Vocês acompanham a classificação das equipes a cada quadrimestre?</li>
+          <li>Quais são as modalidades das equipes de saúde bucal e da eMulti? <small>(com isso, a estimativa fica mais precisa)</small></li>
+          <li>Houve equipe descredenciada, desativada no CNES ou com produção não enviada?</li>
+          <li>Quem cuida do registro da produção no e-SUS?</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="g-sec" id="sobre-limites">O que o painel não sabe — e como falar sobre isso</h3>
+    <div class="sb-aviso">
+      <b>Os valores do painel são estimativas.</b> Eles servem para preparar a conversa e encontrar oportunidades — não para afirmar quanto o município recebeu. O valor oficial é o do <b>Fundo Nacional de Saúde</b> (consulta pública de pagamentos por município).
+    </div>
+    <div class="sb-sabe">
+      <div class="sb-col ok"><span class="sb-tag">Vem do relatório público</span><ul>
+        <li>Quantas equipes de cada tipo o município tem no relatório</li>
+        <li>Em que classificação (Regular a Ótimo) cada grupo de equipes ficou</li>
+        <li>O conceito de cada indicador de Qualidade</li>
+        <li>O estrato IED do município (Portaria)</li>
+      </ul></div>
+      <div class="sb-col sup"><span class="sb-tag">O painel supõe</span><ul>
+        <li><b>A modalidade das equipes:</b> eAP de 30h, eSB II comum, eMulti Complementar, eCR I e eAPP Essencial 20h</li>
+        <li>Isso muda bastante o valor — uma eMulti Ampliada vale três vezes uma Estratégica; o Fixo de uma eSB II é 76% maior que o de uma eSB I</li>
+        <li>Por isso a tela do município mostra a <b>faixa</b>: “pode ficar entre R$ X e R$ Y”</li>
+      </ul></div>
+      <div class="sb-col nao"><span class="sb-tag">O painel não tem</span><ul>
+        <li>Qual equipe (INE) tirou qual nota</li>
+        <li>O valor efetivamente pago: descontos, suspensões, ajustes e competências atrasadas</li>
+        <li>Outros repasses: incentivos, programas, emendas</li>
+      </ul></div>
+    </div>
+    <div class="sb-falar">
+      <div class="sb-col diga"><span class="sb-tag">Na conversa, diga</span><ul>
+        <li>“Pelo relatório público do SIAPS, a estimativa é de cerca de R$ X por mês.”</li>
+        <li>“Há sinais de que algumas equipes saíram do relatório — vale conferir no e-Gestor e no CNES.”</li>
+        <li>“Se as equipes em Bom chegassem a Ótimo, a estimativa é de até R$ Y a mais por mês.”</li>
+      </ul></div>
+      <div class="sb-col evite"><span class="sb-tag">Evite dizer</span><ul>
+        <li>“Vocês recebem exatamente R$ X.”</li>
+        <li>“Vocês perderam R$ X” — sem antes confirmar com o município.</li>
+        <li>Apresentar a margem em aberto como dinheiro garantido.</li>
+      </ul></div>
+    </div>
+    <p class="g-foot">Se o gestor informar as modalidades das equipes, ajuste em <b>Parâmetros do cálculo</b>, na tela do município: a estimativa e os PDFs passam a usar os valores informados.</p>
+
+    <h3 class="g-sec" id="sobre-fontes">De onde vêm os dados</h3>
+    <dl class="g-termos">
+      <div><dt>SIAPS — relatório “Vínculo e Acompanhamento Territorial e Qualidade”</dt><dd>Quantas equipes de cada tipo ficaram em cada classificação, por município e quadrimestre. É a base do cálculo.</dd></div>
+      <div><dt>SIAPS — relatório “Qualidade – Conceito obtido por indicador”</dt><dd>O conceito de cada indicador por tipo de equipe. Alimenta o Raio-X e o Diagnóstico.</dd></div>
+      <div><dt>Portaria GM/MS nº 3.493/2024 e atualizações</dt><dd>Valores por equipe e por classificação, e o estrato IED de cada município. As tabelas estão em “Como funciona o repasse”.</dd></div>
+      <div><dt>Atualização</dt><dd>A cada quadrimestre, quando o SIAPS publica a nova avaliação. A data da última atualização aparece no topo da tela do Brasil.</dd></div>
+    </dl>
   </div>
 </section>
 </div>

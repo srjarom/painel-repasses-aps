@@ -66,7 +66,7 @@ function renderCarteiraView(){
       <div class="mini gap"><div class="l">Margem em aberto</div><div class="v mono" title="${escHTML(fmtBRL(totGap))}">+ ${fmtBRLcurto(totGap)}</div></div>
       <div class="hl-bar"><div class="barwrap"><i style="width:${Math.min(100,pctMed)}%"></i></div><div class="barlbl">${pctMed}% do potencial já alcançado</div></div>
     </div>
-    <div class="quad-footnote">${quem} · valores por mês</div>`;
+    ${faixaEstadoHTML(rows,quem)}`;
 
   // aba "Equipes a menos": número na aba; some quando não há nenhum
   const nPerda=rows.filter(r=>temAlertaEquipes(r.perda)).length;
@@ -161,22 +161,46 @@ function abrirMunicipio(id){
 
 
 function showView(view){
-  ['brasil','carteira','municipio','guia'].forEach(v=>{
+  ['brasil','carteira','municipio','guia','sobre'].forEach(v=>{
     const el=document.getElementById('view-'+v);if(el)el.style.display=view===v?'block':'none';
   });
   {const vis=document.getElementById('view-'+view);if(typeof animarEntrada==='function')animarEntrada(vis);}
   const notas=document.getElementById('notas-gerais');if(notas)notas.style.display=(view==='brasil'||view==='carteira')?'block':'none';
-  const tc=document.getElementById('nav-tab-carteira'),tg=document.getElementById('nav-tab-guia');
-  if(tc)tc.classList.toggle('active',view!=='guia');
+  const tc=document.getElementById('nav-tab-carteira'),tg=document.getElementById('nav-tab-guia'),ts=document.getElementById('nav-tab-sobre');
+  if(tc)tc.classList.toggle('active',view!=='guia'&&view!=='sobre');
   if(tg)tg.classList.toggle('active',view==='guia');
+  if(ts)ts.classList.toggle('active',view==='sobre');
+  if(view!=='sobre'&&view!=='guia')viewAntesDoSobre=view;
+  {const vb=document.getElementById('sobre-voltar');if(vb&&view!=='sobre')vb.style.display='none';}
   if(view==='brasil')renderBrasil();
   if(view==='carteira')renderCarteiraView();
   if(typeof agendarAjusteAltura==='function')agendarAjusteAltura();
   if(view!=='municipio')window.scrollTo({top:0,behavior:'auto'});
 }
+// aviso de estimativa do estado: soma das faixas de cada município (modalidade das equipes não é pública)
+function faixaEstadoHTML(rows,quem){
+  let mn=0,mx=0,ok=false;
+  rows.forEach(r=>{const f=faixaModalidade(r.entry.parsed.rows,r.entry.params);if(f){mn+=f.min;mx+=f.max;ok=true;}});
+  const why=`<button type="button" class="hl-why" onclick="abrirSobre('limites')">Por que é estimativa?</button>`;
+  const txt=ok&&mx-mn>=1?`${quem} · conforme a modalidade das equipes, entre <b>${fmtBRLcurto(mn)}</b> e <b>${fmtBRLcurto(mx)}</b> por mês.`
+    :`Soma de ${quem}, por mês, pela quantidade e classificação das equipes no relatório público do SIAPS.`;
+  return`<div class="hl-faixa"><span class="hl-est">Estimativa</span><p>${txt}</p>${why}</div>`;
+}
 // "Painel" no topo sempre leva à tela do Brasil
 document.getElementById('nav-tab-carteira').addEventListener('click',()=>irBrasil());
 document.getElementById('nav-tab-guia').addEventListener('click',()=>showView('guia'));
+document.getElementById('nav-tab-sobre').addEventListener('click',()=>showView('sobre'));
+// "Por que é estimativa?" (tela do município) abre a página Sobre já na seção certa, com um
+// botão para voltar exatamente para a tela de onde a pessoa veio
+var viewAntesDoSobre='brasil';
+function abrirSobre(secao){
+  const de=viewAntesDoSobre;
+  showView('sobre');
+  const vb=document.getElementById('sobre-voltar');
+  if(vb){vb.style.display='';vb.onclick=()=>showView(de);}
+  const alvo=secao&&document.getElementById('sobre-'+secao);
+  if(alvo)requestAnimationFrame(()=>alvo.scrollIntoView({block:'start'}));
+}
 // "Voltar" devolve o usuário ao ponto do painel do estado onde ele estava (mapa, ranking…)
 {const back=document.getElementById('btn-voltar-painel');if(back)back.addEventListener('click',()=>{
   if(entrouNoMunicipioPeloPainel)history.back();else irEstado(UF_ATUAL);

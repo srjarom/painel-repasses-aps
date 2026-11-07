@@ -82,7 +82,8 @@ function renderBrasil(){
         <div class="mini gap"><div class="l">Margem em aberto</div><div class="v mono" title="${escHTML(fmtBRL(T.gap))}">+ ${fmtBRLcurto(T.gap)}</div></div>
         <div class="hl-bar"><div class="barwrap"><i style="width:${Math.min(100,pct)}%"></i></div><div class="barlbl">${pct}% do potencial já alcançado</div></div>
       </div>
-      <div class="quad-footnote">${fmtNum(T.municipios)} municípios · ${lista.length} estados · valores por mês</div>`;
+      <div class="hl-faixa"><span class="hl-est">Estimativa</span><p>Soma de ${fmtNum(T.municipios)} municípios em ${lista.length} estados, por mês, com a modalidade padrão das equipes — dado que o relatório público não traz.</p><button type="button" class="hl-why" onclick="abrirSobre('limites')">Por que é estimativa?</button></div>
+`;
   }
   // dois quadros: como os municípios variaram e onde há equipes a menos
   const n=T.sobe+T.igual+T.desce||1,p=v=>(v/n*100);

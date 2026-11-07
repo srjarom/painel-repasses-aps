@@ -77,7 +77,9 @@ function generatePDFResumo(){
       setF('bold',16,BLUE);doc.text(fmtBRL(c.val),cx+12,y+40);
       setF('normal',7.8,MUTED);doc.text(c.sub,cx+12,y+53);
     });
-    y+=cardH+32;
+    y+=cardH+10;
+    // aviso de estimativa logo abaixo dos valores (a modalidade das equipes não é pública)
+    y+=desenharAvisoEstimativa(doc,MX,y,tW,avisoEstimativaPdf(parsed.rows,lastParams),{fs:7.8})+26;
 
     // ---- bloco 2: um passo realista (não o potencial distante) ----
     secTitle('Um passo realista para aumentar esse valor');
@@ -134,10 +136,12 @@ function generatePDFResumo(){
 
     // ---- bloco 3: como o repasse evoluiu (barras simples, um valor por quadrimestre) ----
     const serie=lastRes.slice(-6);
-    if(serie.length>=2&&y+172<PH-66){
-      y+=22;
+    // o gráfico se ajusta ao espaço que sobra (some se sobrar pouco)
+    const espaco=PH-66-y-16-28-30;
+    if(serie.length>=2&&espaco>=50){
+      y+=16;
       secTitle('Como o repasse mensal evoluiu');
-      const chH=96,baseY=y+chH+6,max=Math.max(...serie.map(r=>r.total))||1;
+      const chH=Math.min(96,espaco-6),baseY=y+chH+6,max=Math.max(...serie.map(r=>r.total))||1;
       const n=serie.length,slot=tW/n,bw=Math.min(64,slot*0.56);
       serie.forEach((r,i)=>{
         const h=Math.max(4,(r.total/max)*chH*0.82),bx=MX+i*slot+(slot-bw)/2,isLast=i===n-1;

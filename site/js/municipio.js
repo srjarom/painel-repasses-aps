@@ -74,6 +74,15 @@ function render(){
   recompute();
 }
 
+// aviso de estimativa no cartão azul: a faixa possível conforme a modalidade das equipes
+// (o relatório público não traz a modalidade) e um atalho para a explicação na página "Sobre"
+function faixaHTML(fx){
+  const why='<button type="button" class="hl-why" onclick="abrirSobre(\'limites\')">Por que é estimativa?</button>';
+  if(faixaRelevante(fx))return`<div class="hl-faixa"><span class="hl-est">Estimativa</span>
+    <p>Pode ficar entre <b>${fmtBRL(fx.min)}</b> e <b>${fmtBRL(fx.max)}</b> por mês, conforme a modalidade de ${textoTiposModalidade(fx)} — informação que o relatório público não traz.</p>${why}</div>`;
+  return`<div class="hl-faixa"><span class="hl-est">Estimativa</span>
+    <p>Calculada pela quantidade e pela classificação das equipes no relatório público do SIAPS.</p>${why}</div>`;
+}
 function recompute(){
   if(!parsed)return;
   const p={estrato:sel('sel-estrato'),eapMod:sel('sel-eap'),esbMod:sel('sel-esb'),emultiMod:sel('sel-emulti'),ecrMod:sel('sel-ecr'),eappMod:sel('sel-eapp')};
@@ -107,7 +116,8 @@ function recompute(){
         <div class="mini gap" title="≈ ${fmtBRL(gap*4)} em aberto no quadrimestre"><div class="l">Margem em aberto</div><div class="v mono">+ ${fmtBRL(gap)}</div></div>
         <div class="hl-bar"><div class="barwrap"><i style="width:${pct}%"></i></div><div class="barlbl">${pct}% do potencial já alcançado</div></div>
       </div>
-      <div class="quad-footnote">Valores por mês, estimados a partir da avaliação de ${qCode(last.quad)}.</div>`;
+      ${faixaHTML(faixaModalidade(parsed.rows,p))}
+      <div class="quad-footnote">Valores por mês, estimados a partir da avaliação de ${qCode(last.quad)}. Não substituem a consulta ao Fundo Nacional de Saúde.</div>`;
   }
   chartRepasse(res);tblRepasse(res);tblEquipesFixo(res);chartClass(res);renderByType(res,!!p.estrato);
   renderAlertaMunicipio(res);

@@ -83,3 +83,41 @@ function computeProximosPassos(rows,lastQuad,params){
   });
   return passos.sort((a,b)=>b.gain-a.gain);
 }
+
+/* =========================================================================
+   FAIXA POSSÍVEL CONFORME A MODALIDADE DAS EQUIPES (v4.14.0)
+   O relatório público do SIAPS traz quantas equipes de cada tipo ficaram em cada
+   classificação, mas NÃO a modalidade de cada uma (eAP 20h/30h, eSB I/II, eMulti
+   Estratégica/Complementar/Ampliada, eCR I a III, eAPP). O painel assume uma modalidade
+   padrão (PARAMS_PADRAO_MUNI). Esta função calcula o menor e o maior repasse possíveis do
+   quadrimestre mais recente, trocando só as modalidades — o resto (quantidade e classificação
+   das equipes, estrato) fica igual. Como o cálculo é uma soma por equipe, qualquer mistura de
+   modalidades no município cai dentro dessa faixa.
+   eSB quilombola/assentamento fica de fora do máximo (só existe em territórios específicos);
+   se o município estiver configurado assim, a faixa se estende até o valor configurado.
+   ========================================================================= */
+const MODALIDADE_MIN={eapMod:'20',esbMod:'I_comum',emultiMod:'estrategica',ecrMod:'I',eappMod:'ess20'};
+const MODALIDADE_MAX={eapMod:'30',esbMod:'II_comum',emultiMod:'ampliada',ecrMod:'III',eappMod:'amp30'};
+const TIPOS_COM_MODALIDADE=['eap','esb','emulti','ecr','eapp'];
+function faixaModalidade(rows,p){
+  if(!rows||!rows.length)return null;
+  const lastQ=rows.reduce((mx,r)=>quadKey(r.quad)>quadKey(mx)?r.quad:mx,rows[0].quad);
+  const rs=rows.filter(r=>r.quad===lastQ);
+  const um=m=>{const r=compute(rs,Object.assign({},p,m));return r[r.length-1];};
+  const lo=um(MODALIDADE_MIN),hi=um(MODALIDADE_MAX),atual=um({});
+  const tipos=TIPOS_COM_MODALIDADE.filter(k=>(atual.byType[k]||{}).n>0).map(k=>({k,n:atual.byType[k].n}));
+  return{
+    min:Math.min(lo.total,atual.total),max:Math.max(hi.total,atual.total),atual:atual.total,
+    potMin:Math.min(lo.potencial,atual.potencial),potMax:Math.max(hi.potencial,atual.potencial),
+    tipos,quad:lastQ
+  };
+}
+// texto curto dos tipos que dependem da modalidade: "eSB (59), eMulti (12) e eCR (2)"
+function textoTiposModalidade(f){
+  if(!f||!f.tipos.length)return'';
+  const nomes={eap:'eAP',esb:'eSB',emulti:'eMulti',ecr:'eCR',eapp:'eAPP'};
+  const it=f.tipos.map(t=>`${nomes[t.k]} (${t.n})`);
+  return it.length>1?it.slice(0,-1).join(', ')+' e '+it[it.length-1]:it[0];
+}
+// a faixa só vale a pena mostrar quando muda alguma coisa (mais de R$ 1 de diferença)
+function faixaRelevante(f){return!!f&&f.max-f.min>=1;}

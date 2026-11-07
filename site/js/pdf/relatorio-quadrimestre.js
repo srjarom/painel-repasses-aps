@@ -395,7 +395,9 @@ function generatePDF(){
     setF('normal',9,MUTED);
     const antesL=doc.splitTextToSize(antes,tW);
     antesL.forEach((ln,i)=>doc.text(ln,MX,y+i*11));
-    y+=antesL.length*11+10;
+    y+=antesL.length*11+6;
+    // aviso de estimativa junto do valor (a modalidade das equipes não é pública)
+    y+=desenharAvisoEstimativa(doc,MX,y,tW,avisoEstimativaPdf(parsed.rows,lastParams||{}),{fs:7.8})+12;
 
     // ---- 4 indicadores-resumo ----
     const gap=Math.max(0,R0(last.potencial)-R0(last.total));
@@ -575,7 +577,7 @@ function generatePDF(){
           if(y+h+22>FOOT_TOP){
             const resto=itens.length-i;
             setF('normal',8.8,MUTED);
-            doc.text(`+ ${resto} ${resto>1?'outros indicadores também mudaram':'outro indicador também mudou'} — veja o detalhe na página seguinte.`,MX,y);
+            doc.text(`+ ${resto} ${resto>1?'outros indicadores também mudaram':'outro indicador também mudou'} — veja o detalhe na tabela de indicadores, mais adiante.`,MX,y);
             y+=16;break;
           }
           par.forEach((p,j)=>{
@@ -610,9 +612,41 @@ function generatePDF(){
       y+=bh+12;
     }
 
+    // prioridades sugeridas + quadro final (v4.14.0: logo depois de "O que puxou", antes da
+    // tabela indicador por indicador — o resumo vem primeiro e o detalhe fica no fim)
+    function blocoPrioridades(){
+      const prios=buildPrioridades(comp);
+      {
+        // prioridades + quadro final ficam juntos: se não couberem no espaço que sobrou,
+        // começam numa página nova em vez de se partirem entre duas páginas.
+        const pl=prios.map(sg=>richLayout(sg,tW-30,10));
+        const need=(prios.length?26+pl.reduce((acc,l)=>acc+l.length*13.2+15.5,0):0)+quadroSpec().bh+12;
+        if(y+need>FOOT_TOP&&need<FOOT_TOP-134)newPage();
+      }
+      if(prios.length){
+        secTitle('Prioridades sugeridas para o próximo quadrimestre');
+        const FS=10,LH=13.2,TX=MX+30,TWd=tW-30;
+        prios.forEach((segs,i)=>{
+          const lines=richLayout(segs,TWd,FS);
+          const h=lines.length*LH+12;
+          ensure(h+4);
+          const top=y-9;
+          doc.setFillColor(...hex2rgb(NAVY));doc.circle(MX+9,top+9+(lines.length>1?LH/2:0)-3.4,8.5,'F');
+          setF('bold',8.5,'#ffffff');doc.text(String(i+1),MX+9,top+9+(lines.length>1?LH/2:0),{align:'center'});
+          richDraw(lines,TX,y,FS,LH,'#2b3b48',INK);
+          y+=lines.length*LH+3;
+          doc.setDrawColor(...hex2rgb(LINE2));doc.setLineWidth(0.6);doc.line(MX,y,MX+tW,y);
+          y+=12.5;
+        });
+        y+=2;
+      }
+      quadroProximoPasso();
+    }
+
     if(!comp){
       quadroProximoPasso();
     }else{
+      blocoPrioridades();
       // ================= PÁGINA 2 — indicador por indicador =================
       const temPrev=comp.prevKey!=null;
       newPage(`Indicadores de Qualidade · ${temPrev?`comparativo ${qCodeKey(comp.prevKey)} × ${qCodeKey(comp.curKey)}`:qCodeKey(comp.curKey)}`);
@@ -673,33 +707,6 @@ function generatePDF(){
       });
       y+=27;
 
-      // prioridades
-      const prios=buildPrioridades(comp);
-      {
-        // prioridades + quadro final ficam juntos: se não couberem no espaço que sobrou,
-        // começam numa página nova em vez de se partirem entre duas páginas.
-        const pl=prios.map(sg=>richLayout(sg,tW-30,10));
-        const need=(prios.length?26+pl.reduce((acc,l)=>acc+l.length*13.2+15.5,0):0)+quadroSpec().bh+12;
-        if(y+need>FOOT_TOP&&need<FOOT_TOP-134)newPage();
-      }
-      if(prios.length){
-        secTitle('Prioridades sugeridas para o próximo quadrimestre');
-        const FS=10,LH=13.2,TX=MX+30,TWd=tW-30;
-        prios.forEach((segs,i)=>{
-          const lines=richLayout(segs,TWd,FS);
-          const h=lines.length*LH+12;
-          ensure(h+4);
-          const top=y-9;
-          doc.setFillColor(...hex2rgb(NAVY));doc.circle(MX+9,top+9+(lines.length>1?LH/2:0)-3.4,8.5,'F');
-          setF('bold',8.5,'#ffffff');doc.text(String(i+1),MX+9,top+9+(lines.length>1?LH/2:0),{align:'center'});
-          richDraw(lines,TX,y,FS,LH,'#2b3b48',INK);
-          y+=lines.length*LH+3;
-          doc.setDrawColor(...hex2rgb(LINE2));doc.setLineWidth(0.6);doc.line(MX,y,MX+tW,y);
-          y+=12.5;
-        });
-        y+=2;
-      }
-      quadroProximoPasso();
     }
 
     // ---- rodapé fixo em todas as páginas ----

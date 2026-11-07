@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.14.0
+
+Estimativa à vista e nova página "Sobre o painel". A modalidade das equipes (eAP 20h/30h, eSB I/II, eMulti, eCR, eAPP) não aparece no relatório público do SIAPS e muda bastante o valor; por isso o painel agora mostra a faixa possível: no cartão azul do município ("Estimativa — pode ficar entre R$ X e R$ Y por mês, conforme a modalidade de eSB, eMulti…"), no do estado (soma das faixas) e um aviso no do Brasil, todos com o atalho "Por que é estimativa?". O Relatório do quadrimestre e o Resumo para o secretário trazem, logo abaixo do valor, o quadro "Valores estimados" com as modalidades consideradas e a faixa. O aviso em Parâmetros do cálculo foi corrigido (dizia que as modalidades vinham dos dados publicados). Nova página "Sobre o painel" (menu do topo): por que o painel existe, o que dá para descobrir de cada município, roteiro para preparar uma visita com perguntas que abrem a conversa, o que o painel não sabe (público × suposto × não temos) e como falar sobre os números ("diga" × "evite"), e de onde vêm os dados. No Relatório do quadrimestre, as prioridades e o quadro final vêm logo depois de "O que puxou", e a tabela indicador por indicador fica no fim (menos páginas vazias). No celular, o menu do topo usa nomes curtos.
+
 ## 4.13.0
 
 Guia "Como funciona o repasse" mais completo e visual. No topo, a conta inteira numa linha (Fixo + Vínculo + Qualidade = Repasse mensal) e atalhos para cada parte do guia. Cada componente mostra "quem tem" e se "depende da nota". A escala de classificação traz um exemplo em reais (quanto uma equipe ESF recebe de Vínculo + Qualidade em cada degrau: subir um degrau = + R$ 4.000/mês). Duas seções novas: "Como usar o painel" (Brasil → estado → município, em 3 passos) e "Palavras que aparecem no painel" (repasse mensal, potencial, margem em aberto, tendência, equipes a menos, estrato IED, quadrimestre e prioridade). Corrigida a menção ao gráfico de evolução, que agora fica na tela do município.

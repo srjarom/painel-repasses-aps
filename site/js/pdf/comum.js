@@ -99,3 +99,38 @@ function pdfTable(doc,x,y,cols,rows,opts={}){
   doc.setTextColor(15,32,48);
   return y;
 }
+
+// Aviso de estimativa para os PDFs entregues ao município (v4.14.0): deixa claro, junto do valor,
+// que é estimativa a partir do relatório público, quais modalidades foram consideradas (o relatório
+// não traz a modalidade das equipes) e a faixa possível. Devolve {titulo, texto}.
+function avisoEstimativaPdf(rows,p){
+  const f=faixaModalidade(rows,p);
+  const nomes={eap:p.eapMod==='20'?'eAP 20h':'eAP 30h',
+    esb:{I_comum:'eSB I',II_comum:'eSB II',I_quil:'eSB I quilombola/assentamento',II_quil:'eSB II quilombola/assentamento'}[p.esbMod]||'eSB',
+    emulti:{estrategica:'eMulti Estratégica',complementar:'eMulti Complementar',ampliada:'eMulti Ampliada'}[p.emultiMod]||'eMulti',
+    ecr:'eCR '+(p.ecrMod||'I'),eapp:{ess20:'eAPP Essencial 20h',ess30:'eAPP Essencial 30h',amp20:'eAPP Ampliada 20h',amp30:'eAPP Ampliada 30h'}[p.eappMod]||'eAPP'};
+  if(!faixaRelevante(f))return{titulo:'Valores estimados',
+    texto:'Calculados pela quantidade e pela classificação das equipes no relatório público do SIAPS. O valor oficial é o informado pelo Fundo Nacional de Saúde.'};
+  const cons=f.tipos.map(t=>nomes[t.k]).join(', ');
+  return{titulo:'Valores estimados',
+    texto:`Calculados pela quantidade e pela classificação das equipes no relatório público do SIAPS, que não informa a modalidade de cada equipe. Foram consideradas: ${cons}. Conforme as modalidades reais, o repasse mensal pode ficar entre ${fmtBRL(f.min)} e ${fmtBRL(f.max)}. O valor oficial é o informado pelo Fundo Nacional de Saúde.`};
+}
+// desenha o aviso num quadro claro com borda âmbar (título em negrito no começo do texto); devolve a altura usada
+function desenharAvisoEstimativa(doc,x,y,w,aviso,o={}){
+  const fs=o.fs||7.8,lh=fs*1.32,PX=10;
+  const tit=aviso.titulo+': ';
+  doc.setFont('helvetica','bold');doc.setFontSize(fs);const tw=doc.getTextWidth(tit);
+  doc.setFont('helvetica','normal');
+  // 1ª linha começa depois do título; as demais usam a largura toda
+  const palavras=aviso.texto.split(' '),linhas=[];let cur='',max=w-PX*2-tw;
+  palavras.forEach(p=>{const t=cur?cur+' '+p:p;if(doc.getTextWidth(t)>max&&cur){linhas.push(cur);cur=p;max=w-PX*2;}else cur=t;});
+  if(cur)linhas.push(cur);
+  const h=9+linhas.length*lh+5;
+  doc.setFillColor(...hex2rgb('#fdf8ec'));doc.setDrawColor(...hex2rgb('#efd9a3'));doc.setLineWidth(0.7);
+  doc.roundedRect(x,y,w,h,4,4,'FD');
+  const by=y+9+fs*0.75;
+  doc.setFont('helvetica','bold');doc.setFontSize(fs);doc.setTextColor(...hex2rgb('#8a5a00'));doc.text(tit,x+PX,by);
+  doc.setFont('helvetica','normal');doc.setTextColor(...hex2rgb('#3c4d5a'));
+  linhas.forEach((ln,k)=>doc.text(ln,k?x+PX:x+PX+tw,by+k*lh));
+  return h;
+}
