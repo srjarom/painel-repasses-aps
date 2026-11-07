@@ -39,14 +39,12 @@
 <section class="topbar" aria-label="Município">
   <div class="in tb-row">
     <div class="tb-loc">
-      <nav class="crumbs" aria-label="Você está em">
+      <nav class="crumbs crumbs-sm" aria-label="Você está em">
         <a href="?" class="crumb-link" onclick="event.preventDefault();irBrasil();">Brasil</a>
         <span class="crumb-sep" aria-hidden="true">›</span>
         <button type="button" class="crumb-link crumb-btn" id="btn-voltar-painel" title="Voltar ao painel do estado"><span id="crumb-uf-nome">Estado</span></button>
-        <span class="crumb-sep" aria-hidden="true">›</span>
-        <span class="muni-id"><h2 id="muni-name">—</h2><span class="uf" id="uf-code">—</span><span class="ibge">IBGE <span id="ibge-code">—</span></span></span>
       </nav>
-      <div class="tb-sub" id="muni-sub"></div>
+      <div class="muni-id"><h2 id="muni-name">—</h2><span class="muni-meta"><span id="uf-code">—</span> · IBGE <span id="ibge-code">—</span></span></div>
     </div>
     <div class="tb-tools idbar-actions muni-acts">
       <div class="change primary" id="btn-pdf" role="button" tabindex="0" onclick="generatePDF()">⤓ Relatório do quadrimestre (PDF)</div>
@@ -69,9 +67,15 @@
     <div id="sec-tabpanels">
     <div class="sec-panel" id="sec-geral">
 
-      <div class="card">
-        <div class="card-h"><h3>Evolução do repasse por quadrimestre</h3><p>Componente Fixo/IED + Vínculo e Acompanhamento Territorial + Qualidade. Cada resultado subsidia o custeio do quadrimestre subsequente.</p></div>
-        <div class="card-b"><canvas id="chart-repasse" height="98"></canvas></div>
+      <div class="card evo-card">
+        <div class="card-h ch-row">
+          <div><h3>Evolução do repasse mensal</h3><div class="evo-resumo" id="evo-resumo"></div></div>
+          <div class="map-metrics" id="evo-modo" role="group" aria-label="Tipo de gráfico">
+            <div class="map-metric-btn active" data-modo="curva" role="button" tabindex="0" aria-pressed="true">Evolução</div>
+            <div class="map-metric-btn" data-modo="composicao" role="button" tabindex="0" aria-pressed="false">Composição</div>
+          </div>
+        </div>
+        <div class="card-b evo-b"><div class="evo-canvas"><canvas id="chart-repasse" role="img" aria-label="Gráfico da evolução do repasse mensal do município"></canvas></div><p class="evo-nota" id="evo-nota"></p></div>
       </div>
 
       <div class="bytype-head">

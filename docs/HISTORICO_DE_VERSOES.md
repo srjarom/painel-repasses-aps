@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.6.0
+
+Novo gráfico de evolução do repasse. A visão padrão agora é a curva do repasse mensal, com a escala ajustada aos valores do município (nas barras empilhadas, o Fixo/IED, que quase não muda, escondia a variação), a linha do potencial e, entre as duas, a faixa verde da margem em aberto; o valor do primeiro e do último quadrimestre fica escrito no gráfico. Acima, um resumo: valor do mês, variação vs. o quadrimestre anterior, variação desde o início do histórico e margem em aberto. As barras de composição (Fixo/IED + Vínculo + Qualidade) continuam na chave "Composição". Topo do município mais limpo: "Brasil › estado" pequeno em cima e o nome do município em destaque, com UF e IBGE discretos ao lado.
+
 ## 4.5.0
 
 Tela do município redesenhada no mesmo padrão do estado. No topo, uma barra fina com "Brasil › estado › município" (o estado é clicável para voltar) e os botões dos PDFs. Embaixo, duas colunas: à esquerda as abas (Visão geral, Raio-X, Diagnóstico, Detalhamento) com a largura toda; à direita, fixos ao rolar, o resumo do repasse (valor do mês, tendência, Fixo/Vínculo/Qualidade, potencial e margem), o alerta de equipes a menos e os parâmetros do cálculo (estrato, modalidades e destinatário do PDF) em grade compacta e recolhível. Antes era uma coluna estreita com tudo empilhado.
