@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.5.0
+
+Tela do município redesenhada no mesmo padrão do estado. No topo, uma barra fina com "Brasil › estado › município" (o estado é clicável para voltar) e os botões dos PDFs. Embaixo, duas colunas: à esquerda as abas (Visão geral, Raio-X, Diagnóstico, Detalhamento) com a largura toda; à direita, fixos ao rolar, o resumo do repasse (valor do mês, tendência, Fixo/Vínculo/Qualidade, potencial e margem), o alerta de equipes a menos e os parâmetros do cálculo (estrato, modalidades e destinatário do PDF) em grade compacta e recolhível. Antes era uma coluna estreita com tudo empilhado.
+
 ## 4.4.4
 
 Aba Equipes a menos: o quadro vazava para fora da tela e se sobrepunha ao rodapé (o código forçava um modo de exibição que impedia a rolagem por dentro). Agora fica contido na altura da tela e rola por dentro, como o Ranking. Colunas com largura fixa, selos de "o que mudou" lado a lado e linhas mais baixas.

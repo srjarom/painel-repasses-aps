@@ -34,7 +34,9 @@ function showSecTab(sec){
 }
 document.querySelectorAll('.sec-tab').forEach(t=>t.addEventListener('click',()=>showSecTab(t.dataset.sec)));
 function render(){
-  document.getElementById('results').style.display='block';
+  document.getElementById('results').style.display='grid';   // duas colunas (ver .muni-grid no CSS)
+  {const cu=document.getElementById('crumb-uf-nome');if(cu)cu.textContent=estadoInfo(parsed.uf).nome;}
+  {const ms=document.getElementById('muni-sub');const d=PainelDados.uf(parsed.uf);if(ms&&d){const u=quadParts(d.quads[d.quads.length-1]);ms.textContent=`Avaliação do ${u.q}º quadrimestre de ${u.y} · histórico desde ${qCode(d.quads[0])} · atualizado em ${new Date(d.atualizadoEm+'T12:00:00').toLocaleDateString('pt-BR')}`;}}
   hidePdfFallback('pdf-fallback-full');
   hidePdfFallback('pdf-fallback-resumo');
   document.getElementById('muni-name').textContent=parsed.nomeMuni||'Município';

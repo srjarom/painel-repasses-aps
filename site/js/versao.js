@@ -6,8 +6,9 @@
    uma nova entrada no topo do array (mais recente primeiro) e atualize
    APP_VERSION (e docs/HISTORICO_DE_VERSOES.md). Fica visível só na tela (rodapé), não entra no PDF do cliente.
    ========================================================================= */
-const APP_VERSION='4.4.4';
+const APP_VERSION='4.5.0';
 const APP_CHANGELOG=[
+  {v:'4.5.0',desc:'Tela do município redesenhada no mesmo padrão do estado. No topo, uma barra fina com "Brasil › estado › município" (o estado é clicável para voltar) e os botões dos PDFs. Embaixo, duas colunas: à esquerda as abas (Visão geral, Raio-X, Diagnóstico, Detalhamento) com a largura toda; à direita, fixos ao rolar, o resumo do repasse (valor do mês, tendência, Fixo/Vínculo/Qualidade, potencial e margem), o alerta de equipes a menos e os parâmetros do cálculo (estrato, modalidades e destinatário do PDF) em grade compacta e recolhível. Antes era uma coluna estreita com tudo empilhado.'},
   {v:'4.4.4',desc:'Aba Equipes a menos: o quadro vazava para fora da tela e se sobrepunha ao rodapé (o código forçava um modo de exibição que impedia a rolagem por dentro). Agora fica contido na altura da tela e rola por dentro, como o Ranking. Colunas com largura fixa, selos de "o que mudou" lado a lado e linhas mais baixas.'},
   {v:'4.4.3',desc:'Ao clicar num município no mapa, o cartão dele aparece no alto do painel do lado (que volta ao topo sozinho), com o botão verde "Abrir relatório do município" logo abaixo do nome — a primeira coisa que se vê. Saiu o campo "Achar no mapa", que repetia a busca do topo; sem município selecionado fica só uma dica de uma linha.'},
   {v:'4.4.2',desc:'Linha das abas (Mapa · Ranking · Equipes a menos) e seletor de cor do mapa mais finos, com menos espaço acima: o mapa ganha mais altura. As alturas do painel são recalculadas também depois que as fontes terminam de carregar.'},

@@ -34,77 +34,40 @@
 <div id="view-loading" class="view-loading"><div class="vl-spin"></div></div>
 
 <div id="view-municipio" style="display:none;">
-
-
-
-
-
-
-<div class="stage">
-  <div id="results">
-    <div class="back-row"><button type="button" class="back-link" id="btn-voltar-painel">← Voltar ao painel do estado</button></div>
-    <div class="idbar">
-      <div class="muni">
-        <h2 id="muni-name">—</h2>
-        <span class="uf" id="uf-code">—</span>
-        <span class="ibge">IBGE <span id="ibge-code">—</span></span>
-      </div>
-      <div class="idbar-actions">
-        <div class="change primary" id="btn-pdf" onclick="generatePDF()">⤓ Relatório do quadrimestre (PDF)</div>
-        <div class="change disabled" id="btn-resumo" onclick="generatePDFResumo()">▤ Resumo p/ secretário</div>
-      </div>
+<!-- v4.5.0: barra fina no topo (Brasil › estado › município + PDFs) e duas colunas:
+     à esquerda as abas e o conteúdo; à direita o resumo do repasse, o alerta e os parâmetros -->
+<section class="topbar" aria-label="Município">
+  <div class="in tb-row">
+    <div class="tb-loc">
+      <nav class="crumbs" aria-label="Você está em">
+        <a href="?" class="crumb-link" onclick="event.preventDefault();irBrasil();">Brasil</a>
+        <span class="crumb-sep" aria-hidden="true">›</span>
+        <button type="button" class="crumb-link crumb-btn" id="btn-voltar-painel" title="Voltar ao painel do estado"><span id="crumb-uf-nome">Estado</span></button>
+        <span class="crumb-sep" aria-hidden="true">›</span>
+        <span class="muni-id"><h2 id="muni-name">—</h2><span class="uf" id="uf-code">—</span><span class="ibge">IBGE <span id="ibge-code">—</span></span></span>
+      </nav>
+      <div class="tb-sub" id="muni-sub"></div>
     </div>
-
-    <div class="parambar">
-      <div class="pfield">
-        <label>Estrato IED <span class="auto-badge" id="estrato-badge">definido automaticamente</span></label>
-        <select id="sel-estrato">
-          <option value="">— selecione —</option>
-          <option value="1">Estrato I</option><option value="2">Estrato II</option>
-          <option value="3">Estrato III</option><option value="4">Estrato IV</option>
-        </select>
-        <div class="hint" id="estrato-hint">Anexo VI da <a href="https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-3.493-de-10-de-abril-de-2024-553573811" target="_blank">Portaria 3.493/2024</a></div>
-      </div>
-      <div class="pfield" id="field-eap" style="display:none;">
-        <label>Modalidade eAP</label>
-        <select id="sel-eap"><option value="30">30 horas</option><option value="20">20 horas</option></select>
-      </div>
-      <div class="pfield" id="field-esb" style="display:none;">
-        <label>Modalidade eSB</label>
-        <select id="sel-esb"><option value="II_comum">eSB II comum</option><option value="I_comum">eSB I comum</option><option value="II_quil">eSB II quil/assent</option><option value="I_quil">eSB I quil/assent</option></select>
-      </div>
-      <div class="pfield" id="field-emulti" style="display:none;">
-        <label>Modalidade eMulti</label>
-        <select id="sel-emulti"><option value="complementar">Complementar</option><option value="ampliada">Ampliada</option><option value="estrategica">Estratégica</option></select>
-      </div>
-      <div class="pfield" id="field-ecr" style="display:none;">
-        <label>Modalidade eCR</label>
-        <select id="sel-ecr"><option value="I">eCR I</option><option value="II">eCR II</option><option value="III">eCR III</option></select>
-      </div>
-      <div class="pfield" id="field-eapp" style="display:none;">
-        <label>Modalidade eAPP</label>
-        <select id="sel-eapp"><option value="ess20">Essencial 20h</option><option value="ess30">Essencial 30h</option><option value="amp20">Ampliada 20h</option><option value="amp30">Ampliada 30h</option></select>
-      </div>
-      <div class="pfield grow" id="field-destinatario">
-        <label for="inp-destinatario">Destinatário do relatório <span class="opt">(opcional)</span></label>
-        <input type="text" id="inp-destinatario" maxlength="90" autocomplete="off" placeholder="Ex.: Ester Cassol, Coordenação da APS">
-        <div class="hint">Aparece no cabeçalho do PDF como "Para: …"</div>
-      </div>
+    <div class="tb-tools idbar-actions muni-acts">
+      <div class="change primary" id="btn-pdf" role="button" tabindex="0" onclick="generatePDF()">⤓ Relatório do quadrimestre (PDF)</div>
+      <div class="change disabled" id="btn-resumo" role="button" tabindex="0" onclick="generatePDFResumo()">▤ Resumo p/ secretário</div>
     </div>
+  </div>
+</section>
 
-    <div class="sim-note">Estrato e modalidades vêm dos dados publicados. Se mudar algo acima, vale só como simulação nesta tela — os dados oficiais não mudam.</div>
-
+<div class="stage stage-compact">
+  <div id="results" class="muni-grid">
+    <div class="muni-main">
+      <div class="tabs-row muni-tabs-row">
     <div class="sec-tabs" id="sec-tabs">
       <div class="sec-tab active" data-sec="geral">Visão geral</div>
       <div class="sec-tab" data-sec="raiox">Raio-X por indicador<span class="sec-flag" id="sec-flag-raiox"></span></div>
       <div class="sec-tab" data-sec="diag">Diagnóstico<span class="sec-flag" id="sec-flag-diag"></span></div>
       <div class="sec-tab" data-sec="detalhe">Detalhamento</div>
     </div>
-
+      </div>
     <div id="sec-tabpanels">
     <div class="sec-panel" id="sec-geral">
-      <div class="alerta-muni" id="alerta-equipes-muni" role="status" style="display:none;"></div>
-      <div class="headline" id="headline"></div>
 
       <div class="card">
         <div class="card-h"><h3>Evolução do repasse por quadrimestre</h3><p>Componente Fixo/IED + Vínculo e Acompanhamento Territorial + Qualidade. Cada resultado subsidia o custeio do quadrimestre subsequente.</p></div>
@@ -185,12 +148,57 @@
       </div>
     </div>
     </div>
+    </div>
 
+    <aside class="muni-side" aria-label="Resumo do município">
+      <div class="headline" id="headline"></div>
+      <div class="alerta-muni" id="alerta-equipes-muni" role="status" style="display:none;"></div>
+      <details class="side-sec muni-params" id="muni-params" open>
+        <summary>Parâmetros do cálculo</summary>
+    <div class="parambar">
+      <div class="pfield">
+        <label>Estrato IED <span class="auto-badge" id="estrato-badge">definido automaticamente</span></label>
+        <select id="sel-estrato">
+          <option value="">— selecione —</option>
+          <option value="1">Estrato I</option><option value="2">Estrato II</option>
+          <option value="3">Estrato III</option><option value="4">Estrato IV</option>
+        </select>
+        <div class="hint" id="estrato-hint">Anexo VI da <a href="https://www.in.gov.br/web/dou/-/portaria-gm/ms-n-3.493-de-10-de-abril-de-2024-553573811" target="_blank">Portaria 3.493/2024</a></div>
+      </div>
+      <div class="pfield" id="field-eap" style="display:none;">
+        <label>Modalidade eAP</label>
+        <select id="sel-eap"><option value="30">30 horas</option><option value="20">20 horas</option></select>
+      </div>
+      <div class="pfield" id="field-esb" style="display:none;">
+        <label>Modalidade eSB</label>
+        <select id="sel-esb"><option value="II_comum">eSB II comum</option><option value="I_comum">eSB I comum</option><option value="II_quil">eSB II quil/assent</option><option value="I_quil">eSB I quil/assent</option></select>
+      </div>
+      <div class="pfield" id="field-emulti" style="display:none;">
+        <label>Modalidade eMulti</label>
+        <select id="sel-emulti"><option value="complementar">Complementar</option><option value="ampliada">Ampliada</option><option value="estrategica">Estratégica</option></select>
+      </div>
+      <div class="pfield" id="field-ecr" style="display:none;">
+        <label>Modalidade eCR</label>
+        <select id="sel-ecr"><option value="I">eCR I</option><option value="II">eCR II</option><option value="III">eCR III</option></select>
+      </div>
+      <div class="pfield" id="field-eapp" style="display:none;">
+        <label>Modalidade eAPP</label>
+        <select id="sel-eapp"><option value="ess20">Essencial 20h</option><option value="ess30">Essencial 30h</option><option value="amp20">Ampliada 20h</option><option value="amp30">Ampliada 30h</option></select>
+      </div>
+      <div class="pfield grow" id="field-destinatario">
+        <label for="inp-destinatario">Destinatário do relatório <span class="opt">(opcional)</span></label>
+        <input type="text" id="inp-destinatario" maxlength="90" autocomplete="off" placeholder="Ex.: Ester Cassol, Coordenação da APS">
+        <div class="hint">Aparece no cabeçalho do PDF como "Para: …"</div>
+      </div>
+    </div>
+    <div class="sim-note">Estrato e modalidades vêm dos dados publicados. Se mudar algo acima, vale só como simulação nesta tela — os dados oficiais não mudam.</div>
+      </details>
+    </aside>
+  </div>
     <div class="foot">
       <b>Metodologia.</b> <b>CVAT</b> é o <b>Componente de Vínculo e Acompanhamento Territorial</b> (aparece como "Vínculo (CVAT)" no gráfico de evolução). Valores conforme o novo modelo de financiamento da APS, o <b>Saúde Brasil 360</b>, instituído pela Portaria GM/MS nº 3.493/2024 (art. 9º-B — Componente Fixo por estrato IED; Anexo XCIX-A — Componente de Vínculo e Acompanhamento Territorial; Anexo XCIX-B — Componente de Qualidade). O relatório público do SIAPS não contém INE nem modalidade das equipes; os cálculos usam a quantidade de equipes por classificação e a modalidade informada, aplicada a todas as equipes do mesmo tipo. O estrato IED, quando não identificado automaticamente pelo código IBGE, deve ser informado conforme o Anexo VI da mesma Portaria. O potencial máximo assume classificação "Ótimo" para todas as equipes, mantido o quantitativo atual. Ferramenta de apoio — não substitui o e-Gestor nem os demonstrativos oficiais do FNS. Ferramenta desenvolvida com apoio de IA; valores calculados por regras fixas a partir de dados públicos do SIAPS.
       <br><b>Os valores podem divergir dos registrados no Fundo Municipal de Saúde do município.</b> A metodologia de cálculo da Governança Brasil é aplicada de forma consistente em todos os documentos gerados por este painel, mas não substitui a conciliação com o Fundo Municipal.
     </div>
-  </div>
 </div>
 </div>
 

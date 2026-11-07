@@ -1182,3 +1182,79 @@ table.ae-table th:nth-child(5),table.ae-table td:nth-child(5){width:11%;}
 .ae-hcell .ae-hist{display:block;margin:0;line-height:1.55;}
 .ae-acts{white-space:nowrap;}
 .ae-rel{margin-left:6px;}
+
+/* =========================================================================
+   v4.5.0 — TELA DO MUNICÍPIO EM DUAS COLUNAS
+   Topo: Brasil › estado › município + PDFs. Esquerda: abas e conteúdo.
+   Direita (fixa ao rolar): resumo do repasse, alerta de equipes e parâmetros.
+   ========================================================================= */
+.muni-id{display:inline-flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+.muni-id h2{font-size:clamp(18px,1.8vw,22px);color:var(--navy);line-height:1.15;}
+.muni-id .uf{font-size:11px;font-weight:700;color:#fff;background:var(--teal);padding:2px 8px;border-radius:5px;}
+.muni-id .ibge{font-size:12px;color:var(--muted);}
+.crumb-btn{font:inherit;background:none;border:0;padding:4px 2px;cursor:pointer;color:var(--muted);font-weight:600;font-size:14px;}
+.crumb-btn:hover{color:var(--navy);text-decoration:underline;text-underline-offset:3px;}
+.muni-acts{gap:8px;}
+.muni-acts .change{font-size:12.5px;padding:7px 12px;border-radius:8px;white-space:nowrap;}
+.muni-acts .change.primary{color:#fff;border:none;background:#09274C;box-shadow:0 3px 10px rgba(9,39,76,.25);}
+.muni-acts .change.primary:hover{background:#0d3a68;}
+.muni-acts .change.disabled{opacity:.5;pointer-events:none;}
+:root[data-theme="dark"] .muni-acts .change.primary{background:#bcd6f0;color:#09274C;}
+
+.muni-grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start;}
+.muni-main{min-width:0;}
+.muni-side{display:flex;flex-direction:column;gap:12px;min-width:0;}
+.layout-fit .muni-side{position:sticky;top:calc(var(--nav-h,60px) + 78px);max-height:calc(100vh - var(--nav-h,60px) - 94px);overflow-y:auto;padding-right:2px;}
+
+/* abas do município no mesmo estilo das abas do estado */
+.muni-tabs-row{margin-bottom:12px;padding-bottom:0;}
+.muni-tabs-row .sec-tabs{border-bottom:0;margin:0 0 -2px;gap:4px;}
+.muni-tabs-row .sec-tab{font-size:13.5px;font-weight:600;padding:6px 12px 8px;border-bottom-width:3px;}
+.muni-tabs-row .sec-tab.active{border-bottom-color:var(--navy);}
+
+/* resumo do repasse (o cartão azul) empilhado na coluna do lado */
+.muni-side .headline{grid-template-columns:1fr;padding:18px 20px 16px;border-radius:14px;margin:0;gap:12px;}
+.muni-side .headline::after{width:200px;height:200px;right:-70px;bottom:-80px;}
+.muni-side .headline .primary .big{font-size:34px;margin:6px 0 4px;}
+.muni-side .headline .primary .cap{font-size:11px;}
+.muni-side .headline .primary .sub{font-size:12px;line-height:1.5;}
+.muni-side .headline .split{border-left:0;padding-left:0;border-top:1px solid rgba(255,255,255,.14);padding-top:12px;gap:10px;flex-direction:row;flex-wrap:wrap;}
+.muni-side .headline .mini{flex:1 1 140px;}
+.muni-side .headline .mini .v{font-size:19px;}
+.muni-side .headline .mini .l{font-size:10.5px;}
+.muni-side .headline .quad-footnote{font-size:10.5px;padding-top:8px;margin-top:0;}
+.muni-side .headline .needest{font-size:13px;}
+.muni-side .alerta-muni{margin:0;padding:10px 12px;font-size:12.5px;}
+
+/* parâmetros do cálculo: recolhíveis, em grade de 2 colunas */
+.muni-params{padding:0;}
+.muni-params>summary{list-style:none;cursor:pointer;padding:10px 14px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.muni-params>summary::-webkit-details-marker{display:none;}
+.muni-params>summary::before{content:'▸';color:var(--lime);transition:.15s;}
+.muni-params[open]>summary::before{transform:rotate(90deg);}
+.muni-params .parambar{background:none;border:0;border-radius:0;padding:0 14px 6px;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;}
+.muni-params .pfield{min-width:0;}
+.muni-params .pfield label{font-size:10.5px;margin-bottom:4px;}
+.muni-params .pfield select,.muni-params .pfield input[type=text]{padding:6px 8px;font-size:13px;}
+.muni-params .pfield:first-child,.muni-params #field-destinatario{grid-column:1/-1;}
+.muni-params .pfield .hint{font-size:10.5px;}
+.muni-params .sim-note{font-size:11px;color:var(--muted);padding:0 14px 12px;margin:0;}
+
+/* conteúdo da Visão geral mais enxuto */
+.muni-main .card{margin-bottom:16px;}
+.muni-main .card-h{padding:12px 18px 10px;}
+.muni-main .card-h h3{font-size:15.5px;}
+.muni-main .card-h p{font-size:12px;}
+.muni-main .bytype-head{margin:2px 0 10px;}
+.muni-main .bytype-head h3{font-size:15.5px;}
+.muni-main .bytype-head p{font-size:12px;}
+.muni-main .bytype-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
+#view-municipio .stage-compact>.foot{margin-top:18px;}
+
+@media(max-width:999px){
+  .muni-grid{grid-template-columns:1fr;}
+  .muni-side{order:-1;}
+  .muni-acts{width:100%;}
+}
+@media(max-width:999px){#results.muni-grid[style*="grid"]{display:grid;}}
+.muni-side>*,.estado-side>*{flex-shrink:0;}
