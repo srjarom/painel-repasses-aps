@@ -432,21 +432,25 @@ function generatePDF(){
 
     // ---- quanto ficou abaixo do potencial, em cada avaliação ----
     {
-      setF('bold',8.3,SUB);
-      const lbl='Abaixo do potencial máximo, por mês:';
-      doc.text(lbl,MX,y+9);
-      let cx=MX+doc.getTextWidth(lbl)+10,cy=y;
-      lastRes.forEach(r=>{
-        const g=Math.max(0,R0(r.potencial)-R0(r.total));
-        const s=`${qCode(r.quad)}   ${g>0?fmtBRL(g):'R$ 0'}`;
-        setF('bold',8);
-        const w=doc.getTextWidth(s)+14;
-        if(cx+w>MX+tW){cx=MX;cy+=18;}
-        doc.setFillColor(...hex2rgb(g>0?RED_BG:GREEN_BG));doc.roundedRect(cx,cy,w,14,3,3,'F');
-        setF('bold',8,g>0?RED:GREEN);doc.text(s,cx+7,cy+9.8);
-        cx+=w+6;
+      // uma linha só: rótulo + um selo por quadrimestre (quadrimestre em cinza, valor em vermelho);
+      // a fonte diminui um pouco se não couber, e só quebra a linha em último caso
+      // rótulo numa linha e, embaixo, um selo por quadrimestre, todos da mesma largura numa linha só
+      const itens=lastRes.slice(-6).map(r=>{const g=Math.max(0,R0(r.potencial)-R0(r.total));return{q:qShort(r.quad),v:g>0?fmtBRL(g):'R$ 0',g};});
+      setF('bold',8.3,SUB);doc.text('Quanto ficou abaixo do potencial máximo, por mês, em cada quadrimestre:',MX,y+8);
+      y+=15;
+      const SG=6,sw=(tW-SG*(itens.length-1))/itens.length;
+      let fs=8.2;
+      const cabe=f=>itens.every(it=>{setF('normal',f);const a=doc.getTextWidth(it.q+'  ');setF('bold',f);return a+doc.getTextWidth(it.v)+12<=sw;});
+      while(!cabe(fs)&&fs>6.4)fs-=0.2;
+      itens.forEach((it,i)=>{
+        const cx=MX+i*(sw+SG);
+        doc.setFillColor(...hex2rgb(it.g>0?RED_BG:GREEN_BG));doc.roundedRect(cx,y,sw,17,3,3,'F');
+        setF('normal',fs);const aq=doc.getTextWidth(it.q+'  ');setF('bold',fs);const tw2=aq+doc.getTextWidth(it.v);
+        const tx0=cx+(sw-tw2)/2;
+        setF('normal',fs,MUTED);doc.text(it.q,tx0,y+11.6);
+        setF('bold',fs,it.g>0?RED:GREEN);doc.text(it.v,tx0+aq,y+11.6);
       });
-      y=cy+14+26;
+      y+=17+28;
     }
 
     // ---- classificação das equipes ----
@@ -524,13 +528,23 @@ function generatePDF(){
         // equipes a menos no relatório: aviso em destaque logo abaixo da tabela
         const pa=analisarPerdaEquipes(lastRes,parsed.rows,0);
         if(pa&&(pa.recente.length||pa.antiga.length)){
-          y+=notas.length?16:14;
+          y+=notas.length?12:8;
           const comp=perdaCompensacao(pa,true);
-          const txt=`Atenção: ${perdaTexto(pa)}. Vale verificar se houve descredenciamento, desativação no CNES ou falta de envio de produção — o Componente Fixo/IED depende disso.${comp?' '+comp:''}`;
-          setF('bold',8.8,RED);
-          const al=doc.splitTextToSize(txt,tW);
-          al.forEach((ln,i)=>doc.text(ln,MX,y+i*11));
-          y+=(al.length-1)*11;
+          // quadro âmbar (em vez de um parágrafo inteiro em vermelho): título curto + o que mudou + o que fazer
+          const t1=perdaTexto(pa)+'.';
+          const t2=`Vale verificar se houve descredenciamento, desativação no CNES ou falta de envio de produção — o Componente Fixo/IED depende disso.${comp?' '+comp:''}`;
+          const PX=16,BW=tW-PX-12;
+          setF('bold',8.8);const l1=doc.splitTextToSize(t1,BW);
+          setF('normal',8.5);const l2=doc.splitTextToSize(t2,BW);
+          const bh=12+12+l1.length*11+4+l2.length*10.6+8;
+          ensure(bh+6);
+          doc.setFillColor(...hex2rgb('#fdf5e4'));doc.roundedRect(MX,y,tW,bh,5,5,'F');
+          doc.setFillColor(...hex2rgb('#e0a82e'));doc.roundedRect(MX,y,3.5,bh,1.5,1.5,'F');
+          setF('bold',8,'#8a5a00');doc.text('EQUIPES A MENOS NO RELATÓRIO',MX+PX,y+16,{charSpace:0.3});
+          let ay=y+30;
+          setF('bold',8.8,INK);l1.forEach((ln,i)=>doc.text(ln,MX+PX,ay+i*11));ay+=l1.length*11+4;
+          setF('normal',8.5,SUB);l2.forEach((ln,i)=>doc.text(ln,MX+PX,ay+i*10.6));
+          y+=bh-12;
         }
       }
       y+=30;

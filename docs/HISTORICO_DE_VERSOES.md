@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.12.0
+
+PDFs mais caprichados. Resumo p/ secretário: cabeçalho no mesmo padrão dos outros dois PDFs (nome do município em destaque), a variação contra o quadrimestre anterior ao lado do valor, os três componentes com nome simples e técnico, a "outra oportunidade" num quadro com o valor em destaque (antes era uma frase em itálico) e, no espaço que sobrava, um gráfico de barras de como o repasse mensal evoluiu; corrigido o texto "equipes de Equipes de Saúde da Família". Relatório do quadrimestre: o aviso de equipes a menos virou um quadro âmbar com título, o que mudou em negrito e a orientação em texto normal (antes era um parágrafo inteiro em vermelho), e os valores abaixo do potencial ficam numa linha só, em selos do mesmo tamanho. Raio-X: os rótulos dos quadros do topo não são mais cortados ("Com equipe em Regular", "Com todas em Ótimo") e a coluna Situação ficou mais larga, sem quebrar em duas linhas.
+
 ## 4.11.0
 
 Painel do estado no mesmo padrão das outras telas. Os quatro quadros brancos do lado direito viraram o cartão azul (igual ao do Brasil e do município): repasse mensal do estado, variação contra o quadrimestre anterior, potencial, margem em aberto, barra de quanto já foi alcançado e o número de municípios (ou de clientes, quando o filtro de clientes está ligado). A legenda do mapa cabe numa linha só, com rótulos curtos ("mais de +5%", "até −2%"…; o texto completo aparece ao passar o mouse). A lista de tendência ficou um pouco mais compacta, e a coluna da direita cabe inteira na tela.

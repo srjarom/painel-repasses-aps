@@ -158,8 +158,8 @@ function generatePDFRaioX(){
       `Situação das equipes em cada indicador no relatório do SIAPS de ${qCodeKey(comp.curKey)}. Ponto de partida para a próxima agenda técnica com o município.`);
     const tiles=[
       {lbl:'Indicadores avaliados',val:String(todos.length),sub:`em ${comp.tipos.length} tipo${comp.tipos.length>1?'s':''} de equipe`,c:BLUE,sc:MUTED},
-      {lbl:'Com alguma equipe em Regular',val:String(nReg),sub:nReg?'prioridade da agenda':'nenhum — ótimo sinal',c:nReg?RED:GREEN,sc:nReg?RED:GREEN},
-      {lbl:'Com todas as equipes em Ótimo',val:String(nOt),sub:nOt?'manter o que já funciona':'nenhum ainda',c:nOt?GREEN:BLUE,sc:MUTED},
+      {lbl:'Com equipe em Regular',val:String(nReg),sub:nReg?'prioridade da agenda':'nenhum — ótimo sinal',c:nReg?RED:GREEN,sc:nReg?RED:GREEN},
+      {lbl:'Com todas em Ótimo',val:String(nOt),sub:nOt?'manter o que já funciona':'nenhum ainda',c:nOt?GREEN:BLUE,sc:MUTED},
       temPrev?{lbl:`Em relação ao ${qCodeKey(comp.prevKey)}`,val:`${nUp} ↑  ${nDn} ↓`,sub:`${nUp} melhoraram · ${nDn} pioraram`,c:BLUE,sc:MUTED}
              :{lbl:'Comparação',val:'—',sub:'só há um quadrimestre no relatório',c:MUTED,sc:MUTED}
     ];
@@ -167,7 +167,7 @@ function generatePDFRaioX(){
     tiles.forEach((t,i)=>{
       const tx=MX+i*(TWd+TG);
       doc.setFillColor(...hex2rgb(TILE));doc.roundedRect(tx,y,TWd,TH,5,5,'F');
-      setF('normal',8,SUB);doc.splitTextToSize(t.lbl,TWd-20).slice(0,1).forEach(ln=>doc.text(ln,tx+10,y+17));
+      {let fl=8;setF('normal',fl,SUB);while(doc.getTextWidth(t.lbl)>TWd-20&&fl>6.6){fl-=0.2;doc.setFontSize(fl);}doc.text(t.lbl,tx+10,y+17);}
       if(t.val.includes('↑')){
         // setas desenhadas (a fonte do PDF não garante ↑/↓)
         setF('bold',17,BLUE);doc.text(String(nUp),tx+10,y+40);let ax=tx+10+doc.getTextWidth(String(nUp))+5;
@@ -205,7 +205,7 @@ function generatePDFRaioX(){
 
     // ---- indicador por indicador, do mais crítico ao mais consolidado, por tipo de equipe ----
     const TIPO_NOME={eSF:'eSF — Saúde da Família',eAP:'eAP — Atenção Primária',eSB:'eSB — Saúde Bucal',eMulti:'eMulti — Multiprofissional',eAPP:'eAPP — Atenção Primária Prisional',eCR:'eCR — Consultório na Rua',eSFR:'eSFR — Saúde da Família Ribeirinha'};
-    const wQ=86,wSit=96,wTend=temPrev?62:0;
+    const wQ=80,wSit=110,wTend=temPrev?62:0;
     const wInd=tW-wQ*(temPrev?2:1)-wSit-wTend;
     const cols=[{l:'Indicador',w:wInd}];
     if(temPrev)cols.push({l:qShortKey(comp.prevKey),w:wQ,c:true});
