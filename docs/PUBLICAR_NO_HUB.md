@@ -59,6 +59,10 @@ cd testes
 npm.cmd run pacote
 ```
 
+Se a janela abrir em outra pasta, digite antes `cd D:painel-repasses-aps	estes`. No PowerShell, use sempre `npm.cmd` e `npx.cmd` (com `.cmd`): o Windows bloqueia a forma sem `.cmd`.
+
+**Na primeira vez num computador**, o teste precisa do navegador de teste. Se aparecer `Executable doesn't exist`, rode uma vez `npx.cmd playwright install chromium` (baixa uns 150 MB) e depois `npm.cmd run pacote` de novo.
+
 O comando faz tudo em ordem e para se algo der errado:
 
 1. Carimba o `site/index.html` (versão nos arquivos de código, carimbo nos dados).
