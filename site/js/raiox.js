@@ -180,7 +180,7 @@ function renderIndList(list){
     const acao=ACAO_INDICADOR[it.indicador];
     const det=CO.filter(c=>it[CHAVE[c]]).map(c=>`${it[CHAVE[c]]} ${c}`).join(' · ');
     return `<div class="ind-row ${nivel}">
-      <div class="ind-name">${it.indicador}${acao?`<div class="ind-acao">${acao}</div>`:''}</div>
+      <div class="ind-name">${it.indicador}${acao?`<div class="ind-acao">${acao}</div>`:''}${(()=>{const g=typeof guiaTecnicoDe==='function'?guiaTecnicoDe(it.indicador):null;return g?`<details class="ind-tec"><summary>O que revisar no sistema</summary>${guiaTecnicoHTML(g)}</details>`:'';})()}</div>
       <div class="ind-barw"><div class="ind-bar">${segs}</div><div class="ind-n" title="${det}">${it.total} equipe${it.total>1?'s':''} · ${det}</div></div>
       <div class="ind-score ${nivel}">${pct}%</div>
       <div class="ind-tagw">${tagHtml}</div>

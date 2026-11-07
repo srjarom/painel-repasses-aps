@@ -1755,3 +1755,58 @@ button.kpi:hover,.tcard:hover{box-shadow:var(--sh-2);}
   .navtabs .t-long{display:none;}
   .navtabs .tab{padding-left:10px;padding-right:10px;}
 }
+
+/* =========================================================================
+   v4.15.0 — SOBRE O PAINEL POR PÚBLICO E GUIA TÉCNICO POR INDICADOR
+   ========================================================================= */
+.sb-publicos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:14px;}
+.sb-pub{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:var(--sh-1);transition:border-color var(--dur) var(--ease),transform var(--dur) var(--ease),box-shadow var(--dur) var(--ease);}
+.sb-pub:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:var(--sh-2);}
+.sb-pub-ic{font-size:24px;line-height:1;}
+.sb-pub b{font-family:var(--font-titulo);font-size:17px;color:var(--navy);}
+.sb-pub p{margin:0;font-size:13px;color:var(--muted);line-height:1.5;}
+.sb-pub-go{margin-top:auto;padding-top:6px;font-size:12.5px;font-weight:700;color:var(--darkgreen);}
+:root[data-theme="dark"] .sb-pub-go{color:#b6e07a;}
+.sb-sub{font-family:var(--font-titulo);font-size:15px;color:var(--navy);margin:0 0 10px;scroll-margin-top:80px;}
+.sb-lead{font-size:14px;color:var(--ink);line-height:1.6;margin:0 0 14px;}
+.sb-fluxo{list-style:none;margin:0 0 14px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.sb-fluxo li{display:flex;gap:10px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 14px;box-shadow:var(--sh-1);}
+.sb-fluxo b{font-family:var(--font-titulo);font-size:14px;color:var(--navy);}
+.sb-fluxo p{margin:4px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5;}
+.sb-fluxo p b{font-family:inherit;font-size:inherit;color:var(--ink);}
+.sb-geral{background:linear-gradient(135deg,#09274C,#0d3a68);color:#fff;border-radius:12px;padding:14px 18px;margin-bottom:22px;}
+.sb-geral>b{font-family:var(--font-titulo);font-size:14.5px;}
+.sb-geral ul{margin:8px 0 0;padding-left:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 22px;}
+.sb-geral li{font-size:12.5px;color:#d4e2ee;line-height:1.45;}
+.sb-geral li b{color:#fff;}
+.gt-lista{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:30px;align-items:start;}
+.gt-grupo{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--sh-1);}
+.gt-gh{font-family:var(--font-titulo);font-weight:700;font-size:13px;letter-spacing:.03em;color:var(--navy);background:var(--panel-2);border-bottom:1px solid var(--line);padding:9px 14px;}
+.gt-item{border-top:1px solid var(--line);}
+.gt-gh+.gt-item{border-top:0;}
+.gt-item summary,.ind-tec summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:7px;}
+.gt-item summary::-webkit-details-marker,.ind-tec summary::-webkit-details-marker{display:none;}
+.gt-item summary::before,.ind-tec summary::before{content:'▸';color:var(--teal);font-size:11px;transition:transform var(--dur) var(--ease);flex:none;}
+.gt-item[open] summary::before,.ind-tec[open] summary::before{transform:rotate(90deg);}
+.gt-item summary{padding:9px 14px;font-size:13px;font-weight:600;color:var(--ink);}
+.gt-item summary:hover{background:var(--panel-2);}
+.gt-item[open]{background:var(--panel-2);}
+.gt-item>.gt-conta,.gt-item>.gt-rev{margin-left:14px;margin-right:14px;}
+.gt-conta{font-size:12.5px;color:var(--ink);line-height:1.5;margin:2px 0 6px;}
+.gt-rev{margin:0 0 12px;padding-left:18px;display:flex;flex-direction:column;gap:5px;}
+.gt-rev li{font-size:12.5px;color:var(--muted);line-height:1.5;}
+.gt-rev li b,.gt-conta b{color:var(--ink);}
+.sb-adendo{background:var(--chip-green-bg,#e6f5e0);border:1px solid rgba(62,155,79,.35);border-left:4px solid var(--bom);border-radius:10px;padding:13px 16px;margin:0 0 14px;}
+.sb-adendo>b{font-family:var(--font-titulo);font-size:14.5px;color:var(--navy);}
+.sb-adendo p{margin:6px 0 0;font-size:13px;color:var(--ink);line-height:1.6;}
+:root[data-theme="dark"] .sb-adendo{background:rgba(62,155,79,.12);}
+:root[data-theme="dark"] .sb-adendo>b{color:#e8f2fb;}
+/* Raio-X: checklist técnico em cada indicador */
+.ind-tec{margin-top:5px;}
+.ind-tec summary{font-size:11.5px;font-weight:600;color:var(--darkgreen);width:max-content;}
+:root[data-theme="dark"] .ind-tec summary{color:#b6e07a;}
+.ind-tec[open]{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px 2px;margin-top:6px;}
+.ind-tec .gt-conta{font-weight:400;margin-top:6px;}
+.ind-tec .gt-rev{font-weight:400;}
+@media(max-width:1000px){.sb-fluxo{grid-template-columns:repeat(2,minmax(0,1fr));}.gt-lista{grid-template-columns:1fr;}}
+@media(max-width:820px){.sb-publicos,.sb-fluxo,.sb-geral ul{grid-template-columns:1fr;}}

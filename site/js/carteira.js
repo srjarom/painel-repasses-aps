@@ -173,6 +173,7 @@ function showView(view){
   if(view!=='sobre'&&view!=='guia')viewAntesDoSobre=view;
   {const vb=document.getElementById('sobre-voltar');if(vb&&view!=='sobre')vb.style.display='none';}
   if(view==='brasil')renderBrasil();
+  if(view==='sobre'&&typeof renderGuiaTecnicoSobre==='function')renderGuiaTecnicoSobre();
   if(view==='carteira')renderCarteiraView();
   if(typeof agendarAjusteAltura==='function')agendarAjusteAltura();
   if(view!=='municipio')window.scrollTo({top:0,behavior:'auto'});
@@ -209,7 +210,7 @@ function abrirSobre(secao){
 // atalhos do guia ("Os 3 componentes", "Como usar o painel"…): só rolam a página, sem mexer no
 // endereço (o "#" no endereço dispararia a navegação do painel e tiraria a pessoa do guia)
 document.addEventListener('click',e=>{
-  const a=e.target.closest&&e.target.closest('.g-nav a');if(!a)return;
+  const a=e.target.closest&&e.target.closest('.g-nav a, a.sb-pub');if(!a)return;
   e.preventDefault();
   const t=document.querySelector(a.getAttribute('href'));
   if(t)t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});

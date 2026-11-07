@@ -197,7 +197,7 @@
         <div class="hint">Aparece no cabeçalho do PDF como "Para: …"</div>
       </div>
     </div>
-    <div class="sim-note sim-mod"><b>Modalidades não são públicas.</b> O estrato vem da Portaria (Anexo VI), mas a modalidade das equipes não aparece no relatório do SIAPS: o painel assume eAP 30h, eSB II comum, eMulti Complementar, eCR I e eAPP Essencial 20h. Se o município informar as modalidades reais, ajuste acima — a estimativa e os PDFs gerados agora passam a usar esses valores (não fica salvo).</div>
+    <div class="sim-note sim-mod"><b>Modalidades: opcional.</b> Não são públicas. O estrato vem da Portaria (Anexo VI), mas a modalidade das equipes não aparece no relatório do SIAPS: o painel assume eAP 30h, eSB II comum, eMulti Complementar, eCR I e eAPP Essencial 20h. Se o município informar as modalidades reais, ajuste acima — a estimativa e os PDFs gerados agora passam a usar esses valores (não fica salvo).</div>
       </details>
     </aside>
   </div>
@@ -396,7 +396,7 @@
 </section>
 </div>
 
-<!-- ======================= SOBRE O PAINEL (v4.14.0) ======================= -->
+<!-- ======================= SOBRE O PAINEL (v4.15.0) ======================= -->
 <div id="view-sobre" style="display:none;">
 <section class="guide sobre" id="sobre">
   <div class="guide-in">
@@ -404,20 +404,38 @@
     <div class="tut-head">
       <span class="tut-kicker">Sobre o painel</span>
       <h2>Para que serve este painel</h2>
-      <p>Chegar a uma conversa com o prefeito ou o secretário de saúde sabendo como está o município — com números públicos, organizados em poucos minutos.</p>
+      <p>Chegar a qualquer conversa sobre um município — com o prefeito, o secretário de saúde, a regional ou a própria equipe — sabendo como ele está, com números públicos, em poucos minutos.</p>
     </div>
-    <nav class="g-nav" aria-label="Seções desta página">
-      <a href="#sobre-porque">Por que existe</a><a href="#sobre-descobrir">O que dá para descobrir</a><a href="#sobre-visita">Como preparar uma visita</a><a href="#sobre-limites">O que o painel não sabe</a><a href="#sobre-fontes">De onde vêm os dados</a>
-    </nav>
 
     <h3 class="g-sec" id="sobre-porque">Por que ele existe</h3>
     <div class="sb-tres">
       <div class="sb-card"><b>Os dados existem, mas estão espalhados</b><p>O Ministério da Saúde publica no SIAPS como as equipes de cada município foram avaliadas — em planilhas grandes, um quadrimestre por vez, difíceis de ler.</p></div>
-      <div class="sb-card"><b>A conversa costuma começar sem base</b><p>Antes de uma visita, é raro saber quanto o município recebe, se o repasse está subindo ou caindo, ou onde estão os problemas das equipes.</p></div>
-      <div class="sb-card"><b>O painel junta e traduz</b><p>Calcula uma estimativa do repasse, compara os quadrimestres e aponta onde há valor em aberto e equipes com dificuldade — em linguagem simples.</p></div>
+      <div class="sb-card"><b>As conversas costumavam começar sem base</b><p>Reuniões com gestores e regionais aconteciam sem saber quanto o município recebe, se o repasse sobe ou cai e onde estão os problemas — e a investigação técnica pedia agendas longas.</p></div>
+      <div class="sb-card"><b>O painel dá uma leitura própria, com fatos</b><p>Junta os relatórios, estima o repasse, compara os quadrimestres e aponta equipes e indicadores com dificuldade. A conversa passa a partir de dados, não de percepções.</p></div>
     </div>
 
-    <h3 class="g-sec" id="sobre-descobrir">O que dá para descobrir de cada município</h3>
+    <h3 class="g-sec">Para quem é</h3>
+    <div class="sb-publicos">
+      <a class="sb-pub" href="#sobre-gestao">
+        <span class="sb-pub-ic" aria-hidden="true">🤝</span>
+        <b>Gestão e equipe comercial</b>
+        <p>Preparar visitas e reuniões, entender o momento do município e encontrar oportunidades de serviço — sem precisar dominar a Saúde Pública.</p>
+        <span class="sb-pub-go">Ver como usar →</span>
+      </a>
+      <a class="sb-pub" href="#sobre-tecnico">
+        <span class="sb-pub-ic" aria-hidden="true">🛠️</span>
+        <b>Consultor técnico e analista</b>
+        <p>Cortar caminho num chamado (“os indicadores caíram”): ver qual equipe e qual indicador caiu e ir direto ao que revisar no sistema.</p>
+        <span class="sb-pub-go">Ver o roteiro técnico →</span>
+      </a>
+    </div>
+    <nav class="g-nav" aria-label="Seções desta página">
+      <a href="#sobre-gestao">Gestão e comercial</a><a href="#sobre-tecnico">Consultor técnico</a><a href="#sobre-limites">O que o painel não sabe</a><a href="#sobre-fontes">De onde vêm os dados</a>
+    </nav>
+
+    <!-- ===== GESTÃO E COMERCIAL ===== -->
+    <h3 class="g-sec" id="sobre-gestao">Para a gestão e a equipe comercial</h3>
+    <h4 class="sb-sub">O que dá para descobrir de cada município</h4>
     <dl class="sb-perguntas">
       <div><dt>Quanto recebe por mês na Atenção Primária?</dt><dd>Cartão azul da tela do município, com a faixa possível do valor.</dd></div>
       <div><dt>O repasse está subindo ou caindo?</dt><dd>Selo de tendência e gráfico de evolução por quadrimestre.</dd></div>
@@ -426,8 +444,7 @@
       <div><dt>Em quais indicadores as equipes vão mal?</dt><dd>Abas Raio-X por indicador e Diagnóstico.</dd></div>
       <div><dt>Como está perto dos outros municípios do estado?</dt><dd>Mapa e Ranking do painel do estado.</dd></div>
     </dl>
-
-    <h3 class="g-sec" id="sobre-visita">Como preparar uma visita — o dever de casa</h3>
+    <h4 class="sb-sub" id="sobre-visita">Como preparar uma visita — o dever de casa</h4>
     <div class="sb-visita">
       <ol class="sb-passos">
         <li><b>Busque o município</b> no topo da tela e abra o relatório dele.</li>
@@ -441,16 +458,34 @@
         <b>Perguntas que abrem a conversa</b>
         <ul>
           <li>Vocês acompanham a classificação das equipes a cada quadrimestre?</li>
-          <li>Quais são as modalidades das equipes de saúde bucal e da eMulti? <small>(com isso, a estimativa fica mais precisa)</small></li>
           <li>Houve equipe descredenciada, desativada no CNES ou com produção não enviada?</li>
-          <li>Quem cuida do registro da produção no e-SUS?</li>
+          <li>Quem cuida do registro da produção e do envio das fichas?</li>
+          <li>Quais indicadores mais preocupam a coordenação hoje?</li>
         </ul>
       </div>
     </div>
 
+    <!-- ===== CONSULTOR TÉCNICO ===== -->
+    <h3 class="g-sec" id="sobre-tecnico">Para o consultor técnico</h3>
+    <p class="sb-lead">Quando chega um chamado ou um comentário — “os indicadores estão todos baixos”, “perdemos recurso” — quase nunca vem junto qual equipe, qual indicador ou desde quando. O painel responde isso antes da visita, e a agenda técnica já começa no ponto certo.</p>
+    <ol class="sb-fluxo">
+      <li><span class="g-n">1</span><div><b>Abra o município</b><p>Veja a tendência e se há <b>equipes a menos</b>: perda de equipe derruba o Fixo e não se resolve com configuração.</p></div></li>
+      <li><span class="g-n">2</span><div><b>Raio-X por indicador</b><p>Escolha o tipo de equipe e veja os indicadores <b>em prioridade</b> (nota abaixo de 50%) e quantas equipes estão em Regular.</p></div></li>
+      <li><span class="g-n">3</span><div><b>“O que revisar no sistema”</b><p>Em cada indicador do Raio-X há o checklist: o que o Ministério conta e quais campos precisam estar preenchidos.</p></div></li>
+      <li><span class="g-n">4</span><div><b>Decida a ação</b><p>Configuração do sistema, capacitação da equipe, cadastro (INE, CBO, vínculo das famílias) ou envio das fichas — antes de marcar a visita.</p></div></li>
+    </ol>
+    <div class="sb-geral">
+      <b>Antes de olhar um indicador específico, confira</b>
+      <ul id="sobre-tec-geral"></ul>
+    </div>
+    <h4 class="sb-sub">O que revisar no sistema, indicador por indicador</h4>
+    <p class="g-foot" style="margin-bottom:12px;">Resumo do manual interno “Indicadores Saúde 360”, que segue as fichas técnicas do Ministério da Saúde. Clique num indicador para abrir.</p>
+    <div class="gt-lista" id="sobre-tec-lista"></div>
+
+    <!-- ===== LIMITES ===== -->
     <h3 class="g-sec" id="sobre-limites">O que o painel não sabe — e como falar sobre isso</h3>
     <div class="sb-aviso">
-      <b>Os valores do painel são estimativas.</b> Eles servem para preparar a conversa e encontrar oportunidades — não para afirmar quanto o município recebeu. O valor oficial é o do <b>Fundo Nacional de Saúde</b> (consulta pública de pagamentos por município).
+      <b>Os valores em reais são estimativas.</b> Eles servem para acompanhar tendências e encontrar oportunidades — não para afirmar quanto o município recebeu. O valor oficial é o do <b>Fundo Nacional de Saúde</b> (consulta pública de pagamentos por município).
     </div>
     <div class="sb-sabe">
       <div class="sb-col ok"><span class="sb-tag">Vem do relatório público</span><ul>
@@ -461,7 +496,7 @@
       </ul></div>
       <div class="sb-col sup"><span class="sb-tag">O painel supõe</span><ul>
         <li><b>A modalidade das equipes:</b> eAP de 30h, eSB II comum, eMulti Complementar, eCR I e eAPP Essencial 20h</li>
-        <li>Isso muda bastante o valor — uma eMulti Ampliada vale três vezes uma Estratégica; o Fixo de uma eSB II é 76% maior que o de uma eSB I</li>
+        <li>Isso muda o valor — uma eMulti Ampliada vale três vezes uma Estratégica; o Fixo de uma eSB II é 76% maior que o de uma eSB I</li>
         <li>Por isso a tela do município mostra a <b>faixa</b>: “pode ficar entre R$ X e R$ Y”</li>
       </ul></div>
       <div class="sb-col nao"><span class="sb-tag">O painel não tem</span><ul>
@@ -469,6 +504,10 @@
         <li>O valor efetivamente pago: descontos, suspensões, ajustes e competências atrasadas</li>
         <li>Outros repasses: incentivos, programas, emendas</li>
       </ul></div>
+    </div>
+    <div class="sb-adendo">
+      <b>E se a gente nunca souber a modalidade das equipes?</b>
+      <p>Tudo bem — e é o mais comum. Informar a modalidade em <b>Parâmetros do cálculo</b>, na tela do município, é <b>opcional</b>: para muitos municípios, inclusive clientes, essa informação talvez nunca chegue, e não vale a pena travar o trabalho por ela. O painel foi feito para <b>acompanhar tendências e prospectar</b>. A classificação das equipes, os indicadores em prioridade e as equipes a menos <b>não dependem da modalidade</b>, e a direção do repasse (subiu ou caiu) quase sempre também não. Só o valor exato em reais depende — por isso ele vem com a faixa. Se um dia o município informar as modalidades, é só ajustar: a estimativa e os PDFs passam a usar os valores informados.</p>
     </div>
     <div class="sb-falar">
       <div class="sb-col diga"><span class="sb-tag">Na conversa, diga</span><ul>
@@ -482,13 +521,13 @@
         <li>Apresentar a margem em aberto como dinheiro garantido.</li>
       </ul></div>
     </div>
-    <p class="g-foot">Se o gestor informar as modalidades das equipes, ajuste em <b>Parâmetros do cálculo</b>, na tela do município: a estimativa e os PDFs passam a usar os valores informados.</p>
 
     <h3 class="g-sec" id="sobre-fontes">De onde vêm os dados</h3>
     <dl class="g-termos">
       <div><dt>SIAPS — relatório “Vínculo e Acompanhamento Territorial e Qualidade”</dt><dd>Quantas equipes de cada tipo ficaram em cada classificação, por município e quadrimestre. É a base do cálculo.</dd></div>
       <div><dt>SIAPS — relatório “Qualidade – Conceito obtido por indicador”</dt><dd>O conceito de cada indicador por tipo de equipe. Alimenta o Raio-X e o Diagnóstico.</dd></div>
       <div><dt>Portaria GM/MS nº 3.493/2024 e atualizações</dt><dd>Valores por equipe e por classificação, e o estrato IED de cada município. As tabelas estão em “Como funciona o repasse”.</dd></div>
+      <div><dt>Manual interno “Indicadores Saúde 360”</dt><dd>Como registrar cada indicador no sistema, com base nas fichas técnicas do Ministério da Saúde. Resumido na seção do consultor técnico.</dd></div>
       <div><dt>Atualização</dt><dd>A cada quadrimestre, quando o SIAPS publica a nova avaliação. A data da última atualização aparece no topo da tela do Brasil.</dd></div>
     </dl>
   </div>
@@ -699,6 +738,7 @@
 <script src="js/calculo.js"></script>
 <script src="js/mapa.js"></script>
 <script src="js/versao.js"></script>
+<script src="js/guia-tecnico.js"></script>
 <script src="js/raiox.js"></script>
 <script src="js/municipio.js"></script>
 <script src="js/carteira.js"></script>

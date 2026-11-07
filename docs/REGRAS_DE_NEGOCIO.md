@@ -28,7 +28,7 @@ Cada avaliação de quadrimestre define o repasse **dos meses seguintes**. O pai
 
 Na tela do município, o usuário pode mudar esses parâmetros para **simular**. Nada é salvo. Os oficiais são os publicados pela manutenção.
 
-**A modalidade não é pública.** O relatório do SIAPS traz quantas equipes de cada tipo ficaram em cada classificação, mas não a modalidade de cada uma. Hoje todos os municípios usam as modalidades padrão da tabela acima. Por isso, desde a versão 4.14.0, o painel mostra uma **faixa**:
+**A modalidade não é pública — e informá-la é opcional.** O painel serve para acompanhar tendências e prospectar; classificação das equipes, indicadores e equipes a menos não dependem da modalidade. O relatório do SIAPS traz quantas equipes de cada tipo ficaram em cada classificação, mas não a modalidade de cada uma. Hoje todos os municípios usam as modalidades padrão da tabela acima. Por isso, desde a versão 4.14.0, o painel mostra uma **faixa**:
 
 - **Mínimo:** eAP 20h, eSB I comum, eMulti Estratégica, eCR I, eAPP Essencial 20h.
 - **Máximo:** eAP 30h, eSB II comum, eMulti Ampliada, eCR III, eAPP Ampliada 30h. A eSB quilombola/assentamento fica de fora do máximo (só existe em territórios específicos); se o município estiver configurado assim, a faixa vai até o valor configurado.
@@ -92,6 +92,8 @@ O alerta serve como ponto de partida para oferecer apoio ao município. Ele func
 ## 6. Raio-X por indicador e "indicador mais crítico"
 
 A nota de cada indicador é a média ponderada das equipes classificadas nele, com os pesos oficiais do SIAPS: Regular 0,25 · Suficiente 0,50 · Bom 0,75 · Ótimo 1. Quanto mais perto de 25%, mais aquele indicador está segurando a equipe abaixo de "Ótimo". O ranking mostra o de menor nota no quadrimestre mais recente.
+
+**O que revisar no sistema (desde 4.15.0).** Cada indicador de ESF/eAP, eSB e eMulti traz um checklist para o consultor técnico: o que o Ministério conta e quais campos precisam estar preenchidos para o atendimento ser reconhecido no envio. É um resumo do manual interno "Indicadores Saúde 360" (que segue as fichas técnicas do Ministério). Fica em `site/js/guia-tecnico.js` e aparece no Raio-X e na página "Sobre o painel". Por ser um site público, o resumo usa só nomes de campos e telas — sem os códigos internos das telas do sistema nem nomes de pessoas. Os indicadores da eSFR usam o checklist do indicador equivalente da eSF; eCR e eAPP ainda não têm checklist (o manual não cobre).
 
 ## 7. "Próximo passo" (resumo para o secretário)
 
