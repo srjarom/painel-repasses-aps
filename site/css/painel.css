@@ -1622,3 +1622,58 @@ button.kpi:hover,.tcard:hover{box-shadow:var(--sh-2);}
 .estado-side .side-sec{padding:12px 14px;}
 .estado-side .tf-chip{padding:5px 10px;}
 .estado-side .tf-bar{gap:3px;}
+
+/* =========================================================================
+   v4.13.0 — GUIA DO REPASSE
+   a conta numa linha, atalhos, fatos de cada componente, exemplo em R$,
+   como usar o painel e glossário
+   ========================================================================= */
+.guide-in{max-width:1040px;padding:40px 30px 52px;}
+.tut-head{margin-bottom:24px;}
+.g-soma{display:flex;align-items:stretch;justify-content:center;gap:10px;flex-wrap:wrap;margin:0 auto 18px;}
+.g-parte{display:flex;flex-direction:column;justify-content:center;gap:2px;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:var(--panel);min-width:150px;text-align:center;box-shadow:var(--sh-1);}
+.g-parte small{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);}
+.g-parte b{font-family:var(--font-titulo);font-size:16px;color:var(--navy);}
+.g-parte.fixed{border-top:3px solid var(--chip-blue-fg);}
+.g-parte.variable{border-top:3px solid var(--darkgreen);}
+.g-parte.total{background:linear-gradient(135deg,#09274C,#0d3a68);border-color:#09274C;}
+.g-parte.total small{color:#9fb6c8;}
+.g-parte.total b{color:#fff;}
+.g-op{align-self:center;font-family:var(--font-titulo);font-size:22px;font-weight:700;color:var(--muted);}
+.g-nav{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin:0 0 30px;}
+.g-nav a{font-size:12.5px;font-weight:600;color:var(--navy);text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 13px;transition:background var(--dur) var(--ease),border-color var(--dur) var(--ease);}
+.g-nav a:hover{border-color:var(--teal);background:var(--panel-2);}
+.g-sec{font-size:18px;color:var(--navy);margin:0 0 14px;scroll-margin-top:80px;display:flex;align-items:center;gap:10px;}
+.g-sec::after{content:"";flex:1;height:1px;background:var(--line);}
+.comp-grid{margin-bottom:10px;}
+.comp-card{display:flex;flex-direction:column;}
+.comp-facts{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto;}
+.comp-card p{margin-bottom:14px;}
+.comp-facts dt{font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);}
+.comp-facts dd{margin:2px 0 0;font-size:13px;font-weight:700;color:var(--ink);}
+.comp-facts dd.sim{color:var(--darkgreen);}
+.comp-facts dd.nao{color:var(--chip-blue-fg);}
+:root[data-theme="dark"] .comp-facts dd.sim{color:#b6e07a;}
+.g-foot{font-size:12px;color:var(--muted);margin:0 0 30px;line-height:1.5;}
+.scale-ex{display:flex;margin-top:6px;}
+.scale-ex>div{flex:1;text-align:center;font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums;}
+.scale-ex>div+div{border-left:1px dashed var(--line-2);}
+.scale-wrap{margin-bottom:30px;}
+.flow-note{margin-bottom:30px;}
+.g-passos{list-style:none;margin:0 0 10px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;}
+.g-passos li{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--sh-1);}
+.g-n{flex:none;width:28px;height:28px;border-radius:50%;background:#09274C;color:#fff;font-family:var(--font-titulo);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;}
+.g-passos b{font-family:var(--font-titulo);font-size:15px;color:var(--navy);}
+.g-passos p{margin:4px 0 0;font-size:13px;color:var(--muted);line-height:1.5;}
+.g-passos p b{font-family:inherit;font-size:inherit;color:var(--ink);}
+.g-termos{margin:0 0 30px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;}
+.g-termos>div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px;}
+.g-termos dt{font-family:var(--font-titulo);font-weight:700;font-size:14px;color:var(--navy);}
+.g-termos dd{margin:4px 0 0;font-size:13px;color:var(--muted);line-height:1.5;}
+.g-termos dd b{color:var(--ink);}
+@media(max-width:820px){
+  .g-passos,.g-termos{grid-template-columns:1fr;}
+  .g-op{width:100%;text-align:center;font-size:18px;line-height:1;}
+  .g-parte{flex:1 1 100%;}
+  .guide-in{padding:28px 16px 40px;}
+}

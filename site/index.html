@@ -216,38 +216,61 @@
       <p>Pensado pra quem apresenta esses números ao cliente sem precisar dominar a Saúde Pública por dentro.</p>
     </div>
 
+    <!-- a conta inteira numa linha -->
+    <div class="g-soma" aria-label="Repasse mensal é a soma de Fixo, Vínculo e Qualidade">
+      <div class="g-parte fixed"><small>todo mês</small><b>Fixo / IED</b></div>
+      <span class="g-op" aria-hidden="true">+</span>
+      <div class="g-parte variable"><small>depende da nota</small><b>Vínculo (CVAT)</b></div>
+      <span class="g-op" aria-hidden="true">+</span>
+      <div class="g-parte variable"><small>depende da nota</small><b>Qualidade</b></div>
+      <span class="g-op" aria-hidden="true">=</span>
+      <div class="g-parte total"><small>o que o painel mostra</small><b>Repasse mensal</b></div>
+    </div>
+    <nav class="g-nav" aria-label="Seções do guia">
+      <a href="#g-comp">Os 3 componentes</a><a href="#g-nota">A classificação</a><a href="#g-quando">Quando é pago</a><a href="#g-uso">Como usar o painel</a><a href="#g-termos">Palavras do painel</a>
+    </nav>
+
+    <h3 class="g-sec" id="g-comp">Os 3 componentes</h3>
     <div class="comp-grid">
       <div class="comp-card">
         <div class="comp-ic fixed"><svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.66 0-3 .9-3 2s1.34 2 3 2 3 .9 3 2-1.34 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 12v-2M12 4v.01M12 20a8 8 0 100-16 8 8 0 000 16z"/></svg></div>
         <div class="comp-tag fixed">Componente fixo</div>
         <h3>Fixo por Estrato IED</h3>
         <p>Pago <b>todo mês, independente de avaliação</b>. Só varia pelo <b>Estrato IED</b> do município (I a IV, definido pelo IBGE conforme o perfil socioeconômico) e pelo <b>tipo de equipe</b>. É a base garantida do repasse — a parte que não depende do desempenho.</p>
+        <dl class="comp-facts"><div><dt>Quem tem</dt><dd>Todas as equipes*</dd></div><div><dt>Depende da nota?</dt><dd class="nao">Não</dd></div></dl>
       </div>
       <div class="comp-card">
         <div class="comp-ic variable"><svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.97-3-8-6.5-8-10.5A5.5 5.5 0 0112 6a5.5 5.5 0 018 4.5c0 4-3.03 7.5-8 10.5z"/></svg></div>
         <div class="comp-tag variable">Componente variável</div>
         <h3>Vínculo e Acompanhamento Territorial (CVAT)</h3>
         <p>Paga pelo <b>vínculo da equipe com o território</b> — cadastro atualizado, visitas domiciliares, acompanhamento das famílias. Existe só para equipes <b>ESF</b> e <b>eAP</b>. Varia conforme a classificação do quadrimestre.</p>
+        <dl class="comp-facts"><div><dt>Quem tem</dt><dd>Só ESF e eAP</dd></div><div><dt>Depende da nota?</dt><dd class="sim">Sim</dd></div></dl>
       </div>
       <div class="comp-card">
         <div class="comp-ic variable"><svg fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15a4 4 0 100-8 4 4 0 000 8zm-3.5 1.5L7 22l5-3 5 3-1.5-5.5"/></svg></div>
         <div class="comp-tag variable">Componente variável</div>
         <h3>Qualidade</h3>
         <p>Paga pelo desempenho nos <b>indicadores de qualidade</b> (pré-natal, hipertensão/diabetes, câncer da mulher, saúde da criança, entre outros). Existe para <b>todos os tipos de equipe</b> — ESF, eAP, eSB, eMulti e também as equipes ribeirinhas (eSFR), prisionais (eAPP) e de Consultório na Rua (eCR). Também varia por classificação.</p>
+        <dl class="comp-facts"><div><dt>Quem tem</dt><dd>Todos os tipos</dd></div><div><dt>Depende da nota?</dt><dd class="sim">Sim</dd></div></dl>
       </div>
     </div>
+    <p class="g-foot">* A eAPP (prisional) não tem Fixo no cálculo deste painel — veja os valores oficiais no fim da página.</p>
 
+    <h3 class="g-sec" id="g-nota">A classificação de cada equipe, a cada quadrimestre</h3>
     <div class="scale-wrap">
-      <div class="scale-label">A classificação de cada equipe, a cada quadrimestre</div>
       <div class="scale">
         <div class="scale-seg" style="background:var(--regular)">Regular</div>
         <div class="scale-seg" style="background:var(--suficiente)">Suficiente</div>
         <div class="scale-seg" style="background:var(--bom)">Bom</div>
         <div class="scale-seg" style="background:var(--otimo)">Ótimo</div>
       </div>
-      <div class="scale-caption">Quanto maior a classificação, maior o valor de <b>Vínculo</b> e de <b>Qualidade</b> — o <b>Fixo não muda</b>, independente da classificação.</div>
+      <div class="scale-ex" aria-label="Exemplo de valor por equipe ESF">
+        <div><b>R$ 4.000</b></div><div><b>R$ 8.000</b></div><div><b>R$ 12.000</b></div><div><b>R$ 16.000</b></div>
+      </div>
+      <div class="scale-caption"><b>Exemplo:</b> quanto uma equipe <b>ESF</b> recebe por mês somando <b>Vínculo</b> e <b>Qualidade</b> em cada classificação (o Fixo vem por cima e <b>não muda</b> com a nota). Subir um degrau = <b>+ R$ 4.000/mês</b> por equipe ESF.</div>
     </div>
 
+    <h3 class="g-sec" id="g-quando">Quando é pago</h3>
     <div class="flow">
       <div class="flow-step">
         <div class="fq">Quadrimestre atual</div>
@@ -259,7 +282,36 @@
         <div class="fl">O repasse é pago com base na nota do quadrimestre anterior</div>
       </div>
     </div>
-    <p class="flow-note">Por isso, o valor que a equipe recebe <b>agora</b> reflete o desempenho do quadrimestre <b>anterior</b> — não do atual. Uma equipe que melhorou a atuação neste quadrimestre só vai ver o reflexo em R$ no quadrimestre seguinte. É esse intervalo que o gráfico de evolução do repasse, mais abaixo, mostra.</p>
+    <p class="flow-note">Por isso, o valor que a equipe recebe <b>agora</b> reflete o desempenho do quadrimestre <b>anterior</b> — não do atual. Uma equipe que melhorou a atuação neste quadrimestre só vai ver o reflexo em R$ no quadrimestre seguinte. É esse movimento que o gráfico de evolução, na tela de cada município, mostra.</p>
+
+    <h3 class="g-sec" id="g-uso">Como usar o painel</h3>
+    <ol class="g-passos">
+      <li>
+        <span class="g-n">1</span>
+        <div><b>Brasil</b><p>Mapa por estado e lista dos 27 estados. Mostra quanto o país recebe, a margem em aberto e onde há equipes a menos. <b>Clique num estado</b> para abrir.</p></div>
+      </li>
+      <li>
+        <span class="g-n">2</span>
+        <div><b>Estado</b><p>Mapa por município (tendência, margem, % do potencial), <b>Ranking</b> e <b>Equipes a menos</b>. O botão <b>Clientes</b>, no topo (nos estados com clientes), filtra só a carteira. <b>Clique num município</b> e depois em “Abrir relatório”.</p></div>
+      </li>
+      <li>
+        <span class="g-n">3</span>
+        <div><b>Município</b><p>Repasse, evolução, ganhos por tipo de equipe, <b>Raio-X</b> por indicador e <b>Diagnóstico</b> com sugestão de agenda. No topo, os 3 PDFs: relatório, resumo para o secretário e Raio-X (uso interno).</p></div>
+      </li>
+    </ol>
+    <p class="g-foot">Dica: a busca no topo leva direto a qualquer município ou estado, e o endereço da página pode ser copiado e enviado — abre na mesma tela.</p>
+
+    <h3 class="g-sec" id="g-termos">Palavras que aparecem no painel</h3>
+    <dl class="g-termos">
+      <div><dt>Repasse mensal</dt><dd>Quanto o município recebe por mês do Ministério da Saúde para a Atenção Primária (Fixo + Vínculo + Qualidade), estimado a partir do relatório público do SIAPS.</dd></div>
+      <div><dt>Potencial</dt><dd>Quanto receberia se todas as equipes que já existem chegassem a <b>Ótimo</b>. É o teto com as equipes de hoje.</dd></div>
+      <div><dt>Margem em aberto</dt><dd>A diferença entre o potencial e o repasse atual: o que ainda dá para conquistar por mês, sem criar equipe nova.</dd></div>
+      <div><dt>Tendência</dt><dd>Se o repasse <b>subiu</b>, <b>caiu</b> ou ficou <b>igual</b> em relação ao quadrimestre anterior.</dd></div>
+      <div><dt>Equipes a menos</dt><dd>Tipos de equipe que aparecem em menor número no relatório do que antes. Pode ser descredenciamento, desativação no CNES ou falta de envio de produção — e derruba o Fixo.</dd></div>
+      <div><dt>Estrato IED</dt><dd>Classificação do município de I (mais vulnerável) a IV, que define o valor do Fixo das equipes ESF e eAP.</dd></div>
+      <div><dt>Quadrimestre (ex.: 2026Q2)</dt><dd>Período de 4 meses da avaliação. 2026Q2 = 2º quadrimestre de 2026 (maio a agosto).</dd></div>
+      <div><dt>Prioridade (Raio-X)</dt><dd>Indicador com nota abaixo de 50%: é onde uma agenda técnica tende a dar mais resultado.</dd></div>
+    </dl>
 
     <details class="guide-details">
       <summary>Ver valores oficiais completos, por tipo de equipe <span class="sm">(Portaria GM/MS nº 3.493/2024)</span></summary>

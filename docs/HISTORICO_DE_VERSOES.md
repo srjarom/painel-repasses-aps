@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.13.0
+
+Guia "Como funciona o repasse" mais completo e visual. No topo, a conta inteira numa linha (Fixo + Vínculo + Qualidade = Repasse mensal) e atalhos para cada parte do guia. Cada componente mostra "quem tem" e se "depende da nota". A escala de classificação traz um exemplo em reais (quanto uma equipe ESF recebe de Vínculo + Qualidade em cada degrau: subir um degrau = + R$ 4.000/mês). Duas seções novas: "Como usar o painel" (Brasil → estado → município, em 3 passos) e "Palavras que aparecem no painel" (repasse mensal, potencial, margem em aberto, tendência, equipes a menos, estrato IED, quadrimestre e prioridade). Corrigida a menção ao gráfico de evolução, que agora fica na tela do município.
+
 ## 4.12.0
 
 PDFs mais caprichados. Resumo p/ secretário: cabeçalho no mesmo padrão dos outros dois PDFs (nome do município em destaque), a variação contra o quadrimestre anterior ao lado do valor, os três componentes com nome simples e técnico, a "outra oportunidade" num quadro com o valor em destaque (antes era uma frase em itálico) e, no espaço que sobrava, um gráfico de barras de como o repasse mensal evoluiu; corrigido o texto "equipes de Equipes de Saúde da Família". Relatório do quadrimestre: o aviso de equipes a menos virou um quadro âmbar com título, o que mudou em negrito e a orientação em texto normal (antes era um parágrafo inteiro em vermelho), e os valores abaixo do potencial ficam numa linha só, em selos do mesmo tamanho. Raio-X: os rótulos dos quadros do topo não são mais cortados ("Com equipe em Regular", "Com todas em Ótimo") e a coluna Situação ficou mais larga, sem quebrar em duas linhas.

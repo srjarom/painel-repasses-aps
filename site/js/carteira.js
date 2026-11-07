@@ -181,3 +181,12 @@ document.getElementById('nav-tab-guia').addEventListener('click',()=>showView('g
 {const back=document.getElementById('btn-voltar-painel');if(back)back.addEventListener('click',()=>{
   if(entrouNoMunicipioPeloPainel)history.back();else irEstado(UF_ATUAL);
 });}
+
+// atalhos do guia ("Os 3 componentes", "Como usar o painel"…): só rolam a página, sem mexer no
+// endereço (o "#" no endereço dispararia a navegação do painel e tiraria a pessoa do guia)
+document.addEventListener('click',e=>{
+  const a=e.target.closest&&e.target.closest('.g-nav a');if(!a)return;
+  e.preventDefault();
+  const t=document.querySelector(a.getAttribute('href'));
+  if(t)t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+});
