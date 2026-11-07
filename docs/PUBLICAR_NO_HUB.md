@@ -43,9 +43,20 @@ Desde novembro de 2026 o painel é publicado pelo **GitHub Pages**, a partir do 
 
 Se no futuro o painel for para o hub da empresa, as instruções abaixo continuam valendo.
 
-## Instruções do ambiente do hub (preencher após a autorização)
+## Instruções do ambiente do hub
 
-- Endereço do painel:
-- Onde/como enviar os arquivos:
-- Quem autorizou / data:
-- Observações:
+- Endereço do painel: (a definir pela TI)
+- Onde/como enviar os arquivos: um **.zip com o conteúdo da pasta `site/`** (o `index.html` na raiz do zip), entregue à TI de sistemas internos, que publica no Hub corporativo. A TI pretende converter a plataforma para .NET antes de publicar.
+- Versões enviadas: 2.4.0 (só RS, novembro de 2026) e depois **4.16.2** (Brasil todo), que substitui a anterior.
+- Observações: o site é estático e usa caminhos relativos; os arquivos são chamados com `?v=<versão>` no `index.html` para o navegador não misturar versões — se a conversão mexer nisso, manter um mecanismo parecido.
+
+### Como gerar o pacote .zip
+
+No PowerShell, na pasta do projeto (o `tar` do Windows grava o zip no formato padrão, com `/` nos caminhos):
+
+```
+cd site
+tar.exe -a -c -f ..pacotepainel-repasses-aps-v<versão>.zip *
+```
+
+A pasta `pacote/` não vai para o GitHub (está no `.gitignore`).
