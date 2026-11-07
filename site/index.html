@@ -49,6 +49,7 @@
     <div class="tb-tools idbar-actions muni-acts">
       <div class="change primary" id="btn-pdf" role="button" tabindex="0" onclick="generatePDF()">⤓ Relatório do quadrimestre (PDF)</div>
       <div class="change disabled" id="btn-resumo" role="button" tabindex="0" onclick="generatePDFResumo()">▤ Resumo p/ secretário</div>
+      <div class="idbar-actions" id="raiox-actions" style="display:none;"><div class="change" role="button" tabindex="0" onclick="generatePDFRaioX()" title="PDF do Raio-X por indicador">⤓ Raio-X (PDF)</div></div>
     </div>
   </div>
 </section>
@@ -91,9 +92,6 @@
           <div>
             <h3>Raio-X por indicador</h3>
             <p>Mostra, indicador por indicador, por que uma equipe não chega a "Ótimo" — a nota de cada indicador de Qualidade, por tipo de equipe, no quadrimestre mais recente.</p>
-          </div>
-          <div class="idbar-actions" id="raiox-actions" style="display:none;">
-            <div class="change primary" onclick="generatePDFRaioX()">⤓ Baixar Raio-X (PDF)</div>
           </div>
         </div>
         <div class="card-b">

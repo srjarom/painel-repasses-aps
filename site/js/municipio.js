@@ -88,23 +88,26 @@ function recompute(){
     const atual=last.vin+last.qual+last.fixo;
     const gap=last.potencial-atual;
     const pct=Math.round(atual/last.potencial*100);
+    // v4.8.0: o essencial em destaque (valor do mês e tendência); a composição em três
+    // números pequenos; potencial e margem lado a lado com a barra. Os valores do
+    // quadrimestre (×4) ficam na dica ao passar o mouse.
     hl.innerHTML=`
       <div class="primary">
-        <div class="cap">Repasse mensal · ${last.quad}</div>
-        <div class="big mono">${fmtBRL(last.total)}</div>
+        <div class="cap">Repasse mensal · ${qCode(last.quad)}</div>
+        <div class="big mono" title="≈ ${fmtBRL(last.total*4)} no quadrimestre (4 meses)">${fmtBRL(last.total)}</div>
         <div class="hl-trend">${trendChipHTML(tendenciaDe(res),'onnavy')}</div>
-        <div class="sub">Fixo/IED ${fmtBRL(last.fixo)} &nbsp;·&nbsp; Vínculo ${fmtBRL(last.vin)} &nbsp;·&nbsp; Qualidade ${fmtBRL(last.qual)}</div>
-        <div class="quad-note">≈ <b>${fmtBRL(last.total*4)}</b> no quadrimestre (4 meses)</div>
       </div>
-      <div class="split">
-        <div class="mini"><div class="l">Potencial — tudo Ótimo</div><div class="v mono">${fmtBRL(last.potencial)}</div></div>
-        <div class="mini gap"><div class="l">Margem em aberto por mês</div><div class="v mono">+ ${fmtBRL(gap)}</div>
-          <div class="barwrap"><i style="width:${pct}%"></i></div>
-          <div class="barlbl">${pct}% do potencial máximo já alcançado</div>
-          <div class="quad-note">≈ <b>${fmtBRL(gap*4)}</b> em aberto no quadrimestre</div>
-        </div>
+      <div class="hl-comp">
+        <div><span>Fixo/IED</span><b>${fmtBRLcurto(last.fixo)}</b></div>
+        <div><span>Vínculo</span><b>${fmtBRLcurto(last.vin)}</b></div>
+        <div><span>Qualidade</span><b>${fmtBRLcurto(last.qual)}</b></div>
       </div>
-      <div class="quad-footnote">Estimativa do quadrimestre: assume a mesma classificação mantida pelos 4 meses seguintes à avaliação de ${last.quad}.</div>`;
+      <div class="hl-pot">
+        <div class="mini"><div class="l">Potencial (tudo Ótimo)</div><div class="v mono">${fmtBRL(last.potencial)}</div></div>
+        <div class="mini gap" title="≈ ${fmtBRL(gap*4)} em aberto no quadrimestre"><div class="l">Margem em aberto</div><div class="v mono">+ ${fmtBRL(gap)}</div></div>
+        <div class="hl-bar"><div class="barwrap"><i style="width:${pct}%"></i></div><div class="barlbl">${pct}% do potencial já alcançado</div></div>
+      </div>
+      <div class="quad-footnote">Valores por mês, estimados a partir da avaliação de ${qCode(last.quad)}.</div>`;
   }
   chartRepasse(res);tblRepasse(res);tblEquipesFixo(res);chartClass(res);renderByType(res,!!p.estrato);
   renderAlertaMunicipio(res);
@@ -151,28 +154,28 @@ function renderByType(res,hasEstrato){
     // eAPP: só o componente de Qualidade entra no cálculo (custeio mensal federal não confirmado)
     const soQual=k==='eapp';
     const nowLbl=soQual?'Repasse mensal (só Qualidade)':hasEstrato?(hasVinculo?'Repasse mensal (Fixo + CVAT + Qualidade)':'Repasse mensal (Fixo + Qualidade)'):'Repasse mensal (sem Fixo)';
+    // v4.8.0: cartão enxuto — valor do mês, barra do potencial e a margem em destaque;
+    // a composição vira uma linha discreta de "etiquetas"
     const compParts=[];
-    if(hasEstrato&&!soQual)compParts.push(`${hasVinculo?'Fixo/IED':'Fixo'} <b>${fmtBRL(t.fixo)}</b>`);
-    if(hasVinculo)compParts.push(`Vínculo (CVAT) <b>${fmtBRL(t.vin)}</b> <span style="color:var(--muted);font-weight:400;">— ver cartão CVAT</span>`);
-    compParts.push(`Qualidade <b>${fmtBRL(t.qual)}</b>${gapQual>0.5?` <span class="comp-gap">+ ${fmtBRL(gapQual)} até Ótimo</span>`:''}`);
-    const compLine=`<div class="tcard-comp">${compParts.map(p=>`<span>${p}</span>`).join('')}</div>`;
+    if(hasEstrato&&!soQual)compParts.push(`${hasVinculo?'Fixo/IED':'Fixo'} ${fmtBRLcurto(t.fixo)}`);
+    if(hasVinculo)compParts.push(`Vínculo ${fmtBRLcurto(t.vin)}`);
+    compParts.push(`Qualidade ${fmtBRLcurto(t.qual)}`);
+    const compLine=`<div class="tc-comp" title="${nowLbl}">${compParts.map(p=>`<span>${p}</span>`).join('')}</div>`;
+    const margem=hasEstrato
+      ?(t.gap>0.5?`<div class="tc-gap" title="Potencial ${fmtBRL(t.potencial)}/mês${gapQual>0.5?' · Qualidade: + '+fmtBRL(gapQual)+' até Ótimo':''}">Margem <b>+ ${fmtBRL(t.gap)}</b>/mês</div>`:`<div class="tc-gap ok">No potencial máximo</div>`)
+      :`<div class="tc-gap muted">Selecione o estrato para o valor total</div>`;
     cardsByType[k]=`
-      <div class="tcard">
-        <div class="tcard-top">
-          <div><div class="tt">${TYPE_META[k].label}</div><div class="cnt">${t.n} equipe${t.n>1?'s':''} · ${TYPE_META[k].full}</div></div>
+      <div class="tcard tc">
+        <div class="tc-top">
+          <div class="tc-id"><span class="tt">${TYPE_META[k].label}</span><span class="cnt">${t.n} equipe${t.n>1?'s':''}</span></div>
           ${hasEstrato?`<div class="pill ${pillCls}">${pillTxt}</div>`:''}
         </div>
-        <div class="tcard-body">
-          <div class="nowlbl">${nowLbl}</div>
-          <div class="now mono">${nowVal}</div>
-          ${hasEstrato?`<div class="tcard-prog"><i style="width:${Math.min(pct,100)}%"></i></div>`:''}
-          ${compLine}
-          ${gapLine}
-        </div>
-        <div class="tcard-foot">
-          Classificação em ${last.quad}
-          <div class="dist">${distBar}</div>
-        </div>
+        <div class="tc-full">${TYPE_META[k].full}</div>
+        <div class="now mono">${nowVal}<small>/mês</small></div>
+        ${hasEstrato?`<div class="tcard-prog"><i style="width:${Math.min(pct,100)}%"></i></div>`:''}
+        ${margem}
+        ${compLine}
+        <div class="tc-dist" title="Classificação das equipes em ${qCode(last.quad)}"><div class="dist">${distBar}</div></div>
       </div>`;
   });
 
@@ -196,22 +199,17 @@ function renderByType(res,hasEstrato){
     const vinDistTotal=CO.reduce((s,c)=>s+(vinDist[c]||0),0)||1;
     const vinDistBar=CO.map(c=>{const n=vinDist[c]||0;if(!n)return'';const w=(n/vinDistTotal*100).toFixed(1);return `<span style="width:${w}%;background:${CC[c]}" title="${c}: ${n}"></span>`;}).join('');
     cvatHtml=`
-      <div class="tcard cvat-card">
-        <div class="tcard-top">
-          <div><div class="tt">CVAT</div><div class="cnt">Vínculo e Acompanhamento Territorial · ${vinTypes.map(k=>TYPE_META[k].label).join(' + ')}</div></div>
+      <div class="tcard tc cvat-card">
+        <div class="tc-top">
+          <div class="tc-id"><span class="tt">CVAT</span><span class="cnt">${vinTypes.map(k=>TYPE_META[k].label).join(' + ')}</span></div>
           <div class="pill ${vPillCls}">${vPillTxt}</div>
         </div>
-        <div class="tcard-body">
-          <div class="nowlbl">Repasse mensal — componente CVAT</div>
-          <div class="now mono">${fmtBRL(vinNow)}</div>
-          <div class="tcard-prog"><i style="width:${Math.min(vinPct,100)}%"></i></div>
-          <div class="tcard-comp"><span>${perTeam}</span></div>
-          <div class="tcard-meta"><span>Potencial ${fmtBRL(vinPot)}</span><span>Margem <b>+ ${fmtBRL(vinGap)}</b></span></div>
-        </div>
-        <div class="tcard-foot">
-          Classificação de Vínculo em ${last.quad} <span style="color:var(--muted);">(avaliada à parte da Qualidade — pode ter uma distribuição diferente)</span>
-          <div class="dist">${vinDistBar}</div>
-        </div>
+        <div class="tc-full">Vínculo e Acompanhamento Territorial</div>
+        <div class="now mono">${fmtBRL(vinNow)}<small>/mês</small></div>
+        <div class="tcard-prog"><i style="width:${Math.min(vinPct,100)}%"></i></div>
+        ${vinGap>0.5?`<div class="tc-gap" title="Potencial ${fmtBRL(vinPot)}/mês">Margem <b>+ ${fmtBRL(vinGap)}</b>/mês</div>`:`<div class="tc-gap ok">No potencial máximo</div>`}
+        <div class="tc-comp">${vinTypes.map(k=>`<span>${TYPE_META[k].label} ${fmtBRLcurto(last.byType[k].vin)}</span>`).join('')}</div>
+        <div class="tc-dist" title="Classificação de Vínculo em ${qCode(last.quad)} (avaliada à parte da Qualidade)"><div class="dist">${vinDistBar}</div></div>
       </div>`;
   }
 

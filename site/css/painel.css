@@ -1354,3 +1354,75 @@ button.kpi:hover,.tcard:hover{box-shadow:var(--sh-2);}
 @keyframes sk-brilho{from{background-position:100% 0;}to{background-position:-100% 0;}}
 @media(max-width:999px){.sk-grid{grid-template-columns:1fr;}.sk-wrap{padding:16px;}}
 @media (prefers-reduced-motion:reduce){.sk,.sk-top,.sk-main{animation:none;}}
+
+/* =========================================================================
+   v4.8.0 — POLIMENTO DA TELA DO MUNICÍPIO
+   ========================================================================= */
+/* cartão azul do resumo: valor e tendência em destaque, composição em 3 números,
+   potencial e margem lado a lado com a barra */
+.muni-side .headline{gap:14px;padding:18px 20px 14px;}
+.muni-side .headline .primary .big{font-size:36px;margin:4px 0 8px;cursor:default;}
+.muni-side .headline .hl-trend{margin:0;}
+.hl-comp{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:rgba(255,255,255,.12);border-radius:10px;overflow:hidden;}
+.hl-comp>div{background:rgba(9,39,76,.55);padding:8px 10px;display:flex;flex-direction:column;gap:2px;}
+.hl-comp span{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:#9fb6c8;}
+.hl-comp b{font-family:var(--font-titulo);font-size:15px;color:#fff;font-variant-numeric:tabular-nums;}
+.hl-pot{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;}
+.hl-pot .mini .l{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:#9fb6c8;}
+.hl-pot .mini .v{font-family:var(--font-titulo);font-size:19px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums;}
+.hl-pot .mini.gap .v{color:var(--lime-bright);}
+.hl-pot .hl-bar{grid-column:1/-1;}
+.hl-pot .barwrap{height:7px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;}
+.hl-pot .barwrap i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--lime));border-radius:99px;}
+.hl-pot .barlbl{font-size:11px;color:#9fb6c8;margin-top:5px;}
+.muni-side .headline .quad-footnote{font-size:10.5px;padding-top:8px;border-top:1px solid rgba(255,255,255,.12);}
+
+/* alerta de equipes a menos: lista curta */
+.muni-side .alerta-muni{display:block;padding:12px 14px;}
+.am-head{display:flex;align-items:center;gap:8px;font-size:13px;}
+.am-head .am-ic{font-size:15px;line-height:1;}
+.am-head .am-imp{margin-left:auto;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;}
+.am-list{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:5px;}
+.am-list li{display:flex;align-items:baseline;flex-wrap:wrap;gap:2px 8px;font-size:12.5px;padding:5px 8px;background:rgba(255,255,255,.55);border-radius:7px;}
+:root[data-theme="dark"] .am-list li{background:rgba(255,255,255,.05);}
+.am-list li small{margin-left:auto;font-size:11px;opacity:.8;}
+.alerta-muni .am-g{margin-top:8px;font-size:12px;color:var(--darkgreen,#2e7d32);}
+:root[data-theme="dark"] .alerta-muni .am-g{color:#b6e07a;}
+.am-more{margin-top:8px;font-size:11.5px;}
+.am-more summary{cursor:pointer;font-weight:600;list-style:none;display:inline-flex;align-items:center;gap:5px;}
+.am-more summary::-webkit-details-marker{display:none;}
+.am-more summary::before{content:'▸';transition:.15s;}
+.am-more[open] summary::before{transform:rotate(90deg);}
+.am-more p{margin:6px 0 0;line-height:1.5;opacity:.9;}
+
+/* cartões por tipo de equipe: enxutos */
+.tcard.tc{padding:14px 16px 12px;display:flex;flex-direction:column;gap:6px;}
+.tc-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.tc-id{display:flex;align-items:baseline;gap:8px;min-width:0;}
+.tc-id .tt{font-family:var(--font-titulo);font-weight:700;font-size:16px;color:var(--navy);}
+.tc-id .cnt{font-size:11.5px;color:var(--muted);white-space:nowrap;}
+.tc-full{font-size:11.5px;color:var(--muted);margin-top:-4px;}
+.tcard.tc .now{font-family:var(--font-titulo);font-weight:700;font-size:22px;color:var(--navy);line-height:1.1;margin-top:4px;}
+.tcard.tc .now small{font-size:12px;font-weight:600;color:var(--muted);margin-left:2px;}
+.tcard.tc .tcard-prog{margin:2px 0 0;}
+.tc-gap{font-size:12.5px;color:var(--ink);}
+.tc-gap b{color:var(--darkgreen,#2e7d32);font-variant-numeric:tabular-nums;}
+:root[data-theme="dark"] .tc-gap b{color:#b6e07a;}
+.tc-gap.ok{color:var(--darkgreen,#2e7d32);font-weight:600;}
+.tc-gap.muted{color:var(--muted);}
+.tc-comp{display:flex;flex-wrap:wrap;gap:4px;}
+.tc-comp span{font-size:11px;color:var(--muted);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:1px 8px;font-variant-numeric:tabular-nums;}
+.tc-dist{margin-top:4px;}
+.tc-dist .dist{height:6px;}
+.tcard.tc.cvat-card{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset,var(--sh-1);}
+.tc-dist .dist{display:flex;border-radius:3px;overflow:hidden;gap:2px;}
+.tc-dist .dist span{display:block;height:100%;border-radius:2px;}
+.tc-top .pill{white-space:nowrap;flex-shrink:0;font-size:11px;padding:2px 8px;}
+.tc-id{flex-wrap:wrap;row-gap:0;}
+.hl-comp b,.hl-pot .mini .v{white-space:nowrap;}
+@media (max-width:520px){
+  .hl-comp>div{padding:7px 8px;}
+  .hl-comp b{font-size:13px;}
+  .hl-pot .mini .v{font-size:16px;}
+  .hl-pot .mini .l{font-size:9.5px;}
+}

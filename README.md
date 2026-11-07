@@ -5,7 +5,7 @@ Painel de monitoramento do repasse federal da Atenção Primária à Saúde (Por
 - **Usuários:** equipes da Governança Brasil. O painel é **só de consulta**.
 - **Responsável pelo painel (código, dados e publicação):** Jarom Rosa.
 - **Infraestrutura / TI:** autoriza a publicação no hub. Veja a [ficha técnica](docs/FICHA_TECNICA.md).
-- **Versão atual:** 4.7.0. Veja o [histórico](docs/HISTORICO_DE_VERSOES.md).
+- **Versão atual:** 4.8.0. Veja o [histórico](docs/HISTORICO_DE_VERSOES.md).
 
 ---
 

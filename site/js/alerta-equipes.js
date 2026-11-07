@@ -183,6 +183,17 @@ function renderAlertaMunicipio(res){
   const p=parsed?analisarPerdaEquipes(res,parsed.rows,ref):null;
   if(!temAlertaEquipes(p)){el.style.display='none';el.innerHTML='';return;}
   const fixo=p.quedaFixo>0&&!p.ausente?` O Componente Fixo/IED caiu ${fmtBRL(p.quedaFixo)}/mês.`:'';
-  el.style.display='flex';
-  el.innerHTML=`<span class="am-ic" aria-hidden="true">⚠</span><div><b>${p.ausente?'Município fora do relatório mais recente':'Equipes a menos no relatório do SIAPS'}:</b> ${perdaTexto(p)}.${fixo}${p.impacto>0?` Impacto estimado: −${fmtBRL(p.impacto)}/mês.`:''}${perdaCompensacao(p)?`<div class="am-g"><b>Mas entraram outras equipes.</b> ${perdaCompensacao(p)} Detalhe por quadrimestre na aba Detalhamento.</div>`:''}<div class="am-c">${PERDA_CAUSAS}</div></div>`;
+  el.style.display='block';
+  // v4.8.0: lista curta (uma linha por tipo de equipe) em vez de um parágrafo corrido;
+  // as causas possíveis e o saldo detalhado ficam recolhidos em "Entender"
+  const itens=p.ausente
+    ?[`<li><b>Fora do relatório de ${p.ausente.ref}</b><small>último dado ${qCode(p.ausente.ultimo)} · ${p.ausente.equipes} equipe${p.ausente.equipes!==1?'s':''}</small></li>`]
+    :[...p.recente.map(x=>`<li><b>−${x.n} ${x.tipo}</b> vs ${qCode(p.prevQuad)}<small>eram ${x.de}, agora ${x.para}</small></li>`),
+      ...p.antiga.map(x=>`<li><b>−${x.n} ${x.tipo}</b> desde ${qCode(x.desde)}<small>eram ${x.de} em ${qCode(x.deQuad)}</small></li>`)];
+  const ganhos=!p.ausente&&p.ganhos&&p.ganhos.length
+    ?`<div class="am-g">Entraram ${p.ganhos.map(x=>'+'+x.n+' '+x.tipo).join(', ')} no período (≈ +${fmtBRL(p.ganhos.reduce((a,x)=>a+x.valor,0))}/mês)</div>`:'';
+  el.innerHTML=`<div class="am-head"><span class="am-ic" aria-hidden="true">⚠</span><b>${p.ausente?'Município fora do relatório':'Equipes a menos'}</b>`+
+    `${p.impacto>0?`<span class="am-imp" title="Impacto estimado">−${fmtBRL(p.impacto)}/mês</span>`:''}</div>`+
+    `<ul class="am-list">${itens.join('')}</ul>${ganhos}`+
+    `<details class="am-more"><summary>Entender</summary>${fixo?`<p>${fixo.trim()}</p>`:''}${perdaCompensacao(p)?`<p>${perdaCompensacao(p)}</p>`:''}<p>${PERDA_CAUSAS}</p></details>`;
 }

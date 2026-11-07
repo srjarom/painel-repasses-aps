@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.8.0
+
+Tela do município mais limpa. O cartão azul destaca o repasse mensal e a tendência; logo abaixo, Fixo/IED, Vínculo e Qualidade em três números lado a lado, e o potencial e a margem em aberto com a barra de quanto já foi alcançado. O alerta de equipes a menos virou uma lista curta (uma linha por tipo, com "eram X, agora Y"); a explicação fica em "Entender". Os cartões por tipo de equipe ficaram enxutos: nome, quantidade e selo do potencial no topo, valor por mês em destaque, margem em aberto e a composição em selos pequenos. O botão do Raio-X (PDF) foi para a barra do topo, junto dos outros PDFs. Ajustes para celular.
+
 ## 4.7.0
 
 Padrão visual único em todo o painel: uma escala só para tamanhos de texto, espaços, cantos arredondados e sombras (variáveis no início do bloco 4.7.0 do CSS). Todos os cartões têm a mesma borda, canto e sombra leve; os títulos de seção, os textos de apoio e os rótulos pequenos seguem o mesmo tamanho e peso; os números usam algarismos de mesma largura (as colunas não "dançam"); os botões seguem três estilos (azul principal, contorno secundário e o verde de destaque). Transições suaves ao trocar de tela, aba e ao passar o mouse (desligadas para quem prefere menos movimento no sistema). Ao abrir um estado, um esqueleto de carregamento no formato da tela substitui a rodinha. Se o mapa do Brasil não carregar, aparece um aviso em vez de um desenho quebrado.
