@@ -76,6 +76,24 @@ Siga [ATUALIZAR_OS_DADOS.md](ATUALIZAR_OS_DADOS.md). No fim, é sempre:
 - **Antes do commit:** botão direito no arquivo → **Discard changes**.
 - **Depois do push:** aba **History** → botão direito no commit → **Revert changes in commit** → **Push origin**. O histórico não se perde: o revert cria um novo commit que desfaz o anterior.
 
+### Trabalhar em mais de um computador
+
+O GitHub guarda a cópia oficial do projeto; cada computador tem a sua cópia, que você mantém em dia.
+
+**Num computador novo (uma vez só):**
+
+1. Instale o **GitHub Desktop**, entre na sua conta e use **File → Clone repository** → `srjarom/painel-repasses-aps`. Escolha uma pasta (por exemplo, `D:\painel-repasses-aps`).
+2. Instale o **Node.js** (versão LTS, em nodejs.org) — é o que roda o teste e o pacote.
+3. Abra o PowerShell na pasta `testes` do projeto e rode `npm.cmd install`. Ele instala o teste e baixa o navegador de teste (uns 150 MB).
+
+**Toda vez que for trabalhar, em qualquer computador:**
+
+1. **Antes de começar:** no GitHub Desktop, **Fetch origin** e, se aparecer, **Pull origin**. Assim você pega o que fez no outro computador.
+2. **Quando terminar:** **Commit to main** e **Push origin**. Assim o outro computador recebe o que você fez.
+3. **Depois de gerar um pacote para o hub** (`npm.cmd run pacote`): Commit e Push também. O pacote anota qual versão foi entregue (`manutencao/ultimo-pacote.json`), e é isso que faz a nota do próximo pacote, em qualquer computador, partir do lugar certo.
+
+Se esquecer o Pull e mexer nos dois computadores ao mesmo tempo, o GitHub Desktop avisa quando houver conflito. Nesse caso, peça ajuda antes de continuar.
+
 ---
 
 ## Regras de ouro

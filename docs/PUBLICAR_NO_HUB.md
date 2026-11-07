@@ -75,4 +75,4 @@ Opções:
 - `npm run pacote -- --desde 4.16.2`: lista as mudanças desde uma versão específica (útil se um pacote gerado não chegou a ser enviado).
 - `npm run pacote -- --sem-teste`: pula o teste (não recomendado).
 
-O último pacote gerado fica anotado em `pacote/ultimo-envio.json`. A pasta `pacote/` não vai para o GitHub (está no `.gitignore`).
+O último pacote gerado fica anotado em `manutencao/ultimo-pacote.json`, que **vai para o GitHub**: depois de gerar um pacote, faça **Commit e Push** no GitHub Desktop, para outro computador saber de onde partir. A pasta `pacote/` (os .zip e as notas) não vai para o GitHub.

@@ -5,6 +5,7 @@
 *.json
 !testes/package.json
 !testes/package-lock.json
+!manutencao/ultimo-pacote.json
 # PDFs gerados em testes
 *.pdf
 

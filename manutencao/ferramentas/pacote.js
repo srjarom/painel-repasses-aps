@@ -12,13 +12,15 @@
       Se só os dados mudaram, o nome leva a data dos dados: ...-v<versão>-dados-<data>.zip
    4. Escreve pacote/NOTAS-<nome do zip>.txt — o texto para mandar junto: o que mudou desde o último
       pacote gerado, se é só dado ou também código, e o quadrimestre mais recente dos dados.
-   5. Guarda em pacote/ultimo-envio.json o que foi gerado, para a próxima nota saber de onde partir.
-   A pasta pacote/ não vai para o GitHub.
+   5. Guarda em manutencao/ultimo-pacote.json o que foi gerado, para a próxima nota saber de onde partir.
+      Esse arquivo vai para o GitHub (faça Commit e Push depois de gerar o pacote): assim, outro computador
+      continua de onde este parou. A pasta pacote/ (os .zip e as notas) não vai para o GitHub.
    ========================================================================= */
 const fs=require('fs'),path=require('path'),vm=require('vm'),{execFileSync}=require('child_process');
 const {carimbar,SITE,RAIZ}=require('./carimbar.js');
 const PACOTE=path.join(RAIZ,'pacote');
-const REGISTRO=path.join(PACOTE,'ultimo-envio.json');
+// anotação do último pacote gerado: fica dentro do projeto (vai para o GitHub), para valer em qualquer computador
+const REGISTRO=path.join(RAIZ,'manutencao','ultimo-pacote.json');
 const args=process.argv.slice(2);
 const opcao=n=>{const i=args.indexOf(n);return i>=0?(args[i+1]&&!args[i+1].startsWith('--')?args[i+1]:true):null;};
 
@@ -98,5 +100,5 @@ function lerIndice(){
   fs.writeFileSync(notas,'﻿'+linhas.join('\r\n'),'utf8');   // com BOM: Bloco de Notas e Outlook leem os acentos certo
   fs.writeFileSync(REGISTRO,JSON.stringify({versao:ver,dados,arquivo:nome+'.zip',geradoEm:new Date().toISOString().slice(0,10),baseVersao:desde,baseDados:baseDados===undefined?null:baseDados},null,2));
 
-  console.log(`\nPronto!\n  Pacote: pacote/${nome}.zip (${mb} MB)\n  Nota:   pacote/NOTAS-${nome}.txt\n  O que mudou: ${tipo}\n`);
+  console.log(`\nPronto!\n  Pacote: pacote/${nome}.zip (${mb} MB)\n  Nota:   pacote/NOTAS-${nome}.txt\n  O que mudou: ${tipo}\n\n  Pasta dos arquivos: ${PACOTE}\n  Depois, no GitHub Desktop: Commit e Push (guarda a anotação deste pacote para os outros computadores).\n`);
 })();
