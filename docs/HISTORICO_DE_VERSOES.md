@@ -12,6 +12,10 @@ Regra do número (versão semântica, `MAIOR.MENOR.CORREÇÃO`):
 
 Atualizar só os dados (novo quadrimestre) **não** muda a versão.
 
+## 4.16.2
+
+Página "Sobre o painel", checklist geral do consultor técnico: o item sobre a avaliação por equipe foi reescrito com mais clareza (o Ministério avalia cada equipe separadamente; o problema costuma estar concentrado em algumas equipes, que se identificam no sistema comparando a produção e a configuração equipe por equipe).
+
 ## 4.16.1
 
 Página "Sobre o painel": removida a pergunta sobre o registro das visitas dos ACS da lista de perguntas que abrem a conversa.

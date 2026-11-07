@@ -138,7 +138,7 @@ const GUIA_TECNICO_GERAL=[
   'Profissional <b>sem INE</b> não conta para os indicadores de Qualidade.',
   'Profissionais com <b>CBO e carga horária compatíveis</b> com a equipe, e vinculados à equipe certa também <b>no sistema</b> (usuário criado e com produção registrada).',
   'Usuários identificados (nome, data de nascimento, CNS ou CPF válido) e <b>vinculados</b> à equipe — base cadastral e cobertura do território pesam no resultado.',
-  'A avaliação é <b>por equipe</b>: uma equipe mal configurada pode puxar a nota mesmo com as demais bem.',
+  'O Ministério avalia <b>cada equipe separadamente</b>, não o município como um todo. Então o problema costuma estar concentrado em algumas equipes: se o Raio-X mostra 3 de 20 ESF em Regular, não é o município inteiro que vai mal — são essas 3. O relatório público não diz quais são; no sistema, compare a produção e a configuração equipe por equipe e use uma equipe que está bem como referência.',
   'Os dados são extraídos pelo SIAPS no <b>20º dia útil de cada mês</b> e a avaliação é quadrimestral: o que não foi enviado até lá não entra.'
 ];
 function guiaTecnicoDe(indicador){return GUIA_TECNICO[indicador]||GUIA_TECNICO[GUIA_TECNICO_ALIAS[indicador]]||null;}
